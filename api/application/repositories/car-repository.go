@@ -5,8 +5,8 @@ import "github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 type CarRepository interface {
 
 	RegisterCar(car domain.Car) *domain.Car
-/* 	FindCarByLicensePlate(licensePlate string) ( *domain.Car, error)
-	FindAllCars() ([]*domain.Car, error)
+ 	FindCarByLicensePlate(licensePlate string) ( *domain.Car, error)
+/*FindAllCars() ([]*domain.Car, error)
 	UpdateCar(id string, car domain.Car) *domain.Car
 	DeleteCar(id string) error
 

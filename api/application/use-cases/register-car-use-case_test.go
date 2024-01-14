@@ -21,6 +21,11 @@ func (m *MockCarRepository) RegisterCar(car domain.Car) *domain.Car {
 	return args.Get(0).(*domain.Car)
 }
 
+func (m *MockCarRepository) FindCarByLicensePlate(licensePlate string) (*domain.Car, error) {
+	args := m.Called(licensePlate)
+	return nil, args.Error(1) 
+}
+
 func TestRegisterCarUseCase(t *testing.T) {
 	mockRepo := new(MockCarRepository)
 
@@ -48,11 +53,11 @@ func TestRegisterCarUseCase(t *testing.T) {
 	}
 
 	mockRepo.On("RegisterCar", mock.Anything).Return(expectedCar)
+	mockRepo.On("FindCarByLicensePlate", mock.Anything).Return(nil, nil).Times(0)
 
 	resultingCar, err := usecases.RegisterCarUseCase(registerRequest, mockRepo)
 
-	// Assertions
-	assert.NoError(t, err)
+ 	assert.NoError(t, err)
 	assert.NotNil(t, resultingCar)
 	assert.Equal(t, expectedCar, resultingCar)
 	assert.NotEmpty(t, resultingCar.Id)
@@ -65,14 +70,14 @@ func TestRegisterCarUseCase_ValidationFailure(t *testing.T) {
 	mockRepo := new(MockCarRepository)
 
 	invalidRequest := usecases.RegisterCarRequest{}
-
+ 
+	mockRepo.On("FindCarByLicensePlate", mock.Anything).Return(nil, nil).Times(0)
 	resultingCar, err := usecases.RegisterCarUseCase(invalidRequest, mockRepo)
 
-	// Assertions
 	assert.Error(t, err)
 	assert.Nil(t, resultingCar)
-	assert.Contains(t, err.Error(), "name is required") // Replace with the expected validation error message
-	assert.Empty(t, mockRepo.Calls)                     // Ensure that the repository method was not called
+	assert.Contains(t, err.Error(), "name is required")  
+	mockRepo.AssertExpectations(t)
 }
 
 func TestCarValidation(t *testing.T) {
@@ -154,3 +159,40 @@ func TestCarValidation(t *testing.T) {
 	}
 
 }
+
+/* func TestFindCarByLicensePlate(t *testing.T) {
+	mockRepo := new(MockCarRepository)
+
+	existingLicensePlate := "ABC123"
+	nonExistingLicensePlate := "XYZ789"
+
+	expectedExistingCar := &domain.Car{
+		Id:           xid.New().String(),
+		Name:         "Existing Car",
+		Description:  "Existing Description",
+		DailyRate:    50.0,
+		Available:    true,
+		LicensePlate: existingLicensePlate,
+		FineAmount:   10.0,
+		Brand:        "Existing Brand",
+		CategoryId:   "456",
+		CreatedAt:    time.Now(),
+	}
+
+	expectedNonExistingCar := (*domain.Car)(nil) 
+
+	mockRepo.On("FindCarByLicensePlate", existingLicensePlate).Return(expectedExistingCar, nil)
+	mockRepo.On("FindCarByLicensePlate", nonExistingLicensePlate).Return(expectedNonExistingCar, nil)
+
+	existingCar, err := mockRepo.FindCarByLicensePlate(existingLicensePlate)
+	assert.NoError(t, err)
+	assert.NotNil(t, existingCar)
+	assert.Equal(t, expectedExistingCar, existingCar)
+
+	nonExistingCar, err := mockRepo.FindCarByLicensePlate(nonExistingLicensePlate)
+	assert.NoError(t, err)
+	assert.Nil(t, nonExistingCar)
+
+	mockRepo.AssertExpectations(t)
+}
+ */

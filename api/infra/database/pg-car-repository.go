@@ -28,3 +28,14 @@ func (repo *PGCarRepository) FindCarByLicensePlate(licensePlate string) (*domain
 
 	return &car, nil
 }
+
+func (repo *PGCarRepository) FindAllCars() ([]*domain.Car, error) {
+	var cars []*domain.Car
+	err := dbconfig.Postgres.Find(&cars).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return cars, nil
+}

@@ -16,6 +16,7 @@ func Init() {
 	router := gin.Default()
 
 	router.POST("/api/v1/create", endpoints.RegisterCarController)
+	router.GET("/api/v1/cars", endpoints.ListCarController)
 
 	err := godotenv.Load(".env")
 

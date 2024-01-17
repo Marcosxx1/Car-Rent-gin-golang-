@@ -26,9 +26,10 @@ func (m *MockCarRepository) FindCarByLicensePlate(licensePlate string) (*domain.
 	return nil, args.Error(1) 
 }
 
- func (repo *MockCarRepository) FindAllCars() ([]*domain.Car, error) {
-	args := repo.Called()
-	return nil, args.Error(1)
+
+func (m *MockCarRepository) DeleteCar(id string) error {
+	args := m.Called(id)
+	return args.Error(0)
 }
 func TestRegisterCarUseCase(t *testing.T) {
 	mockRepo := new(MockCarRepository)

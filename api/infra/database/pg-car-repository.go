@@ -39,3 +39,17 @@ func (repo *PGCarRepository) FindAllCars() ([]*domain.Car, error) {
 
 	return cars, nil
 }
+
+func (repo *PGCarRepository) DeleteCar(id string) error {
+	result := dbconfig.Postgres.Where("id = ?", id).Delete(&domain.Car{})
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return errors.New("car not found")
+	}
+
+	return nil
+}

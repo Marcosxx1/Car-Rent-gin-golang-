@@ -1,6 +1,7 @@
 package usecases
 
 import (
+	"errors"
 	"time"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
@@ -23,6 +24,14 @@ type RegisterCarRequest struct {
 func RegisterCarUseCase(
 	registerRequest RegisterCarRequest,
 	carRepository repositories.CarRepository) (*domain.Car, error) {
+
+		existCar, err := carRepository.FindCarByLicensePlate(registerRequest.LicensePlate)
+		if err != nil {
+				return nil, err
+		}
+		if existCar != nil {
+				return nil, errors.New("car already exists")
+		}
 
 	car := &domain.Car{
 			Id:           xid.New().String(),

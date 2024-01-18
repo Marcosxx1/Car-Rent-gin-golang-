@@ -7,7 +7,7 @@ type CarRepository interface {
 	FindCarByLicensePlate(licensePlate string) (*domain.Car, error)
 	FindAllCars() ([]*domain.Car, error)
 	DeleteCar(id string) error
-
+	FindCarById(id string) (*domain.Car, error)
 	/*
 		UpdateCar(id string, car domain.Car) *domain.Car
 		FindCarById(id string) *domain.Car

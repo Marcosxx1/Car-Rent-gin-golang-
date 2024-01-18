@@ -17,7 +17,9 @@ func Init() {
 
 	router.POST("/api/v1/create", endpoints.RegisterCarController)
 	router.GET("/api/v1/cars", endpoints.ListCarController)
+	router.GET("/api/v1/cars/:id", endpoints.FindCarByIdController)
 	router.DELETE("/api/v1/delete/:id", endpoints.DeleteCarController)
+	
 
 	err := godotenv.Load(".env")
 

@@ -31,6 +31,12 @@ func (m *MockCarRepository) DeleteCar(id string) error {
 	args := m.Called(id)
 	return args.Error(0)
 }
+
+func (m *MockCarRepository) FindCarById(id string) (*domain.Car, error) {
+	args := m.Called(id)
+	return args.Get(0).(*domain.Car), args.Error(1)
+}
+
 func TestRegisterCarUseCase(t *testing.T) {
 	mockRepo := new(MockCarRepository)
 

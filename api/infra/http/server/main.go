@@ -5,7 +5,7 @@ import (
 	"os"
 
 	dbconfig "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database/postgres/db-config"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/endpoints"
+	endpoints "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/endpoints/car-endpoints"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )

@@ -6,7 +6,7 @@ import (
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain/error_handling"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/dtos"
 	"github.com/rs/xid"
 )

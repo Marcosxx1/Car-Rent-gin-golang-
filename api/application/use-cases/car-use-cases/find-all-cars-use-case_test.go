@@ -3,7 +3,7 @@ package usecases_test
 import (
 	"testing"
 
-	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases"
+	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	"github.com/stretchr/testify/assert"
 )

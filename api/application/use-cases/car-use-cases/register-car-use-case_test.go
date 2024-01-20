@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases"
+	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain/error_handling"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/dtos"
 	"github.com/rs/xid"
 	"github.com/stretchr/testify/assert"

@@ -1,7 +1,7 @@
 package endpoints
 
 import (
-	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases"
+	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database"
 	"github.com/gin-gonic/gin"
 )

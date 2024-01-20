@@ -162,8 +162,30 @@ func (repo *PGCarRepository) FindCarById(id string) (*domain.Car, error) {
 	return &car, nil
 }
 
-func (repo *PGCarRepository ) UpdateCar(id string, car domain.Car) (*domain.Car, error){
+// UpdateCar updates a car in the PostgreSQL database based on its ID.
+// It takes the ID of the car to be updated and the updated car data.
+// The function updates the corresponding record in the database and returns
+// a pointer to the updated car along with an error.
+//
+// Example:
+//   carID := "123"
+//   updatedCarData := domain.Car{Name: "Updated Car", ...}
+//   updatedCar, err := carRepository.UpdateCar(carID, updatedCarData)
+//   if err != nil {
+//       fmt.Println("Error:", err)
+//   } else {
+//       fmt.Println("Updated Car:", updatedCar)
+//   }
+//
+// Parameters:
+//   - id: The ID of the car to be updated.
+//   - car: The updated car data.
+//
+// Returns:
+//   - *domain.Car: A pointer to the updated car.
+//   - error: An error, if any.
+func (repo *PGCarRepository) UpdateCar(id string, car domain.Car) (*domain.Car, error) {
 	dbconfig.Postgres.Model(&car).Where("id = ?", id).Updates(&car)
+	
 	return &car, nil
 }
-

@@ -31,7 +31,7 @@ func TestFindAllUseCase_Success(t *testing.T) {
 	mockRepo.On("FindAllCars").Return(expectedCars, nil)
 
 	// Act
-	resultCars, err := usecases.FindAllUseCase(mockRepo)
+	resultCars, err := usecases.GetAllCarsUseCase(mockRepo)
 
 	// Assert
 	assert.NoError(t, err)

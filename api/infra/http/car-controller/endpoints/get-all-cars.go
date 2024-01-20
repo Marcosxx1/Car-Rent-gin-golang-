@@ -10,7 +10,7 @@ import (
 func ListCarController (context *gin.Context){
 	carRepository := database.PGCarRepository{}
 
-	listOfCars, err := usecases.FindAllUseCase(&carRepository)
+	listOfCars, err := usecases.GetAllCarsUseCase(&carRepository)
 	if err != nil {
 		context.JSON(400, gin.H{
 			"error": err.Error(),

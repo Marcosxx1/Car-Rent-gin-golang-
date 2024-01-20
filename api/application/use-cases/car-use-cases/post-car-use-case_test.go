@@ -32,7 +32,7 @@ func (m *MockCarRepository) FindCarById(id string) (*domain.Car, error) {
 	return args.Get(0).(*domain.Car), args.Error(1)
 }
 
-func TestRegisterCarUseCase(t *testing.T) {
+func TestPostCarUseCase(t *testing.T) {
 	mockRepo := new(MockCarRepository)
 
 	registerRequest := dtos.CarDto{
@@ -61,7 +61,7 @@ func TestRegisterCarUseCase(t *testing.T) {
 	mockRepo.On("RegisterCar", mock.Anything).Return(expectedCar)
 	mockRepo.On("FindCarByLicensePlate", mock.Anything).Return(nil, nil).Times(0)
 
-	resultingCar, err := usecases.RegisterCarUseCase(registerRequest, mockRepo)
+	resultingCar, err := usecases.PostCarUseCase(registerRequest, mockRepo)
 
  	assert.NoError(t, err)
 	assert.NotNil(t, resultingCar)
@@ -72,13 +72,13 @@ func TestRegisterCarUseCase(t *testing.T) {
 	mockRepo.AssertExpectations(t)
 }
 
-func TestRegisterCarUseCase_ValidationFailure(t *testing.T) {
+func TestPostCarUseCase_ValidationFailure(t *testing.T) {
 	mockRepo := new(MockCarRepository)
 
 	invalidRequest := dtos.CarDto{}
  
 	mockRepo.On("FindCarByLicensePlate", mock.Anything).Return(nil, nil).Times(0)
-	resultingCar, err := usecases.RegisterCarUseCase(invalidRequest, mockRepo)
+	resultingCar, err := usecases.PostCarUseCase(invalidRequest, mockRepo)
 
 	assert.Error(t, err)
 	assert.Nil(t, resultingCar)

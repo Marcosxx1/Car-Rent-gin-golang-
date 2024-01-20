@@ -30,7 +30,7 @@ func RegisterCarController(context *gin.Context) {
 		CategoryId: request.CategoryId,
 
 	}
-	createdCar, err := usecases.RegisterCarUseCase(car, &carRepository)
+	createdCar, err := usecases.PostCarUseCase(car, &carRepository)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

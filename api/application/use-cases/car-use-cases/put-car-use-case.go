@@ -6,7 +6,7 @@ import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
 )
 
-func UpdateCarUseCase(id string, car *domain.Car,
+func PutCarUseCase(id string, car *domain.Car,
 	 carRepository repositories.CarRepository)(*domain.Car, error){
 
 		if err := error_handling.ValidateStruct(car); err != nil {

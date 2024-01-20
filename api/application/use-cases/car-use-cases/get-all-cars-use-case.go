@@ -5,7 +5,7 @@ import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 )
 
-func FindAllUseCase(carRepository repositories.CarRepository) ([]*domain.Car, error){
+func GetAllCarsUseCase(carRepository repositories.CarRepository) ([]*domain.Car, error){
 
 	allCars, err := carRepository.FindAllCars()
 

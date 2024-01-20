@@ -26,7 +26,7 @@ func TestFindCarById(t *testing.T) {
 
 	mockRepo.On("FindCarById", "1").Return(expectedCar, nil)
 
-	carToBeFound, err := usecases.FindCarByIdUseCase("1", mockRepo)
+	carToBeFound, err := usecases.GetCarByIdUseCase("1", mockRepo)
 	
 	assert.Nil(err)
 	assert.Equal(expectedCar, carToBeFound)

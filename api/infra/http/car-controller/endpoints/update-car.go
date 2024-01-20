@@ -24,7 +24,7 @@ func UpdateCarController(context *gin.Context) {
 
 	id := context.Param("id")
 
-	foundCar, err := usecases.FindCarByIdUseCase(id, &carRepository)
+	foundCar, err := usecases.GetCarByIdUseCase(id, &carRepository)
 	if err != nil {
 		log.Println("Error finding car:", err)
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -47,7 +47,7 @@ func UpdateCarController(context *gin.Context) {
 		CategoryId:   request.CategoryId,
 	}
 
-	updatedCar, err := usecases.UpdateCarUseCase(id, &car, &carRepository)
+	updatedCar, err := usecases.PutCarUseCase(id, &car, &carRepository)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

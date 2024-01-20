@@ -11,7 +11,7 @@ import (
 	"github.com/rs/xid"
 )
 
-func RegisterCarUseCase(
+func PostCarUseCase(
 	registerRequest dtos.CarDto,
 	carRepository repositories.CarRepository) (*domain.Car, error) {
 

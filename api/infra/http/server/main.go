@@ -15,11 +15,14 @@ func Init() {
 
 	router := gin.Default()
 
-	router.POST("/api/v1/create", endpoints.RegisterCarController)
 	router.GET("/api/v1/cars", endpoints.ListCarController)
 	router.GET("/api/v1/cars/:id", endpoints.FindCarByIdController)
-	router.DELETE("/api/v1/delete/:id", endpoints.DeleteCarController)
+
+	router.POST("/api/v1/cars/create", endpoints.RegisterCarController)
+
+	router.DELETE("/api/v1/cars/delete/:id", endpoints.DeleteCarController)
 	
+	router.PUT("/api/v1/cars/update/:id", endpoints.UpdateCarController)
 
 	err := godotenv.Load(".env")
 

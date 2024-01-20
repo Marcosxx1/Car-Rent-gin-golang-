@@ -161,3 +161,9 @@ func (repo *PGCarRepository) FindCarById(id string) (*domain.Car, error) {
 
 	return &car, nil
 }
+
+func (repo *PGCarRepository ) UpdateCar(id string, car domain.Car) (*domain.Car, error){
+	dbconfig.Postgres.Model(&car).Where("id = ?", id).Updates(&car)
+	return &car, nil
+}
+

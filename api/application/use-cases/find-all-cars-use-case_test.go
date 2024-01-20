@@ -14,6 +14,11 @@ func (m *MockCarRepository) FindAllCars() ([]*domain.Car, error) {
 	args := m.Called()
 	return args.Get(0).([]*domain.Car), args.Error(1)
 }
+func (m *MockCarRepository) UpdateCar(id string, car domain.Car) (*domain.Car, error) {
+	args := m.Called(id, car)
+	return args.Get(0).(*domain.Car), args.Error(1)
+}
+
 
 func TestFindAllUseCase_Success(t *testing.T) {
 	// Arrange

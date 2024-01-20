@@ -7,6 +7,7 @@ import (
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain/error_handling"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/dtos"
 	"github.com/rs/xid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -40,7 +41,7 @@ func (m *MockCarRepository) FindCarById(id string) (*domain.Car, error) {
 func TestRegisterCarUseCase(t *testing.T) {
 	mockRepo := new(MockCarRepository)
 
-	registerRequest := usecases.RegisterCarRequest{
+	registerRequest := dtos.CarDto{
 		Name:         "Test Car",
 		Description:  "Test Description",
 		DailyRate:    50.0,
@@ -80,7 +81,7 @@ func TestRegisterCarUseCase(t *testing.T) {
 func TestRegisterCarUseCase_ValidationFailure(t *testing.T) {
 	mockRepo := new(MockCarRepository)
 
-	invalidRequest := usecases.RegisterCarRequest{}
+	invalidRequest := dtos.CarDto{}
  
 	mockRepo.On("FindCarByLicensePlate", mock.Anything).Return(nil, nil).Times(0)
 	resultingCar, err := usecases.RegisterCarUseCase(invalidRequest, mockRepo)

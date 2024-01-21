@@ -1,26 +1,41 @@
 package usecases
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
-	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/category-controller/category-dtos"
+	categorydtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/category-controller/category-dtos"
+	"github.com/rs/xid"
 )
 
-func PostCategoryUseCase(
-	registerCategory dtos.CategoryInputDTO,
-	categoryRepository repositories.CategoryRepository)(*domain.Category, error) {
-
- 
-
-		category := &domain.Category{
-			Name: registerCategory.Name,
-			Description: registerCategory.Description,
-		}
-
-		if err := error_handling.ValidateStruct(category); err != nil {
+func PostCategoryUseCase(registerCategory categorydtos.CategoryInputDTO, categoryRepository repositories.CategoryRepository) (*categorydtos.CategoryOutputDTO, error) {
+	existingCategory, err := categoryRepository.FindCategoryByName(registerCategory.Name)
+	if err != nil {
 			return nil, err
 	}
 
-	return categoryRepository.PostCategory(*category)
+	if existingCategory != nil {
+			return nil, errors.New("category already exists")
+	}
+
+	newCategory := &domain.Category{
+			ID:          xid.New().String(),
+			Name:        registerCategory.Name,
+			Description: registerCategory.Description,
+	}
+
+	if err := categoryRepository.PostCategory(newCategory); err != nil {
+			return nil, fmt.Errorf("failed to create category: %w", err)
+	}
+
+	outputDTO := &categorydtos.CategoryOutputDTO{
+			ID:          newCategory.ID,
+			Name:        newCategory.Name,
+			Description: newCategory.Description,
+			CreatedAt:   newCategory.CreatedAt,
+	}
+
+	return outputDTO, nil
 }

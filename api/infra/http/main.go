@@ -28,6 +28,6 @@ func main() {
 
 	port := os.Getenv("PORT")
 
-	log.Println("localhost:8080/api/v1/cars" + port)
+	log.Println("server running at port: "  + port)
 	router.Run(":" + port)
 }

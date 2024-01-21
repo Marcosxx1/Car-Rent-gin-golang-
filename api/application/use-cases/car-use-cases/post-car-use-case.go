@@ -6,23 +6,13 @@ import (
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain/error_handling"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
+	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/car-dtos"
 	"github.com/rs/xid"
 )
 
-type RegisterCarRequest struct {
-	Name         string  
-	Description  string  
-	DailyRate    float64 
-	Available    bool    
-	LicensePlate string  
-	FineAmount   float64 
-	Brand        string  
-	CategoryId   string  
-}
-
-func RegisterCarUseCase(
-	registerRequest RegisterCarRequest,
+func PostCarUseCase(
+	registerRequest dtos.CarDto,
 	carRepository repositories.CarRepository) (*domain.Car, error) {
 
 		existCar, err := carRepository.FindCarByLicensePlate(registerRequest.LicensePlate)

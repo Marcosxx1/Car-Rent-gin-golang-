@@ -27,6 +27,7 @@ func Connection() {
 	}
 
 	db.AutoMigrate(&domain.Car{})
+	db.AutoMigrate(&domain.Category{})
 
 	Postgres = db
 }

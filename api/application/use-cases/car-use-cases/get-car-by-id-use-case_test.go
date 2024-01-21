@@ -3,7 +3,7 @@ package usecases_test
 import (
 	"testing"
 
-	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases"
+	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	"github.com/stretchr/testify/assert"
 )
@@ -26,7 +26,7 @@ func TestFindCarById(t *testing.T) {
 
 	mockRepo.On("FindCarById", "1").Return(expectedCar, nil)
 
-	carToBeFound, err := usecases.FindCarByIdUseCase("1", mockRepo)
+	carToBeFound, err := usecases.GetCarByIdUseCase("1", mockRepo)
 	
 	assert.Nil(err)
 	assert.Equal(expectedCar, carToBeFound)

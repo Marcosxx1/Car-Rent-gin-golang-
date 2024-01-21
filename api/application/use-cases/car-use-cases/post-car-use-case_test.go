@@ -4,9 +4,10 @@ import (
 	"testing"
 	"time"
 
-	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases"
+	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain/error_handling"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
+	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/car-dtos"
 	"github.com/rs/xid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -26,21 +27,15 @@ func (m *MockCarRepository) FindCarByLicensePlate(licensePlate string) (*domain.
 	return nil, args.Error(1) 
 }
 
-
-func (m *MockCarRepository) DeleteCar(id string) error {
-	args := m.Called(id)
-	return args.Error(0)
-}
-
 func (m *MockCarRepository) FindCarById(id string) (*domain.Car, error) {
 	args := m.Called(id)
 	return args.Get(0).(*domain.Car), args.Error(1)
 }
 
-func TestRegisterCarUseCase(t *testing.T) {
+func TestPostCarUseCase(t *testing.T) {
 	mockRepo := new(MockCarRepository)
 
-	registerRequest := usecases.RegisterCarRequest{
+	registerRequest := dtos.CarDto{
 		Name:         "Test Car",
 		Description:  "Test Description",
 		DailyRate:    50.0,
@@ -66,7 +61,7 @@ func TestRegisterCarUseCase(t *testing.T) {
 	mockRepo.On("RegisterCar", mock.Anything).Return(expectedCar)
 	mockRepo.On("FindCarByLicensePlate", mock.Anything).Return(nil, nil).Times(0)
 
-	resultingCar, err := usecases.RegisterCarUseCase(registerRequest, mockRepo)
+	resultingCar, err := usecases.PostCarUseCase(registerRequest, mockRepo)
 
  	assert.NoError(t, err)
 	assert.NotNil(t, resultingCar)
@@ -77,13 +72,13 @@ func TestRegisterCarUseCase(t *testing.T) {
 	mockRepo.AssertExpectations(t)
 }
 
-func TestRegisterCarUseCase_ValidationFailure(t *testing.T) {
+func TestPostCarUseCase_ValidationFailure(t *testing.T) {
 	mockRepo := new(MockCarRepository)
 
-	invalidRequest := usecases.RegisterCarRequest{}
+	invalidRequest := dtos.CarDto{}
  
 	mockRepo.On("FindCarByLicensePlate", mock.Anything).Return(nil, nil).Times(0)
-	resultingCar, err := usecases.RegisterCarUseCase(invalidRequest, mockRepo)
+	resultingCar, err := usecases.PostCarUseCase(invalidRequest, mockRepo)
 
 	assert.Error(t, err)
 	assert.Nil(t, resultingCar)

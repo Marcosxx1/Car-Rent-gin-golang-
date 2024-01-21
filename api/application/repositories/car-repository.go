@@ -8,9 +8,9 @@ type CarRepository interface {
 	FindAllCars() ([]*domain.Car, error)
 	DeleteCar(id string) error
 	FindCarById(id string) (*domain.Car, error)
+	UpdateCar(id string, car domain.Car) (*domain.Car, error)
+
 	/*
-		UpdateCar(id string, car domain.Car) *domain.Car
-		FindCarById(id string) *domain.Car
 		FindAvailableCars() (brand string, category_id string, name string, cars []*domain.Car)
 		FindAvailableCarById(id string) *domain.Car
 		UpdateAvailableCar(id string, available bool) error

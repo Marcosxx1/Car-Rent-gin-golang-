@@ -1,12 +1,11 @@
-package endpoints
+package carendpoints
 
 import (
-	"fmt"
 	"net/http"
 
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/dtos"
+	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/car-dtos"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,7 +17,7 @@ func RegisterCarController(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	fmt.Printf("%+v\n", request)
+	//fmt.Printf("%+v\n", request)
 	car := dtos.CarDto {
 		Name: request.Name,
 		Description: request.Description,

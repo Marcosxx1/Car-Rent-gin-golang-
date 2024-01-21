@@ -1,4 +1,4 @@
-package endpoints
+package carendpoints
 
 import (
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"

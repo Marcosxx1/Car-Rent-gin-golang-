@@ -3,22 +3,21 @@ package carendpoints
 import (
 	"net/http"
 
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/car-dtos"
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterCarController(context *gin.Context) {
-	carRepository := database.PGCarRepository{}
+func RegisterCarController(context *gin.Context, carRepository repositories.CarRepository) {
 
-	var request dtos.CarDto
+	var request dtos.CarInputDTO
 	if err := context.ShouldBindJSON(&request); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	//fmt.Printf("%+v\n", request)
-	car := dtos.CarDto {
+	car := dtos.CarInputDTO {
 		Name: request.Name,
 		Description: request.Description,
 		DailyRate: request.DailyRate,
@@ -27,9 +26,9 @@ func RegisterCarController(context *gin.Context) {
 		FineAmount: request.FineAmount,
 		Brand: request.Brand,
 		CategoryId: request.CategoryId,
-
 	}
-	createdCar, err := usecases.PostCarUseCase(car, &carRepository)
+	
+	createdCar, err := usecases.PostCarUseCase(car, carRepository)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

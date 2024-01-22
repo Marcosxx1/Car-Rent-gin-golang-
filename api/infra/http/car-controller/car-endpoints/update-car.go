@@ -1,42 +1,39 @@
 package carendpoints
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/car-dtos"
 	"github.com/gin-gonic/gin"
 )
 
-func UpdateCarController(context *gin.Context) {
-	carRepository := database.PGCarRepository{}
+func UpdateCarController(context *gin.Context, carRepository repositories.CarRepository) {
 
-	var request dtos.CarDto
+	var request dtos.CarOutputDTO
 	if err := context.ShouldBindJSON(&request); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	fmt.Printf("%+v\n", request)
 
 	id := context.Param("id")
 
-	foundCar, err := usecases.GetCarByIdUseCase(id, &carRepository)
+	foundCar, err := usecases.GetCarByIdUseCase(id, carRepository)
 	if err != nil {
 		log.Println("Error finding car:", err)
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if foundCar == nil {
+	if foundCar == nil { 
 		context.JSON(http.StatusNotFound, gin.H{"error": "Car not found"})
 		return
 	}
 
-	car := domain.Car{
+	car := &dtos.CarOutputDTO{
+		Id:           id,
 		Name:         request.Name,
 		Description:  request.Description,
 		DailyRate:    request.DailyRate,
@@ -47,7 +44,7 @@ func UpdateCarController(context *gin.Context) {
 		CategoryId:   request.CategoryId,
 	}
 
-	updatedCar, err := usecases.PutCarUseCase(id, &car, &carRepository)
+	updatedCar, err := usecases.PutCarUseCase(id, *car, carRepository)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

@@ -26,9 +26,8 @@ type PGCarRepository struct{}
 //
 // Returns:
 //   - *domain.Car: A pointer to the registered car.
-func (repo *PGCarRepository) RegisterCar(car domain.Car) *domain.Car {
-	dbconfig.Postgres.Create(&car)
-	return &car
+func (repo *PGCarRepository) RegisterCar(car *domain.Car) error {
+	return dbconfig.Postgres.Create(&car).Error
 }
 
 

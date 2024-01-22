@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
@@ -12,33 +13,50 @@ import (
 )
 
 func PostCarUseCase(
-	registerRequest dtos.CarDto,
-	carRepository repositories.CarRepository) (*domain.Car, error) {
+	registerRequest dtos.CarInputDTO,
+	carRepository repositories.CarRepository) (*dtos.CarOutputDTO, error) {
 
-		existCar, err := carRepository.FindCarByLicensePlate(registerRequest.LicensePlate)
-		if err != nil {
-				return nil, err
-		}
-		if existCar != nil {
-				return nil, errors.New("car already exists")
-		}
-
-	car := &domain.Car{
-			Id:           xid.New().String(),
-			Name:         registerRequest.Name,
-			Description:  registerRequest.Description,
-			DailyRate:    registerRequest.DailyRate,
-			Available:    registerRequest.Available,
-			LicensePlate: registerRequest.LicensePlate,
-			FineAmount:   registerRequest.FineAmount,
-			Brand:        registerRequest.Brand,
-			CategoryId:   registerRequest.CategoryId,
-			CreatedAt:    time.Now(),
+	existCar, err := carRepository.FindCarByLicensePlate(registerRequest.LicensePlate)
+	if err != nil {
+		return nil, err
 	}
- 
-	if err := error_handling.ValidateStruct(car); err != nil {
-			return nil, err
+	if existCar != nil {
+		return nil, errors.New("car already exists")
 	}
 
-	return carRepository.RegisterCar(*car), nil
+	newCar := &domain.Car{
+		Id:           xid.New().String(),
+		Name:         registerRequest.Name,
+		Description:  registerRequest.Description,
+		DailyRate:    registerRequest.DailyRate,
+		Available:    registerRequest.Available,
+		LicensePlate: registerRequest.LicensePlate,
+		FineAmount:   registerRequest.FineAmount,
+		Brand:        registerRequest.Brand,
+		CategoryId:   registerRequest.CategoryId,
+		CreatedAt:    time.Now(),
+	}
+
+	if err := error_handling.ValidateStruct(newCar); err != nil {
+		return nil, err
+	}
+
+	if err := carRepository.RegisterCar(newCar); err != nil {
+		return nil, fmt.Errorf("failed to create car: %w", err)
+	}
+
+	outPut := &dtos.CarOutputDTO{
+		Id:           newCar.Id,
+		Name:         newCar.Name,
+		Description:  newCar.Description,
+		DailyRate:    newCar.DailyRate,
+		Available:    newCar.Available,
+		LicensePlate: newCar.LicensePlate,
+		FineAmount:   newCar.FineAmount,
+		Brand:        newCar.Brand,
+		CategoryId:   newCar.CategoryId,
+		CreatedAt:    newCar.CreatedAt,
+	}
+
+	return outPut, nil
 }

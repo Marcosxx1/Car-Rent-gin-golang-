@@ -81,12 +81,16 @@ func (repo *PGCarRepository) FindCarByLicensePlate(licensePlate string) (*domain
 // Returns:
 //   - []*domain.Car: A slice of pointers to all cars in the database.
 //   - error: An error, if any.
-func (repo *PGCarRepository) FindAllCars() ([]*domain.Car, error) {
+
+
+func (repo *PGCarRepository) FindAllCars(page, pageSize int) ([]*domain.Car, error) {
 	var cars []*domain.Car
-	err := dbconfig.Postgres.Find(&cars).Error
+	offset := (page - 1) * pageSize
+
+	err := dbconfig.Postgres.Offset(offset).Limit(pageSize).Find(&cars).Error
 
 	if err != nil {
-			return nil, err
+		return nil, err
 	}
 
 	return cars, nil

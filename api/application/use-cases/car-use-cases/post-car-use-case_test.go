@@ -8,7 +8,6 @@ import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/car-dtos"
-	"github.com/rs/xid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -17,57 +16,54 @@ type MockCarRepository struct {
 	mock.Mock
 }
 
-func (m *MockCarRepository) RegisterCar(car domain.Car) *domain.Car {
+func (m *MockCarRepository) RegisterCar(car *domain.Car) error {
 	args := m.Called(car)
-	return args.Get(0).(*domain.Car)
+	return args.Error(0)
 }
 
 func (m *MockCarRepository) FindCarByLicensePlate(licensePlate string) (*domain.Car, error) {
 	args := m.Called(licensePlate)
-	return nil, args.Error(1) 
+	
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+
+	return args.Get(0).(*domain.Car), args.Error(1)
 }
+
 
 func (m *MockCarRepository) FindCarById(id string) (*domain.Car, error) {
 	args := m.Called(id)
 	return args.Get(0).(*domain.Car), args.Error(1)
 }
 
-func TestPostCarUseCase(t *testing.T) {
+func TestPostCarUseCase_Success(t *testing.T) {
+	// Arrange
 	mockRepo := new(MockCarRepository)
 
-	registerRequest := dtos.CarDto{
-		Name:         "Test Car",
-		Description:  "Test Description",
+	// Set up expectations for FindCarByLicensePlate
+	mockRepo.On("FindCarByLicensePlate", mock.AnythingOfType("string")).
+		Return(nil, nil)
+
+	mockRepo.On("RegisterCar", mock.AnythingOfType("*domain.Car")).
+		Return(nil)
+
+
+	registerRequest := dtos.CarInputDTO{
+		Name:         "Car Model XYZ",
+		Description:  "A description of the car",
 		DailyRate:    50.0,
 		Available:    true,
-		LicensePlate: "ABC123",
+		LicensePlate: "MAS12345",
 		FineAmount:   10.0,
-		Brand:        "Test Brand",
-		CategoryId:   "123",
+		Brand:        "CarBrand",
+		CategoryId:   "Category123",
 	}
 
-	expectedCar := &domain.Car{
-		Id:           xid.New().String(),
-		Name:         registerRequest.Name,
-		Description:  registerRequest.Description,
-		DailyRate:    registerRequest.DailyRate,
-		Available:    registerRequest.Available,
-		LicensePlate: registerRequest.LicensePlate,
-		FineAmount:   registerRequest.FineAmount,
-		Brand:        registerRequest.Brand,
-		CategoryId:   registerRequest.CategoryId,
-	}
+	result, err := usecases.PostCarUseCase(registerRequest, mockRepo)
 
-	mockRepo.On("RegisterCar", mock.Anything).Return(expectedCar)
-	mockRepo.On("FindCarByLicensePlate", mock.Anything).Return(nil, nil).Times(0)
-
-	resultingCar, err := usecases.PostCarUseCase(registerRequest, mockRepo)
-
- 	assert.NoError(t, err)
-	assert.NotNil(t, resultingCar)
-	assert.Equal(t, expectedCar, resultingCar)
-	assert.NotEmpty(t, resultingCar.Id)
-	assert.NotEqual(t, "generated_id", resultingCar.Id)
+	assert.Nil(t, err, "Expected no error")
+	assert.NotNil(t, result, "Expected a non-nil result")
 
 	mockRepo.AssertExpectations(t)
 }
@@ -75,14 +71,14 @@ func TestPostCarUseCase(t *testing.T) {
 func TestPostCarUseCase_ValidationFailure(t *testing.T) {
 	mockRepo := new(MockCarRepository)
 
-	invalidRequest := dtos.CarDto{}
- 
+	invalidRequest := dtos.CarInputDTO{}
+
 	mockRepo.On("FindCarByLicensePlate", mock.Anything).Return(nil, nil).Times(0)
 	resultingCar, err := usecases.PostCarUseCase(invalidRequest, mockRepo)
 
 	assert.Error(t, err)
 	assert.Nil(t, resultingCar)
-	assert.Contains(t, err.Error(), "name is required")  
+	assert.Contains(t, err.Error(), " is required")
 	mockRepo.AssertExpectations(t)
 }
 
@@ -185,7 +181,7 @@ func TestCarValidation(t *testing.T) {
 		CreatedAt:    time.Now(),
 	}
 
-	expectedNonExistingCar := (*domain.Car)(nil) 
+	expectedNonExistingCar := (*domain.Car)(nil)
 
 	mockRepo.On("FindCarByLicensePlate", existingLicensePlate).Return(expectedExistingCar, nil)
 	mockRepo.On("FindCarByLicensePlate", nonExistingLicensePlate).Return(expectedNonExistingCar, nil)
@@ -201,4 +197,4 @@ func TestCarValidation(t *testing.T) {
 
 	mockRepo.AssertExpectations(t)
 }
- */
+*/

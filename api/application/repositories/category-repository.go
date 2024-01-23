@@ -6,7 +6,6 @@ import (
 
 type CategoryRepository interface {
 	FindCategoryByName(name string) (*domain.Category, error)
-	// GetAll(page, limit int) ([]*domain.Category, error)
+	GetAll() ([]*domain.Category, error)
 	PostCategory(category *domain.Category) error
-
 }

@@ -27,3 +27,17 @@ func (repo *PGCategory) FindCategoryByName(name string) (*domain.Category, error
 
 	return &category, nil
 }
+
+/* 	GetAll(page, limit int) ([]*domain.Category, error)
+ */
+func (repo *PGCategory) GetAll(/* page, limit int */) ([]*domain.Category, error) {
+	//fmt.Printf("%+v   %+v\n", page, limit)
+	var categories []*domain.Category
+	err := dbconfig.Postgres.Find(&categories).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return categories, nil
+}

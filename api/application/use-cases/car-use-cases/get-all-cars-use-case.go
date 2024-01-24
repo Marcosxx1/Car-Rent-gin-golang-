@@ -15,7 +15,7 @@ func GetAllCarsUseCase(carRepository repositories.CarRepository, page, pageSize 
 
 	for _, car := range allCars {
 		dto := &dtos.CarOutputDTO{
-			Id:           car.Id,
+			ID:           car.ID,
 			Name:         car.Name,
 			Description:  car.Description,
 			DailyRate:    car.DailyRate,
@@ -23,10 +23,9 @@ func GetAllCarsUseCase(carRepository repositories.CarRepository, page, pageSize 
 			LicensePlate: car.LicensePlate,
 			FineAmount:   car.FineAmount,
 			Brand:        car.Brand,
-			CategoryId:   car.CategoryId,
 			CreatedAt:    car.CreatedAt,
 		}
-
+ 
 		outputDTO = append(outputDTO, dto)
 	}
 	return outputDTO, nil

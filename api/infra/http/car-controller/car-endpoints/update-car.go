@@ -33,7 +33,7 @@ func UpdateCarController(context *gin.Context, carRepository repositories.CarRep
 	}
 
 	car := &dtos.CarOutputDTO{
-		Id:           id,
+		ID:           id,
 		Name:         request.Name,
 		Description:  request.Description,
 		DailyRate:    request.DailyRate,
@@ -41,7 +41,7 @@ func UpdateCarController(context *gin.Context, carRepository repositories.CarRep
 		LicensePlate: request.LicensePlate,
 		FineAmount:   request.FineAmount,
 		Brand:        request.Brand,
-		CategoryId:   request.CategoryId,
+		CategoryID:   request.CategoryID,
 	}
 
 	updatedCar, err := usecases.PutCarUseCase(id, *car, carRepository)

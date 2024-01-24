@@ -25,7 +25,7 @@ func RegisterCarController(context *gin.Context, carRepository repositories.CarR
 		LicensePlate: request.LicensePlate,
 		FineAmount: request.FineAmount,
 		Brand: request.Brand,
-		CategoryId: request.CategoryId,
+		CategoryID: request.CategoryID,
 	}
 	
 	createdCar, err := usecases.PostCarUseCase(car, carRepository)

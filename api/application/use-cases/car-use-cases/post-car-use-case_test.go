@@ -2,7 +2,6 @@ package usecases_test
 
 import (
 	"testing"
-	"time"
 
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
@@ -57,7 +56,6 @@ func TestPostCarUseCase_Success(t *testing.T) {
 		LicensePlate: "MAS12345",
 		FineAmount:   10.0,
 		Brand:        "CarBrand",
-		CategoryId:   "Category123",
 	}
 
 	result, err := usecases.PostCarUseCase(registerRequest, mockRepo)
@@ -84,7 +82,7 @@ func TestPostCarUseCase_ValidationFailure(t *testing.T) {
 
 func TestCarValidation(t *testing.T) {
 	validData := domain.Car{
-		Id:           "123",
+		ID:           "123",
 		Name:         "Valid Car",
 		Description:  "Valid Description",
 		DailyRate:    50.0,
@@ -92,8 +90,6 @@ func TestCarValidation(t *testing.T) {
 		LicensePlate: "ABC123",
 		FineAmount:   10.0,
 		Brand:        "Valid Brand",
-		CategoryId:   "456",
-		CreatedAt:    time.Now(),
 	}
 
 	missingRequiredFields := domain.Car{
@@ -104,8 +100,6 @@ func TestCarValidation(t *testing.T) {
 		LicensePlate: "",
 		FineAmount:   0.0,
 		Brand:        "Missing Required Fields Brand",
-		CategoryId:   "789",
-		CreatedAt:    time.Now(),
 	}
 
 	invalidFieldValues := domain.Car{
@@ -122,8 +116,6 @@ func TestCarValidation(t *testing.T) {
 		LicensePlate: "",
 		FineAmount:   10.0,
 		Brand:        "Mixed Data Brand",
-		CategoryId:   "987",
-		CreatedAt:    time.Now(),
 	}
 
 	boundaryValues := domain.Car{
@@ -177,7 +169,6 @@ func TestCarValidation(t *testing.T) {
 		LicensePlate: existingLicensePlate,
 		FineAmount:   10.0,
 		Brand:        "Existing Brand",
-		CategoryId:   "456",
 		CreatedAt:    time.Now(),
 	}
 

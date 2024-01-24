@@ -15,27 +15,25 @@ func TestFindCarById(t *testing.T) {
 	mockRepo := new(MockCarRepository)
 
 	inputCar := &domain.Car{
-			Name:         "Test Car",
-			Description:  "Test Description",
-			DailyRate:    50.0,
-			Available:    true,
-			LicensePlate: "ABC123",
-			FineAmount:   10.0,
-			Brand:        "Test Brand",
-			CategoryId:   "123",
+		Name:         "Test Car",
+		Description:  "Test Description",
+		DailyRate:    50.0,
+		Available:    true,
+		LicensePlate: "ABC123",
+		FineAmount:   10.0,
+		Brand:        "Test Brand",
 	}
 
 	carToBeReturned := &dtos.CarOutputDTO{
-			Id:           "1",
-			Name:         inputCar.Name,
-			Description:  inputCar.Description,
-			DailyRate:    inputCar.DailyRate,
-			Available:    inputCar.Available,
-			LicensePlate: inputCar.LicensePlate,
-			FineAmount:   inputCar.FineAmount,
-			Brand:        inputCar.Brand,
-			CategoryId:   inputCar.CategoryId,
-			CreatedAt:    time.Now(),
+		ID:           "1",
+		Name:         inputCar.Name,
+		Description:  inputCar.Description,
+		DailyRate:    inputCar.DailyRate,
+		Available:    inputCar.Available,
+		LicensePlate: inputCar.LicensePlate,
+		FineAmount:   inputCar.FineAmount,
+		Brand:        inputCar.Brand,
+		CreatedAt:    time.Now(),
 	}
 
 	mockRepo.On("FindCarById", "1").Return(carToBeReturned, nil)
@@ -47,4 +45,3 @@ func TestFindCarById(t *testing.T) {
 	mockRepo.AssertExpectations(t)
 	mockRepo.AssertNumberOfCalls(t, "FindCarById", 1)
 }
-

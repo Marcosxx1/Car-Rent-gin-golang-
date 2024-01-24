@@ -3,7 +3,6 @@ package usecases
 import (
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
@@ -25,7 +24,7 @@ func PostCarUseCase(
 	}
 
 	newCar := &domain.Car{
-		Id:           xid.New().String(),
+		ID:           xid.New().String(),
 		Name:         registerRequest.Name,
 		Description:  registerRequest.Description,
 		DailyRate:    registerRequest.DailyRate,
@@ -33,8 +32,6 @@ func PostCarUseCase(
 		LicensePlate: registerRequest.LicensePlate,
 		FineAmount:   registerRequest.FineAmount,
 		Brand:        registerRequest.Brand,
-		CategoryId:   registerRequest.CategoryId,
-		CreatedAt:    time.Now(),
 	}
 
 	if err := error_handling.ValidateStruct(newCar); err != nil {
@@ -46,7 +43,7 @@ func PostCarUseCase(
 	}
 
 	outPut := &dtos.CarOutputDTO{
-		Id:           newCar.Id,
+		ID:           newCar.ID,
 		Name:         newCar.Name,
 		Description:  newCar.Description,
 		DailyRate:    newCar.DailyRate,
@@ -54,8 +51,6 @@ func PostCarUseCase(
 		LicensePlate: newCar.LicensePlate,
 		FineAmount:   newCar.FineAmount,
 		Brand:        newCar.Brand,
-		CategoryId:   newCar.CategoryId,
-		CreatedAt:    newCar.CreatedAt,
 	}
 
 	return outPut, nil

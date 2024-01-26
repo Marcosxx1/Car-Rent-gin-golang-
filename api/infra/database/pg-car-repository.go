@@ -81,8 +81,6 @@ func (repo *PGCarRepository) FindCarByLicensePlate(licensePlate string) (*domain
 // Returns:
 //   - []*domain.Car: A slice of pointers to all cars in the database.
 //   - error: An error, if any.
-
-
 func (repo *PGCarRepository) FindAllCars(page, pageSize int) ([]*domain.Car, error) {
 	var cars []*domain.Car
 	offset := (page - 1) * pageSize

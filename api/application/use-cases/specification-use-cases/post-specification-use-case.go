@@ -1,6 +1,7 @@
 package specificationusecases
 
 import (
+	"errors"
 	"fmt"
 
 	repo "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
@@ -12,11 +13,12 @@ import (
 func PostSpecificationUseCase(registerSpecification *dtos.SpecificationInputDto, specficationRepository repo.SpecificationRepository) (*dtos.SpecificationOutputDto, error) {
 	existingSpecification, err := specficationRepository.FindSpecificationByName(registerSpecification.Name)
 	if err != nil {
-		return nil, err
+			return nil, fmt.Errorf("error querying specification: %w", err)
 	}
 	if existingSpecification != nil {
-		return nil, err
+			return nil, errors.New("specification already exists")
 	}
+	
 	newSpecification := &domain.Specification{
 		ID:          xid.New().String(),
 		Name:        registerSpecification.Name,

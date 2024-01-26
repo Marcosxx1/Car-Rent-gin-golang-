@@ -65,6 +65,7 @@ func PostCarUseCase(
 		LicensePlate: newCar.LicensePlate,
 		FineAmount:   newCar.FineAmount,
 		Brand:        newCar.Brand,
+		CategoryID:   newCar.CategoryID,
 	}
 
 	return outPut, nil

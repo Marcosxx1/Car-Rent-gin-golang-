@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Specification struct {
 	gorm.Model
-	Id          string `json:"id"`
+	ID          string `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	CarID       string `json:"car_id"`

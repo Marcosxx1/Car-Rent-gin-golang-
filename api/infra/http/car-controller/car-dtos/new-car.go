@@ -10,6 +10,6 @@ type NewCarRequest struct {
 	LicensePlate string  
 	FineAmount   float64 
 	Brand        string  
-	CategoryId   string  
+	CategoryID   string  
 	CreatedAt    time.Time 
  }

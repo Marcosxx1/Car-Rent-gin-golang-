@@ -10,11 +10,9 @@ func GetCarByIdUseCase(id string, carRepository repositories.CarRepository) (*dt
 	if err != nil {
 		return nil, err
 	}
-	// println(existCar)
-	// fmt.Printf("%+v\n", existCar)
 
 	carToBeReturned := &dtos.CarOutputDTO{
-		Id:           existCar.Id,
+		ID:           existCar.ID,
 		Name:         existCar.Name,
 		Description:  existCar.Description,
 		DailyRate:    existCar.DailyRate,
@@ -22,7 +20,6 @@ func GetCarByIdUseCase(id string, carRepository repositories.CarRepository) (*dt
 		LicensePlate: existCar.LicensePlate,
 		FineAmount:   existCar.FineAmount,
 		Brand:        existCar.Brand,
-		CategoryId:   existCar.CategoryId,
 		CreatedAt:    existCar.CreatedAt,
 	}
 

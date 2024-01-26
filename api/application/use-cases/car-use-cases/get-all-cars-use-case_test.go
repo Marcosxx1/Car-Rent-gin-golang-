@@ -8,9 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
- 
-
-func (m *MockCarRepository) FindAllCars() ([]*domain.Car, error) {
+func (m *MockCarRepository) FindAllCars(int, int) ([]*domain.Car, error) {
 	args := m.Called()
 	return args.Get(0).([]*domain.Car), args.Error(1)
 }
@@ -19,19 +17,18 @@ func (m *MockCarRepository) UpdateCar(id string, car domain.Car) (*domain.Car, e
 	return args.Get(0).(*domain.Car), args.Error(1)
 }
 
-
 func TestFindAllUseCase_Success(t *testing.T) {
 	// Arrange
 	mockRepo := new(MockCarRepository)
 	expectedCars := []*domain.Car{
-		{Id: "1", Name: "Car1"},
-		{Id: "2", Name: "Car2"},
+		{ID: "1", Name: "Car1"},
+		{ID: "2", Name: "Car2"},
 	}
 
 	mockRepo.On("FindAllCars").Return(expectedCars, nil)
 
 	// Act
-	resultCars, err := usecases.GetAllCarsUseCase(mockRepo)
+	resultCars, err := usecases.GetAllCarsUseCase(mockRepo, 1, 1)
 
 	// Assert
 	assert.NoError(t, err)

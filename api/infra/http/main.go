@@ -13,10 +13,11 @@ import (
 
 func main() {
 	gin.SetMode(gin.ReleaseMode)
- 
+
 	router := gin.Default()
 	routes.SetupCategoryRoutes(router)
 	routes.SetupCarRoutes(router)
+	routes.SetupSpecificationRoutes(router)
 
 	err := godotenv.Load(".env")
 
@@ -28,6 +29,6 @@ func main() {
 
 	port := os.Getenv("PORT")
 
-	log.Println("server running at port: "  + port)
+	log.Println("server running at port: " + port)
 	router.Run(":" + port)
 }

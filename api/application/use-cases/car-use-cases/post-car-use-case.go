@@ -3,7 +3,6 @@ package usecases
 import (
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
@@ -24,17 +23,29 @@ func PostCarUseCase(
 		return nil, errors.New("car already exists")
 	}
 
+	/* 	Specification []*domain.Specification `json:"specification" validate:required`
+	iterate all  registerRequest.Specification to create a []*Specification
+	*/
+	var specifications []domain.Specification
+	for _, specification := range registerRequest.Specification {
+		specifications = append(specifications, domain.Specification{
+			ID:          xid.New().String(),
+			Name:        specification.Name,
+			Description: specification.Description,
+		})
+	}
+
 	newCar := &domain.Car{
-		Id:           xid.New().String(),
-		Name:         registerRequest.Name,
-		Description:  registerRequest.Description,
-		DailyRate:    registerRequest.DailyRate,
-		Available:    registerRequest.Available,
-		LicensePlate: registerRequest.LicensePlate,
-		FineAmount:   registerRequest.FineAmount,
-		Brand:        registerRequest.Brand,
-		CategoryId:   registerRequest.CategoryId,
-		CreatedAt:    time.Now(),
+		ID:            xid.New().String(),
+		Name:          registerRequest.Name,
+		Description:   registerRequest.Description,
+		DailyRate:     registerRequest.DailyRate,
+		Available:     registerRequest.Available,
+		LicensePlate:  registerRequest.LicensePlate,
+		FineAmount:    registerRequest.FineAmount,
+		Brand:         registerRequest.Brand,
+		CategoryID:    registerRequest.CategoryID,
+		Specification: specifications,
 	}
 
 	if err := error_handling.ValidateStruct(newCar); err != nil {
@@ -46,7 +57,7 @@ func PostCarUseCase(
 	}
 
 	outPut := &dtos.CarOutputDTO{
-		Id:           newCar.Id,
+		ID:           newCar.ID,
 		Name:         newCar.Name,
 		Description:  newCar.Description,
 		DailyRate:    newCar.DailyRate,
@@ -54,8 +65,7 @@ func PostCarUseCase(
 		LicensePlate: newCar.LicensePlate,
 		FineAmount:   newCar.FineAmount,
 		Brand:        newCar.Brand,
-		CategoryId:   newCar.CategoryId,
-		CreatedAt:    newCar.CreatedAt,
+		CategoryID:   newCar.CategoryID,
 	}
 
 	return outPut, nil

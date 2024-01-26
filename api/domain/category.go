@@ -1,10 +1,13 @@
 package domain
 
-import "time"
+import (
+	"gorm.io/gorm"
+)
 
 type Category struct {
-	ID          string    `json:"id"`
-	Name        string    `json:"name" validate:"required"`
-	Description string    `json:"description" validate:"required"`
-	CreatedAt   time.Time `json:"created_at"`
+	gorm.Model
+	ID          string `json:"id"`
+	Name        string `json:"name" validate:"required"`
+	Description string `json:"description" validate:"required"`
+	Car         *[]Car
 }

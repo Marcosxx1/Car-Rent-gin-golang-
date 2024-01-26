@@ -11,7 +11,7 @@ func PutCarUseCase(id string, registerRequest dtos.CarOutputDTO,
 	carRepository repositories.CarRepository) (*dtos.CarOutputDTO, error) {
 
 	carToBeUpdated := &domain.Car{
-		Id:           registerRequest.Id,
+		ID:           registerRequest.ID,
 		Name:         registerRequest.Name,
 		Description:  registerRequest.Description,
 		DailyRate:    registerRequest.DailyRate,
@@ -19,8 +19,6 @@ func PutCarUseCase(id string, registerRequest dtos.CarOutputDTO,
 		LicensePlate: registerRequest.LicensePlate,
 		FineAmount:   registerRequest.FineAmount,
 		Brand:        registerRequest.Brand,
-		CategoryId:   registerRequest.CategoryId,
-		CreatedAt:    registerRequest.CreatedAt,
 	}
 
 	if err := error_handling.ValidateStruct(carToBeUpdated); err != nil {
@@ -33,14 +31,13 @@ func PutCarUseCase(id string, registerRequest dtos.CarOutputDTO,
 	}
 
 	carToBeReturned := &dtos.CarOutputDTO{
-		Id:           car.Id,
+		ID:           car.ID,
 		Name:         car.Name,
 		Description:  car.Description,
 		Available:    car.Available,
 		LicensePlate: car.LicensePlate,
 		FineAmount:   car.FineAmount,
 		Brand:        car.Brand,
-		CategoryId:   car.CategoryId,
 	}
 
 /* 	println(carToBeReturned)

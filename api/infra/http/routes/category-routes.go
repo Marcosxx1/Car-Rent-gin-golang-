@@ -13,4 +13,9 @@ func SetupCategoryRoutes(router *gin.Engine) {
 	router.POST("/api/v1/category/create", func(context *gin.Context) {
 		category_endpoints.PostCategoryController(context, &categoryRepository)
 	})
+
+	router.GET("/api/v1/category/list", func(context *gin.Context) {
+		category_endpoints.ListCategoriesController(context, &categoryRepository)
+	})
+	
 }

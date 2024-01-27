@@ -5,7 +5,7 @@ import (
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/category-use-cases"
-	categorydtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/category-controller/category-dtos"
+	categorydtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/category-controller/category-dtos"
 	"github.com/gin-gonic/gin"
 )
 

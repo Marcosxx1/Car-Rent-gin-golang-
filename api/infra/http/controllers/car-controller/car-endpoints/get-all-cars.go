@@ -6,7 +6,7 @@ import (
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
-	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/car-dtos"
+	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
 	"github.com/gin-gonic/gin"
 )
 
@@ -52,7 +52,7 @@ func getPaginationParameters(context *gin.Context) (int, int) {
 
 	pageSize, err := strconv.Atoi(context.Query("pageSize"))
 	if err != nil || pageSize <= 0 {
-		pageSize = 10 
+		pageSize = 10
 	}
 
 	return page, pageSize

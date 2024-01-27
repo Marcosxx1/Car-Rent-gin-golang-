@@ -4,7 +4,7 @@ import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
-	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/car-dtos"
+	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
 )
 
 func PutCarUseCase(id string, registerRequest dtos.CarOutputDTO,
@@ -40,8 +40,8 @@ func PutCarUseCase(id string, registerRequest dtos.CarOutputDTO,
 		Brand:        car.Brand,
 	}
 
-/* 	println(carToBeReturned)
-	fmt.Printf("%+v\n", carToBeReturned) */
+	/* 	println(carToBeReturned)
+	   	fmt.Printf("%+v\n", carToBeReturned) */
 
 	return carToBeReturned, nil
 }

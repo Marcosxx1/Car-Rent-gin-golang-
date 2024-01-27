@@ -3,7 +3,7 @@ package routes
 
 import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database"
-	endpoints "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/car-endpoints"
+	endpoints "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-endpoints"
 	"github.com/gin-gonic/gin"
 )
 

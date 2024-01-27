@@ -6,7 +6,7 @@ import (
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
-	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/car-dtos"
+	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,7 +27,7 @@ func UpdateCarController(context *gin.Context, carRepository repositories.CarRep
 		return
 	}
 
-	if foundCar == nil { 
+	if foundCar == nil {
 		context.JSON(http.StatusNotFound, gin.H{"error": "Car not found"})
 		return
 	}

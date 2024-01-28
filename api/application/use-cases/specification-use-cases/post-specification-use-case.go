@@ -6,19 +6,19 @@ import (
 
 	repo "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/specification-controller/specification-dtos"
+	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/specification-controller/specification-dtos"
 	"github.com/rs/xid"
 )
 
 func PostSpecificationUseCase(registerSpecification *dtos.SpecificationInputDto, specficationRepository repo.SpecificationRepository) (*dtos.SpecificationOutputDto, error) {
 	existingSpecification, err := specficationRepository.FindSpecificationByName(registerSpecification.Name)
 	if err != nil {
-			return nil, fmt.Errorf("error querying specification: %w", err)
+		return nil, fmt.Errorf("error querying specification: %w", err)
 	}
 	if existingSpecification != nil {
-			return nil, errors.New("specification already exists")
+		return nil, errors.New("specification already exists")
 	}
-	
+
 	newSpecification := &domain.Specification{
 		ID:          xid.New().String(),
 		Name:        registerSpecification.Name,

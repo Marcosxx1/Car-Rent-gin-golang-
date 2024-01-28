@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database"
-	specificationendpoints "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/specification-controller/specification-endpoints"
+	specificationendpoints "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/specification-controller/specification-endpoints"
 	"github.com/gin-gonic/gin"
 )
 

@@ -18,6 +18,7 @@ func main() {
 	routes.SetupCategoryRoutes(router)
 	routes.SetupCarRoutes(router)
 	routes.SetupSpecificationRoutes(router)
+	routes.SetupUserRoutes(router)
 
 	err := godotenv.Load(".env")
 

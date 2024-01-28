@@ -2,7 +2,7 @@ package usecases
 
 import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/car-controller/car-dtos"
+	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
 )
 
 func GetCarByIdUseCase(id string, carRepository repositories.CarRepository) (*dtos.CarOutputDTO, error) {

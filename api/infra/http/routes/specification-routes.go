@@ -9,7 +9,7 @@ import (
 func SetupSpecificationRoutes(router *gin.Engine) {
 	specificationRepository := database.PGSpecification{}
 
-	router.GET("/api/v1/specification/create", func(context *gin.Context) {
+	router.POST("/api/v1/specification/create", func(context *gin.Context) {
 		specificationendpoints.PostSpecificationController(context, &specificationRepository)
 	})
 }

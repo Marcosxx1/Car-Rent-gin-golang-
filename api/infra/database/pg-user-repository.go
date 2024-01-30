@@ -44,7 +44,7 @@ func (repo *PGUserRepository) GetById(id string) (*domain.User, error) {
 	return user, nil
 }
 
-func (repo *PGUserRepository) Update(id string, data *domain.User) error {
-	dbconfig.Postgres.Model(&domain.User{}).Where("id = ?", id).Updates(data)
-	return nil
+func (repo *PGUserRepository) Update(id string, data *domain.User) (*domain.User, error) {
+	dbconfig.Postgres.Model(&data).Where("id = ?", id).Updates(&data)
+	return data, nil
 }

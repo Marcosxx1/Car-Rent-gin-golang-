@@ -43,3 +43,8 @@ func (repo *PGUserRepository) GetById(id string) (*domain.User, error) {
 
 	return user, nil
 }
+
+func (repo *PGUserRepository) Update(id string, data *domain.User) error {
+	dbconfig.Postgres.Model(&domain.User{}).Where("id = ?", id).Updates(data)
+	return nil
+}

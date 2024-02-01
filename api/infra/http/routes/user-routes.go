@@ -12,4 +12,10 @@ func SetupUserRoutes(router *gin.Engine) {
 	router.POST("/api/v1/user/create", func(context *gin.Context) {
 		userendpoints.RegisterUserController(context, &userRepository)
 	})
+	router.GET("/api/v1/user/:id", func(contex *gin.Context) {
+		userendpoints.GetUserByIdController(contex, &userRepository)
+	})
+	router.PATCH("/api/v1/user/:id", func(context *gin.Context) {
+		userendpoints.PatchUserController(context, &userRepository)
+	})
 }

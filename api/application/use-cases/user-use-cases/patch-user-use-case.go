@@ -7,14 +7,13 @@ import (
 	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/user-controller/user-dtos"
 )
 
-func PutUserUseCase(id string, putRequest userdtos.UserInputDTO,
+func PutUserUseCase(id string, putRequest userdtos.UserUpdateDTO,
 	userRepository repositories.UserRepository) (*userdtos.UserOutPutDTO, error) {
 
-	userToBeUpdated := domain.User{
+	userToBeUpdated := userdtos.UserUpdateDTO{
 		ID:     id,
 		Name:   putRequest.Name,
 		Email:  putRequest.Email,
-		Role:   putRequest.Role,
 		Status: putRequest.Status,
 		Avatar: putRequest.Avatar,
 	}
@@ -22,8 +21,16 @@ func PutUserUseCase(id string, putRequest userdtos.UserInputDTO,
 	if err := error_handling.ValidateStruct(userToBeUpdated); err != nil {
 		return nil, err
 	}
+	/* convert userToBeUpdated to domain.User */
+	userToBeUpdatedDomain := &domain.User{
+		ID:     id,
+		Name:   userToBeUpdated.Name,
+		Email:  userToBeUpdated.Email,
+		Status: userToBeUpdated.Status,
+		Avatar: userToBeUpdated.Avatar,
+	}
 
-	userUpdated, err := userRepository.Update(id, &userToBeUpdated)
+	userUpdated, err := userRepository.Update(id, userToBeUpdatedDomain)
 
 	if err != nil {
 		return nil, err
@@ -33,7 +40,6 @@ func PutUserUseCase(id string, putRequest userdtos.UserInputDTO,
 		ID:     userUpdated.ID,
 		Name:   userToBeUpdated.Name,
 		Email:  userToBeUpdated.Email,
-		Role:   userToBeUpdated.Role,
 		Status: userToBeUpdated.Status,
 		Avatar: userToBeUpdated.Avatar,
 	}

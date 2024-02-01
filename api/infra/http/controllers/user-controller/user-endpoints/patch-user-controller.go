@@ -11,7 +11,7 @@ import (
 
 func PatchUserController(context *gin.Context, userRepository r.UserRepository) {
 
-	var request userdtos.UserInputDTO
+	var request userdtos.UserUpdateDTO
 	if err := context.ShouldBindJSON(&request); err != nil {
 		context.JSON(400, gin.H{"error": err.Error()})
 		return
@@ -29,13 +29,11 @@ func PatchUserController(context *gin.Context, userRepository r.UserRepository) 
 		return
 	}
 
-	user := &userdtos.UserInputDTO{
-		Name:     request.Name,
-		Email:    request.Email,
-		Password: request.Password,
-		Role:     request.Role,
-		Status:   request.Status,
-		Avatar:   request.Avatar,
+	user := &userdtos.UserUpdateDTO{
+		Name:   request.Name,
+		Email:  request.Email,
+		Status: request.Status,
+		Avatar: request.Avatar,
 	}
 
 	updatedUser, err := userusecases.PutUserUseCase(id, *user, userRepository)

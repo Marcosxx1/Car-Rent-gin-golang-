@@ -10,11 +10,18 @@ type UserInputDTO struct {
 	Avatar      string `json:"avatar"`
 }
 
+type UserUpdateDTO struct {
+	ID     string `json:"id"`
+	Name   string `json:"name" binding:"required"`
+	Email  string `json:"email" binding:"required"`
+	Status string `json:"status" binding:"required"`
+	Avatar string `json:"avatar" binding:"required"`
+}
+
 type UserOutPutDTO struct {
 	ID        string `json:"id"`
 	Name      string `json:"name"`
 	Email     string `json:"email"`
-	Role      string `json:"role"`
 	Status    string `json:"status"`
 	Avatar    string `json:"avatar"`
 	CreatedAt string `json:"created_at"`

@@ -51,7 +51,6 @@ func PostUserUseCase(registerRequest userdtos.UserInputDTO,
 		ID:     newUser.ID,
 		Name:   newUser.Name,
 		Email:  newUser.Email,
-		Role:   newUser.Role,
 		Status: newUser.Status,
 		Avatar: newUser.Avatar,
 	}

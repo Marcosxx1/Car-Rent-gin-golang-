@@ -31,8 +31,8 @@ func Connection() {
 	db.AutoMigrate(&domain.Specification{})
 	db.AutoMigrate(&domain.User{})
 	db.AutoMigrate(&domain.UserCar{})
-
-	/* create an association with user and car using UserCar */
+	db.AutoMigrate(&domain.Maintenance{})
+	db.AutoMigrate(&domain.CarMaintenance{})
 
 	Postgres = db
 }

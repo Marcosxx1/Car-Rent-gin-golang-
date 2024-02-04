@@ -16,5 +16,5 @@ type Car struct {
 	Brand         string          `json:"brand" validate:"required"`
 	CategoryID    string          `json:"category_id"`
 	Specification []Specification `json:"specifications"` // One car HAS MANY specifications
-	Cars          []Car           `gorm:"many2many:user_cars"`
+	Maintenances  []*Maintenance  `gorm:"many2many:car_maintenances;"`
 }

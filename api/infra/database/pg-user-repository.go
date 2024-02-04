@@ -2,6 +2,7 @@ package database
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	dbconfig "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database/postgres/db-config"
@@ -47,4 +48,17 @@ func (repo *PGUserRepository) GetById(id string) (*domain.User, error) {
 func (repo *PGUserRepository) Update(id string, data *domain.User) (*domain.User, error) {
 	dbconfig.Postgres.Model(&data).Where("id = ?", id).Updates(&data)
 	return data, nil
+}
+
+func (repo *PGUserRepository) UpdatePassword(id, newPassword string) error {
+	result := dbconfig.Postgres.Model(&domain.User{}).Where("id = ?", id).Update("password", newPassword)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return fmt.Errorf("user with ID %s not found", id)
+	}
+
+	return nil
 }

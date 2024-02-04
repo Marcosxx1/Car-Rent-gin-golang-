@@ -1,13 +1,12 @@
 package userdtos
 
 type UserInputDTO struct {
-	Name        string `json:"name" binding:"required"`
-	Email       string `json:"email" binding:"required"`
-	Password    string `json:"password" binding:"required"`
-	OldPassword string `json:"old_password" binding:"required"`
-	Role        string `json:"role" binding:"required"`
-	Status      string `json:"status" binding:"required"`
-	Avatar      string `json:"avatar"`
+	Name     string `json:"name" binding:"required"`
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+	Role     string `json:"role" binding:"required"`
+	Status   string `json:"status" binding:"required"`
+	Avatar   string `json:"avatar"`
 }
 
 type UserUpdateDTO struct {
@@ -25,4 +24,9 @@ type UserOutPutDTO struct {
 	Status    string `json:"status"`
 	Avatar    string `json:"avatar"`
 	CreatedAt string `json:"created_at"`
+}
+
+type ChangePasswordDTO struct {
+	CurrentPassword string `json:"current_password" binding:"required"`
+	NewPassword     string `json:"new_password" binding:"required"`
 }

@@ -11,7 +11,7 @@ import (
 
 var Postgres *gorm.DB
 
-func Connection() {
+func Connection() (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=UTC",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_USER"),
@@ -21,9 +21,8 @@ func Connection() {
 	)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-
 	if err != nil {
-		panic("Failed to connect database!")
+		return nil, fmt.Errorf("failed to connect to database: %w", err)
 	}
 
 	db.AutoMigrate(&domain.Car{})
@@ -31,8 +30,10 @@ func Connection() {
 	db.AutoMigrate(&domain.Specification{})
 	db.AutoMigrate(&domain.User{})
 	db.AutoMigrate(&domain.UserCar{})
-
-	/* create an association with user and car using UserCar */
+	db.AutoMigrate(&domain.Maintenance{})
+	db.AutoMigrate(&domain.Part{})
+	db.AutoMigrate(&domain.CarMaintenance{})
 
 	Postgres = db
+	return db, nil
 }

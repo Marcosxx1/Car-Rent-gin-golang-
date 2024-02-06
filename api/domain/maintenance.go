@@ -23,7 +23,6 @@ type Maintenance struct {
 	PartsCost                 int       `json:"parts_cost"`
 	NextMaintenanceDueDate    time.Time `json:"next_maintenance_due_date"`
 	MaintenanceCompletionDate time.Time `json:"maintenance_completion_date"`
-	CreatedAt                 time.Time `json:"created_at"`
 	Car                       []*Car    `gorm:"many2many:car_maintenances"`
 }
 

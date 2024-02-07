@@ -17,7 +17,7 @@ type Maintenance struct {
 	MaintenanceStatus         string    `json:"maintenance_status" binding:"required"`
 	MaintenanceDuration       string    `json:"maintenance_duration"`
 	Description               string    `json:"description"`
-	PartsReplaced             []Part    `json:"parts_replaced" gorm:"foreignKey:MaintenanceID"`
+	PartsReplaced             []Part    `json:"parts_replaced"`
 	MaintenanceNotes          string    `json:"maintenance_notes"`
 	LaborCost                 int       `json:"labor_cost"`
 	PartsCost                 int       `json:"parts_cost"`
@@ -27,8 +27,7 @@ type Maintenance struct {
 }
 
 type Part struct {
-	gorm.Model
-	MaintenanceID string `json:"-"`
+	MaintenanceID string `json:"maintenance_id"`
 	Name          string `json:"name"`
 	Quantity      int    `json:"quantity"`
 	Cost          int    `json:"cost"`

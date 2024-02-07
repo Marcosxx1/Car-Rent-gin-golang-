@@ -18,7 +18,7 @@ func RegisterMaintenanceController(context *gin.Context, carRepository repositor
 
 	carID := context.Param("carID")
 
-	postMaintenanceUseCase := usecases.NewPostMaintenanceUseCase(context, carRepository, maintenanceRepository)
+	postMaintenanceUseCase := usecases.NewPostMaintenanceUseCase(carRepository, maintenanceRepository)
 
 	createdMaintenance, err := postMaintenanceUseCase.Execute(carID, request)
 	if err != nil {

@@ -17,18 +17,20 @@ type Maintenance struct {
 	MaintenanceStatus         string    `json:"maintenance_status" binding:"required"`
 	MaintenanceDuration       string    `json:"maintenance_duration"`
 	Description               string    `json:"description"`
-	PartsReplaced             []Part    `json:"parts_replaced"`
 	MaintenanceNotes          string    `json:"maintenance_notes"`
 	LaborCost                 int       `json:"labor_cost"`
 	PartsCost                 int       `json:"parts_cost"`
 	NextMaintenanceDueDate    time.Time `json:"next_maintenance_due_date"`
 	MaintenanceCompletionDate time.Time `json:"maintenance_completion_date"`
 	Car                       []*Car    `gorm:"many2many:car_maintenances"`
+	Parts                     []Part    `gorm:"foreignkey:MaintenanceID"`
 }
 
 type Part struct {
-	MaintenanceID string `json:"maintenance_id"`
-	Name          string `json:"name"`
-	Quantity      int    `json:"quantity"`
-	Cost          int    `json:"cost"`
+	gorm.Model
+	MaintenanceID   string    `json:"maintenance_id"`
+	Name            string    `json:"name"`
+	Cost            int       `json:"cost"`
+	Quantity        int       `json:"quantity"`
+	ReplacementDate time.Time `json:"replacement_date"`
 }

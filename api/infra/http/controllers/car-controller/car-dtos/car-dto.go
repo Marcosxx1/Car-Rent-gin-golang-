@@ -44,25 +44,3 @@ type CarOutputDTO struct {
 	CreatedAt     time.Time              `json:"created_at"`
 	Specification []domain.Specification `json:"specification"`
 }
-
-/* type CarCommonDTO struct {
-    Name         string  `json:"name" validate:"required"`
-    Description  string  `json:"description" validate:"required"`
-    DailyRate    float64 `json:"daily_rate" validate:"required"`
-    Available    bool    `json:"available" validate:"required"`
-    LicensePlate string  `json:"license_plate" validate:"required"`
-    FineAmount   float64 `json:"fine_amount" validate:"required"`
-    Brand        string  `json:"brand" validate:"required"`
-    CategoryID   string  `json:"category_id" validate:"required"`
-}
-
-type CarInputDTO struct {
-    CarCommonDTO
-}
-
-type CarOutputDTO struct {
-    CarCommonDTO
-    Id        string    `json:"id"`
-    CreatedAt time.Time `json:"created_at"`
-}
-*/

@@ -1,4 +1,4 @@
-package error_handling
+package validation_errors
 
 import (
 	"errors"

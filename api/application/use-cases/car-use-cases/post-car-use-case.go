@@ -6,8 +6,8 @@ import (
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/rs/xid"
 )
 
@@ -45,7 +45,7 @@ func PostCarUseCase(
 		Specification: specifications,
 	}
 
-	if err := error_handling.ValidateStruct(newCar); err != nil {
+	if err := validation_errors.ValidateStruct(newCar); err != nil {
 		return nil, err
 	}
 

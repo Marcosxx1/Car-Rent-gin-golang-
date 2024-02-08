@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
 	hashpassword "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/user-controller/hash-password"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 )
 
 func ChangePasswordUseCase(id string, currentPassword string, newPassword string, userRepository repositories.UserRepository) error {
@@ -26,7 +26,7 @@ func ChangePasswordUseCase(id string, currentPassword string, newPassword string
 
 	existingUserPassword := newHashedPassword
 
-	if err := error_handling.ValidateStruct(existingUser); err != nil {
+	if err := validation_errors.ValidateStruct(existingUser); err != nil {
 		return err
 	}
 

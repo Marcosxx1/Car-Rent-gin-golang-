@@ -3,8 +3,8 @@ package userusecases
 import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
 	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/user-controller/user-dtos"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 )
 
 func PutUserUseCase(id string, putRequest userdtos.UserUpdateDTO,
@@ -18,7 +18,7 @@ func PutUserUseCase(id string, putRequest userdtos.UserUpdateDTO,
 		Avatar: putRequest.Avatar,
 	}
 
-	if err := error_handling.ValidateStruct(userToBeUpdated); err != nil {
+	if err := validation_errors.ValidateStruct(userToBeUpdated); err != nil {
 		return nil, err
 	}
 	/* convert userToBeUpdated to domain.User */

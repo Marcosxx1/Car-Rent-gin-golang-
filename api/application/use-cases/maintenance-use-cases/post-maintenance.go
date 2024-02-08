@@ -6,8 +6,8 @@ import (
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
 	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/maintenance-dtos.go"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/rs/xid"
 )
 
@@ -64,7 +64,7 @@ func (useCase *PostMaintenanceUseCase) Execute(carID string, inputDTO m.Maintena
 		Parts:                     parts,
 	}
 
-	if err := error_handling.ValidateStruct(newMaintenance); err != nil {
+	if err := validation_errors.ValidateStruct(newMaintenance); err != nil {
 		return nil, err
 	}
 

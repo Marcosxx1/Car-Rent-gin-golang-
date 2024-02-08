@@ -23,9 +23,6 @@ func PostCarUseCase(
 		return nil, errors.New("car already exists")
 	}
 
-	/* 	Specification []*domain.Specification `json:"specification" validate:required`
-	iterate all  registerRequest.Specification to create a []*Specification
-	*/
 	var specifications []domain.Specification
 	for _, specification := range registerRequest.Specification {
 		specifications = append(specifications, domain.Specification{

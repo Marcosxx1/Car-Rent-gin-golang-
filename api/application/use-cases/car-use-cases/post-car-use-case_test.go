@@ -30,16 +30,9 @@ func (m *MockCarRepository) FindCarByLicensePlate(licensePlate string) (*domain.
 	return args.Get(0).(*domain.Car), args.Error(1)
 }
 
-func (m *MockCarRepository) FindCarById(id string) (*domain.Car, error) {
-	args := m.Called(id)
-	return args.Get(0).(*domain.Car), args.Error(1)
-}
-
 func TestPostCarUseCase_Success(t *testing.T) {
-	// Arrange
 	mockRepo := new(MockCarRepository)
 
-	// Set up expectations for FindCarByLicensePlate
 	mockRepo.On("FindCarByLicensePlate", mock.AnythingOfType("string")).
 		Return(nil, nil)
 
@@ -117,7 +110,6 @@ func TestCarValidation(t *testing.T) {
 	}
 
 	boundaryValues := domain.Car{
-		// boundary values...
 		DailyRate:  0.0,
 		FineAmount: 0.0,
 	}

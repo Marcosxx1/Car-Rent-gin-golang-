@@ -11,21 +11,21 @@ import (
 )
 
 // RegisterCarController handles the HTTP POST request to create a new car.
-// @Sumary				Create a new car
+// @Summary				Create a new car
 // @Description		Create a new car with the provided information
 // @ID						post-car
 // @Tags					Car
 // @Accept				json
 // @Produce				json
-// @Param					request			body 		 dtos.CarInputDTO	true "Car information to be created"
+// @Param					request			body 		  dtos.CarInputDTO	true "Car information to be created"
 // @Success	    	201   			{object} 	dtos.CarOutputDTO "Successfully created car"
-//	@Failure			400					{array}		validation_errors.HTTPError
+// @Failure				422					{array}		validation_errors.HTTPErrorCar
 // @Router				/api/v1/cars/create [post]
 func RegisterCarController(context *gin.Context, carRepository repositories.CarRepository) {
 
 	var request dtos.CarInputDTO
-	if err := context.ShouldBindJSON(&request); err != nil {
-		validation_errors.NewError(context, http.StatusBadRequest, err)
+	if err := context.ShouldBindJSON(&request); err != nil { 
+		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return
 	}
 	//fmt.Printf("%+v\n", request)
@@ -42,7 +42,7 @@ func RegisterCarController(context *gin.Context, carRepository repositories.CarR
 
 	createdCar, err := usecases.PostCarUseCase(car, carRepository)
 	if err != nil {
-		validation_errors.NewError(context, http.StatusBadRequest, err)
+		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return
 	} else {
 		context.JSON(http.StatusOK, createdCar)

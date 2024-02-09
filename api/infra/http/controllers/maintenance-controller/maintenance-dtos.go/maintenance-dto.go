@@ -1,9 +1,9 @@
-package dto
+package maintenancedtos
 
 import "time"
 
 type MaintenanceInputDTO struct {
-	CarID                     string         `json:"car_id" binding:"required"`
+	CarID                     string         `json:"car_id"`
 	MaintenanceType           string         `json:"maintenance_type" binding:"required"`
 	OdometerReading           int            `json:"odometer_reading"`
 	LastMaintenanceDate       time.Time      `json:"last_maintenance_date"`

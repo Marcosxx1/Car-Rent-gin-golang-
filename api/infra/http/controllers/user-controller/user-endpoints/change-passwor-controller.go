@@ -10,17 +10,14 @@ import (
 )
 
 func ChangePasswordController(context *gin.Context, userRepo r.UserRepository) {
-	// Get user ID from the URL parameter
 	userID := context.Param("id")
 
-	// Bind JSON request to DTO
 	var request userdtos.ChangePasswordDTO
 	if err := context.ShouldBindJSON(&request); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Call the change password use case
 	err := userusecases.ChangePasswordUseCase(userID, request.CurrentPassword, request.NewPassword, userRepo)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

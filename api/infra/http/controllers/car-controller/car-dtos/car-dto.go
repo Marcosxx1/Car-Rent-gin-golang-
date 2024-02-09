@@ -3,7 +3,7 @@ package dtos
 import (
 	"time"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
+	specificationdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/specification-controller/specification-dtos"
 )
 
 /*
@@ -28,7 +28,7 @@ type CarInputDTO struct {
 	FineAmount    float64                `json:"fine_amount" validate:"required"`
 	Brand         string                 `json:"brand" validate:"required"`
 	CategoryID    string                 `json:"category_id" validate:"required"`
-	Specification []domain.Specification `json:"specification"`
+	Specification []specificationdtos.SpecificationInputDto `json:"specification"`
 }
 
 type CarOutputDTO struct {
@@ -42,5 +42,5 @@ type CarOutputDTO struct {
 	Brand         string                 `json:"brand"`
 	CategoryID    string                 `json:"category_id"`
 	CreatedAt     time.Time              `json:"created_at"`
-	Specification []domain.Specification `json:"specification"`
+	Specification []specificationdtos.SpecificationOutputDto `json:"specification"`
 }

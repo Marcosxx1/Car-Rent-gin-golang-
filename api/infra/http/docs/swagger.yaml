@@ -1,0 +1,501 @@
+definitions:
+  categorydtos.CategoryInputDTO:
+    properties:
+      description:
+        example: '''description is required'''
+        type: string
+      name:
+        example: '''name is required'''
+        type: string
+    required:
+    - description
+    - name
+    type: object
+  categorydtos.CategoryOutputDTO:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  dtos.CarInputDTO:
+    properties:
+      available:
+        type: boolean
+      brand:
+        type: string
+      category_id:
+        type: string
+      daily_rate:
+        type: number
+      description:
+        type: string
+      fine_amount:
+        type: number
+      license_plate:
+        type: string
+      name:
+        type: string
+      specification:
+        items:
+          $ref: '#/definitions/specificationdtos.SpecificationInputDto'
+        type: array
+    required:
+    - available
+    - brand
+    - category_id
+    - daily_rate
+    - description
+    - fine_amount
+    - license_plate
+    - name
+    type: object
+  dtos.CarOutputDTO:
+    properties:
+      available:
+        type: boolean
+      brand:
+        type: string
+      category_id:
+        type: string
+      created_at:
+        type: string
+      daily_rate:
+        type: number
+      description:
+        type: string
+      fine_amount:
+        type: number
+      id:
+        type: string
+      license_plate:
+        type: string
+      name:
+        type: string
+      specification:
+        items:
+          $ref: '#/definitions/specificationdtos.SpecificationOutputDto'
+        type: array
+    type: object
+  maintenancedtos.MaintenanceInputDTO:
+    properties:
+      car_id:
+        type: string
+      description:
+        type: string
+      labor_cost:
+        type: integer
+      last_maintenance_date:
+        type: string
+      maintenance_completion_date:
+        type: string
+      maintenance_duration:
+        type: string
+      maintenance_notes:
+        type: string
+      maintenance_status:
+        type: string
+      maintenance_type:
+        type: string
+      next_maintenance_due_date:
+        type: string
+      odometer_reading:
+        type: integer
+      parts:
+        items:
+          $ref: '#/definitions/maintenancedtos.PartInputDTO'
+        type: array
+      parts_cost:
+        type: integer
+      scheduled_maintenance:
+        type: boolean
+    required:
+    - car_id
+    - maintenance_status
+    - maintenance_type
+    type: object
+  maintenancedtos.MaintenanceOutputDTO:
+    properties:
+      car_id:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      labor_cost:
+        type: integer
+      last_maintenance_date:
+        type: string
+      maintenance_completion_date:
+        type: string
+      maintenance_duration:
+        type: string
+      maintenance_notes:
+        type: string
+      maintenance_status:
+        type: string
+      maintenance_type:
+        type: string
+      next_maintenance_due_date:
+        type: string
+      odometer_reading:
+        type: integer
+      parts:
+        items:
+          $ref: '#/definitions/maintenancedtos.PartOutputDTO'
+        type: array
+      parts_cost:
+        type: integer
+      scheduled_maintenance:
+        type: boolean
+    type: object
+  maintenancedtos.PartInputDTO:
+    properties:
+      cost:
+        type: integer
+      name:
+        type: string
+      quantity:
+        type: integer
+      replacement_date:
+        type: string
+    required:
+    - name
+    type: object
+  maintenancedtos.PartOutputDTO:
+    properties:
+      cost:
+        type: integer
+      id:
+        type: string
+      maintenance_id:
+        type: string
+      name:
+        type: string
+      quantity:
+        type: integer
+      replacement_date:
+        type: string
+    type: object
+  specificationdtos.SpecificationInputDto:
+    properties:
+      car_id:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  specificationdtos.SpecificationOutputDto:
+    properties:
+      car_id:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  validation_errors.HTTPError:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: status bad request
+        type: string
+    type: object
+  validation_errors.HTTPErrorCar:
+    properties:
+      code:
+        example: 422
+        type: integer
+      errors:
+        example:
+        - '[''name is required'''
+        - ' ''description is required'''
+        - ' ''licenseplate is required'''
+        - ' ''brand is required'''
+        - ' ''A car needs a category to be registered'']'
+        items:
+          type: string
+        type: array
+      message:
+        example: ""
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Serviço utilizando o framework gin
+  title: Serviço de locação de carros
+  version: "1.0"
+paths:
+  /api/v1/cars:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of cars with pagination support.
+      operationId: list-car
+      parameters:
+      - description: Page number (default is 1)
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page (default is 10)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of cars
+          schema:
+            items:
+              $ref: '#/definitions/dtos.CarOutputDTO'
+            type: array
+        "422":
+          description: Unprocessable Entity
+          schema:
+            items:
+              $ref: '#/definitions/validation_errors.HTTPError'
+            type: array
+      summary: List all cars
+      tags:
+      - Car
+  /api/v1/cars/{carID}/maintenance/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new maintenance with the provided information
+      operationId: post-car
+      parameters:
+      - description: CarID
+        in: path
+        name: carID
+        required: true
+        type: string
+      - description: Maintenance information to be created
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/maintenancedtos.MaintenanceInputDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created maintenance
+          schema:
+            $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            items:
+              $ref: '#/definitions/validation_errors.HTTPErrorCar'
+            type: array
+      summary: Create a new maintenance
+      tags:
+      - Maintenance
+  /api/v1/cars/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Find a car with the provided id
+      operationId: get-car
+      parameters:
+      - description: Car ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ' car'
+          schema:
+            $ref: '#/definitions/dtos.CarOutputDTO'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            items:
+              $ref: '#/definitions/validation_errors.HTTPError'
+            type: array
+      summary: Find car
+      tags:
+      - Car
+  /api/v1/cars/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new car with the provided information
+      operationId: post-car
+      parameters:
+      - description: Car information to be created
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CarInputDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created car
+          schema:
+            $ref: '#/definitions/dtos.CarOutputDTO'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            items:
+              $ref: '#/definitions/validation_errors.HTTPErrorCar'
+            type: array
+      summary: Create a new car
+      tags:
+      - Car
+    put:
+      consumes:
+      - application/json
+      description: Update a car with the provided ID.
+      operationId: put-car
+      parameters:
+      - description: Car ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Car information to be updated
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CarInputDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully updated car
+          schema:
+            $ref: '#/definitions/dtos.CarOutputDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/validation_errors.HTTPErrorCar'
+      summary: Update a car
+      tags:
+      - Car
+  /api/v1/cars/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a car with the provided ID.
+      operationId: delete-car
+      parameters:
+      - description: Car ID to be deleted
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Car deleted successfully
+        "400":
+          description: Error details
+          schema:
+            $ref: '#/definitions/validation_errors.HTTPErrorCar'
+      summary: Delete a car
+      tags:
+      - Car
+  /api/v1/category/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new category with the provided information.
+      operationId: post-category
+      parameters:
+      - description: Category information to be created
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/categorydtos.CategoryInputDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created category
+          schema:
+            $ref: '#/definitions/categorydtos.CategoryOutputDTO'
+      summary: Create a new category
+      tags:
+      - Category
+  /api/v1/category/list:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all categories.
+      operationId: list-categories
+      parameters:
+      - description: Limit the number of categories to be retrieved
+        in: query
+        name: limit
+        type: integer
+      - description: Offset for pagination of categories
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of categories
+          schema:
+            items:
+              $ref: '#/definitions/categorydtos.CategoryOutputDTO'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/validation_errors.HTTPError'
+      summary: Retrieve a list of categories
+      tags:
+      - Category
+  /api/v1/specification/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new specification with the provided information.
+      operationId: post-specification
+      parameters:
+      - description: Specification information to be created
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/specificationdtos.SpecificationInputDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created specification
+          schema:
+            $ref: '#/definitions/specificationdtos.SpecificationOutputDto'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/validation_errors.HTTPError'
+      summary: Create a new specification
+      tags:
+      - Specification
+swagger: "2.0"

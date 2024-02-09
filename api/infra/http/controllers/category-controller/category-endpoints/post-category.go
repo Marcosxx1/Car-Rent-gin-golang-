@@ -19,7 +19,6 @@ import (
 // @Produce     json
 // @Param       request    body    categorydtos.CategoryInputDTO true "Category information to be created"
 // @Success	    201   		{object} categorydtos.CategoryOutputDTO "Successfully created category"
-// @Failure			400       {object} validation_errors.HTTPError
 // @Router			/api/v1/category/create [post]
 func PostCategoryController(context *gin.Context, categoryRepository repositories.CategoryRepository) {
 

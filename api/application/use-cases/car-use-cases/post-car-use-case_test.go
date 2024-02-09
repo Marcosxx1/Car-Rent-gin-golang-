@@ -5,8 +5,8 @@ import (
 
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -30,16 +30,9 @@ func (m *MockCarRepository) FindCarByLicensePlate(licensePlate string) (*domain.
 	return args.Get(0).(*domain.Car), args.Error(1)
 }
 
-func (m *MockCarRepository) FindCarById(id string) (*domain.Car, error) {
-	args := m.Called(id)
-	return args.Get(0).(*domain.Car), args.Error(1)
-}
-
 func TestPostCarUseCase_Success(t *testing.T) {
-	// Arrange
 	mockRepo := new(MockCarRepository)
 
-	// Set up expectations for FindCarByLicensePlate
 	mockRepo.On("FindCarByLicensePlate", mock.AnythingOfType("string")).
 		Return(nil, nil)
 
@@ -117,7 +110,6 @@ func TestCarValidation(t *testing.T) {
 	}
 
 	boundaryValues := domain.Car{
-		// boundary values...
 		DailyRate:  0.0,
 		FineAmount: 0.0,
 	}
@@ -136,7 +128,7 @@ func TestCarValidation(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.errorText, func(t *testing.T) {
-			err := error_handling.ValidateStruct(tc.car)
+			err := validation_errors.ValidateStruct(tc.car)
 
 			if tc.isValid {
 				assert.NoError(t, err)

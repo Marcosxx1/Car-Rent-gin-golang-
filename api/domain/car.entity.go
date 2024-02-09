@@ -15,6 +15,6 @@ type Car struct {
 	FineAmount    float64         `json:"fine_amount" validate:"gte=0"`
 	Brand         string          `json:"brand" validate:"required"`
 	CategoryID    string          `json:"category_id"`
-	Specification []Specification `json:"specifications"` // One car HAS MANY specifications
+	Specification []*Specification `json:"specifications"` // One car HAS MANY specifications
 	Maintenances  []*Maintenance  `gorm:"many2many:car_maintenances;"`
 }

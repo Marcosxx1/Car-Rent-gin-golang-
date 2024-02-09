@@ -6,9 +6,8 @@ import (
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
 	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/maintenance-dtos.go"
-	"github.com/gin-gonic/gin"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/rs/xid"
 )
 
@@ -18,7 +17,6 @@ type PostMaintenanceUseCase struct {
 }
 
 func NewPostMaintenanceUseCase(
-	context *gin.Context,
 	carRepository repositories.CarRepository,
 	maintenanceRepository repositories.MaintenanceRepository) *PostMaintenanceUseCase {
 	return &PostMaintenanceUseCase{
@@ -27,30 +25,21 @@ func NewPostMaintenanceUseCase(
 	}
 }
 
-func (repo *PostMaintenanceUseCase) Execute(carID string, inputDTO m.MaintenanceInputDTO) (*m.MaintenanceOutputDTO, error) {
-	existCar, err := repo.carRepository.FindCarById(carID)
-	if err != nil {
-		return nil, err
-	}
-	if existCar == nil {
-		return nil, errors.New("car not found")
-	}
+func (useCase *PostMaintenanceUseCase) Execute(carID string, inputDTO m.MaintenanceInputDTO) (*m.MaintenanceOutputDTO, error) {
 
-	maintenanceId := xid.New().String()
-
+	newMaintenanceID := xid.New().String()
 	var parts []domain.Part
-
-	for _, part := range inputDTO.PartsReplaced {
+	for _, partDTO := range inputDTO.Parts {
 		parts = append(parts, domain.Part{
-			MaintenanceID: maintenanceId,
-			Name:          part.Name,
-			Quantity:      part.Quantity,
-			Cost:          part.Cost,
+			Name:            partDTO.Name,
+			Cost:            partDTO.Cost,
+			Quantity:        partDTO.Quantity,
+			ReplacementDate: partDTO.ReplacementDate,
 		})
 	}
 
 	newMaintenance := &domain.Maintenance{
-		ID:                        maintenanceId,
+		ID:                        newMaintenanceID,
 		CarID:                     carID,
 		MaintenanceType:           inputDTO.MaintenanceType,
 		OdometerReading:           inputDTO.OdometerReading,
@@ -59,19 +48,27 @@ func (repo *PostMaintenanceUseCase) Execute(carID string, inputDTO m.Maintenance
 		MaintenanceStatus:         inputDTO.MaintenanceStatus,
 		MaintenanceDuration:       inputDTO.MaintenanceDuration,
 		Description:               inputDTO.Description,
-		PartsReplaced:             parts,
 		MaintenanceNotes:          inputDTO.MaintenanceNotes,
 		LaborCost:                 inputDTO.LaborCost,
 		PartsCost:                 inputDTO.PartsCost,
 		NextMaintenanceDueDate:    inputDTO.NextMaintenanceDueDate,
 		MaintenanceCompletionDate: inputDTO.MaintenanceCompletionDate,
-	}
-
-	if err := error_handling.ValidateStruct(newMaintenance); err != nil {
+		Parts:                     parts,
+	}	
+ 
+	if err := validation_errors.ValidateStruct(newMaintenance); err != nil {
 		return nil, err
 	}
 
-	if err := repo.maintenanceRepository.CreateMaintenance(newMaintenance); err != nil {
+	existingCar, err := useCase.carRepository.FindCarById(carID)
+	if err != nil {
+		return nil, err
+	}
+	if existingCar == nil {
+		return nil, errors.New("car not found")
+	}
+
+	if err := useCase.maintenanceRepository.CreateMaintenance(newMaintenance); err != nil {
 		return nil, fmt.Errorf("failed to create maintenance record: %w", err)
 	}
 
@@ -85,13 +82,27 @@ func (repo *PostMaintenanceUseCase) Execute(carID string, inputDTO m.Maintenance
 		MaintenanceStatus:         newMaintenance.MaintenanceStatus,
 		MaintenanceDuration:       newMaintenance.MaintenanceDuration,
 		Description:               newMaintenance.Description,
-		PartsReplaced:             []m.PartOutputDTO{},
 		MaintenanceNotes:          newMaintenance.MaintenanceNotes,
 		LaborCost:                 newMaintenance.LaborCost,
 		PartsCost:                 newMaintenance.PartsCost,
 		NextMaintenanceDueDate:    newMaintenance.NextMaintenanceDueDate,
 		MaintenanceCompletionDate: newMaintenance.MaintenanceCompletionDate,
+		Parts:                     convertPartsToDTO(newMaintenance.Parts),
 	}
 
 	return outputDTO, nil
+}
+
+func convertPartsToDTO(parts []domain.Part) []m.PartOutputDTO {
+	var partsDTO []m.PartOutputDTO
+	for _, part := range parts {
+		partsDTO = append(partsDTO, m.PartOutputDTO{
+			MaintenanceID:   part.MaintenanceID,
+			Name:            part.Name,
+			Cost:            part.Cost,
+			Quantity:        part.Quantity,
+			ReplacementDate: part.ReplacementDate,
+		})
+	}
+	return partsDTO
 }

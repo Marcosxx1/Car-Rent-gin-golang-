@@ -10,6 +10,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary List all cars
+// @Description Retrieve a list of cars with pagination support.
+// @ID list-car
+// @Tags Car
+// @Accept json
+// @Produce json
+// @Param page query int false "Page number (default is 1)"
+// @Param pageSize query int false "Number of items per page (default is 10)"
+// @Success 200 {array} dtos.CarOutputDTO "List of cars"
+// @Failure				422					{array}		validation_errors.HTTPError
+// @Router /api/v1/cars [get]
 func ListCarController(context *gin.Context, carRepository repositories.CarRepository) {
 	page, pageSize := getPaginationParameters(context)
 

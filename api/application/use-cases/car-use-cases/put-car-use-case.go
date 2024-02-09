@@ -1,31 +1,51 @@
 package usecases
 
 import (
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
+	r "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
+	repoutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/repo-utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 )
 
-func PutCarUseCase(id string, registerRequest dtos.CarOutputDTO,
-	carRepository repositories.CarRepository) (*dtos.CarOutputDTO, error) {
+//updateCarUseCase := *usecases.NewUpdateCarUseCase(carRepository, specificationRepository)
+
+type PutCarUseCase struct {
+	carRepository           r.CarRepository
+	specificationRepository r.SpecificationRepository
+}
+
+func NewUpdateCarUseCase(
+	carRepository r.CarRepository,
+	specificationRepository r.SpecificationRepository) *PutCarUseCase {
+
+	return &PutCarUseCase{
+		carRepository:           carRepository,
+		specificationRepository: specificationRepository,
+	}
+}
+
+func (useCase *PutCarUseCase) Execute(id string, updateRequest *dtos.CarOutputDTO) (*dtos.CarOutputDTO, error) {
+
+
 
 	carToBeUpdated := &domain.Car{
-		ID:           registerRequest.ID,
-		Name:         registerRequest.Name,
-		Description:  registerRequest.Description,
-		DailyRate:    registerRequest.DailyRate,
-		Available:    registerRequest.Available,
-		LicensePlate: registerRequest.LicensePlate,
-		FineAmount:   registerRequest.FineAmount,
-		Brand:        registerRequest.Brand,
+		ID:            id,
+		Name:          updateRequest.Name,
+		Description:   updateRequest.Description,
+		DailyRate:     updateRequest.DailyRate,
+		Available:     updateRequest.Available,
+		LicensePlate:  updateRequest.LicensePlate,
+		FineAmount:    updateRequest.FineAmount,
+		Brand:         updateRequest.Brand,
+		Specification: repoutils.FuncConvertSpecificationToDomain(updateRequest.Specification),
 	}
 
-	if err := error_handling.ValidateStruct(carToBeUpdated); err != nil {
+	if err := validation_errors.ValidateStruct(carToBeUpdated); err != nil {
 		return nil, err
 	}
 
-	car, err := carRepository.UpdateCar(id, *carToBeUpdated)
+	car, err := useCase.carRepository.UpdateCar(id, *carToBeUpdated)
 	if err != nil {
 		return nil, err
 	}
@@ -38,6 +58,8 @@ func PutCarUseCase(id string, registerRequest dtos.CarOutputDTO,
 		LicensePlate: car.LicensePlate,
 		FineAmount:   car.FineAmount,
 		Brand:        car.Brand,
+		Specification: repoutils.ConvertSpecificationToDTO(car.Specification),
+
 	}
 
 	/* 	println(carToBeReturned)

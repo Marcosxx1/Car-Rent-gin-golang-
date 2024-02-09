@@ -6,8 +6,8 @@ import (
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/rs/xid"
 )
 
@@ -15,17 +15,6 @@ func PostCarUseCase(
 	registerRequest dtos.CarInputDTO,
 	carRepository repositories.CarRepository) (*dtos.CarOutputDTO, error) {
 
-	existCar, err := carRepository.FindCarByLicensePlate(registerRequest.LicensePlate)
-	if err != nil {
-		return nil, err
-	}
-	if existCar != nil {
-		return nil, errors.New("car already exists")
-	}
-
-	/* 	Specification []*domain.Specification `json:"specification" validate:required`
-	iterate all  registerRequest.Specification to create a []*Specification
-	*/
 	var specifications []domain.Specification
 	for _, specification := range registerRequest.Specification {
 		specifications = append(specifications, domain.Specification{
@@ -48,12 +37,20 @@ func PostCarUseCase(
 		Specification: specifications,
 	}
 
-	if err := error_handling.ValidateStruct(newCar); err != nil {
+	if err := validation_errors.ValidateStruct(newCar); err != nil {
 		return nil, err
 	}
 
+	existCar, err := carRepository.FindCarByLicensePlate(registerRequest.LicensePlate)
+	if err != nil {
+		return nil, err
+	}
+	if existCar != nil {
+		return nil, errors.New("car already exists")
+	}
+
 	if err := carRepository.RegisterCar(newCar); err != nil {
-		return nil, fmt.Errorf("failed to create car: %w", err)
+		return nil, fmt.Errorf("A car needs a category to be registrated")
 	}
 
 	outPut := &dtos.CarOutputDTO{

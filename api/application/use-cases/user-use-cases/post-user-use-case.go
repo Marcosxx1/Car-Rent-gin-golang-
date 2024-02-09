@@ -5,9 +5,9 @@ import (
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/error_handling"
 	hashpassword "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/user-controller/hash-password"
 	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/user-controller/user-dtos"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/rs/xid"
 )
 
@@ -39,7 +39,7 @@ func PostUserUseCase(registerRequest userdtos.UserInputDTO,
 		Avatar:   registerRequest.Avatar,
 	}
 
-	if err := error_handling.ValidateStruct(newUser); err != nil {
+	if err := validation_errors.ValidateStruct(newUser); err != nil {
 		return nil, err
 	}
 

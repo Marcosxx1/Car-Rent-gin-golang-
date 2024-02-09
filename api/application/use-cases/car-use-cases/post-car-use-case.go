@@ -15,9 +15,9 @@ func PostCarUseCase(
 	registerRequest dtos.CarInputDTO,
 	carRepository repositories.CarRepository) (*dtos.CarOutputDTO, error) {
 
-	var specifications []domain.Specification
+	var specifications []*domain.Specification
 	for _, specification := range registerRequest.Specification {
-		specifications = append(specifications, domain.Specification{
+		specifications = append(specifications, &domain.Specification{
 			ID:          xid.New().String(),
 			Name:        specification.Name,
 			Description: specification.Description,

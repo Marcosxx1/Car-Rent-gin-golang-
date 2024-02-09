@@ -23,7 +23,6 @@ func GetAllCarsUseCase(carRepository repositories.CarRepository, page, pageSize 
 			LicensePlate: car.LicensePlate,
 			FineAmount:   car.FineAmount,
 			Brand:        car.Brand,
-			CreatedAt:    car.CreatedAt,
 		}
 
 		outputDTO = append(outputDTO, dto)

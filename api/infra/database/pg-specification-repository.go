@@ -10,6 +10,39 @@ import (
 
 type PGSpecification struct{}
 
+func (repo *PGSpecification) UpdateSpecification(carID string, specifications []domain.Specification) ([]*domain.Specification, error) {
+	db := dbconfig.Postgres
+
+	tx := db.Begin()
+
+	if tx.Error != nil {
+			return nil, tx.Error
+	}
+
+	for _, spec := range specifications {
+			if err := tx.Model(&domain.Specification{}).
+					Where("car_id = ?", carID).
+					Updates(spec).Error; err != nil {
+					tx.Rollback()
+					return nil, err
+			}
+	}
+
+	if err := tx.Commit().Error; err != nil {
+			tx.Rollback()
+			return nil, err
+	}
+
+	var updatedSpecs []*domain.Specification
+	if err := db.Where("car_id = ?", carID).Find(&updatedSpecs).Error; err != nil {
+			return nil, err
+	}
+
+	return updatedSpecs, nil
+}
+
+
+
 // FindAllSpecificationsById retrieves all specifications for a given car_id from the database.
 // It takes a string (car_id) as a parameter, queries the database for specifications with that car_id,
 // and returns a slice of pointers to the specifications or an error.

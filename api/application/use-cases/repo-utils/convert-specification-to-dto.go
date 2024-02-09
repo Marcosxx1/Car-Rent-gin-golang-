@@ -5,10 +5,10 @@ import (
 	s "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/specification-controller/specification-dtos"
 )
 
-func ConvertSpecificationToDTO(specificaion []*domain.Specification) []s.SpecificationOutputDto {
-	var SpecificationsDTO []s.SpecificationOutputDto
+func ConvertSpecificationToDTO(specificaion []*domain.Specification) []*s.SpecificationOutputDto {
+	var SpecificationsDTO []*s.SpecificationOutputDto
 	for _, spec := range specificaion {
-		SpecificationsDTO = append(SpecificationsDTO, s.SpecificationOutputDto{
+		SpecificationsDTO = append(SpecificationsDTO, &s.SpecificationOutputDto{
 			ID:          spec.ID,
 			Name:        spec.Name,
 			Description: spec.Description,
@@ -18,7 +18,7 @@ func ConvertSpecificationToDTO(specificaion []*domain.Specification) []s.Specifi
 	return SpecificationsDTO
 }
 
-func FuncConvertSpecificationToDomain(specification []s.SpecificationOutputDto) []*domain.Specification {
+func FuncConvertSpecificationToDomain(specification []*s.SpecificationOutputDto) []*domain.Specification {
 	var specifications []*domain.Specification
 
 	for _, inputDto := range specification {

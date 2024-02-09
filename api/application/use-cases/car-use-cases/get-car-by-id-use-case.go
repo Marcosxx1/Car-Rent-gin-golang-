@@ -1,8 +1,6 @@
 package usecases
 
 import (
-	"fmt"
-
 	r "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	repoutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/repo-utils"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
@@ -34,7 +32,6 @@ func (useCase *GetCarByIdUseCase) Execute(id string) (*dtos.CarOutputDTO, error)
 		return nil, nil
 	}
 
-	fmt.Println("test")
 	carToBeReturned := &dtos.CarOutputDTO{
 		ID:            existCar.ID,
 		Name:          existCar.Name,

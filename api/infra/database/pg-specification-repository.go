@@ -10,6 +10,39 @@ import (
 
 type PGSpecification struct{}
 
+// FindAllSpecificationsById retrieves all specifications for a given car_id from the database.
+// It takes a string (car_id) as a parameter, queries the database for specifications with that car_id,
+// and returns a slice of pointers to the specifications or an error.
+//
+// Example:
+//   carID := "example_car_id"
+//   specifications, err := specificationRepository.FindAllSpecificationsById(carID)
+//   if err != nil {
+//       // handle error
+//   }
+//   for _, spec := range specifications {
+//       fmt.Println("Specification:", *spec)
+//   }
+//
+// Parameters:
+//   - carID: The ID of the car for which specifications are to be retrieved.
+//
+// Returns:
+//   - []*domain.Specification: A slice of pointers to specifications for the given car_id.
+//   - error: An error, if any, during the retrieval process.
+func (repo *PGSpecification) FindAllSpecificationsByCarId(carID string) ([]*domain.Specification, error) {
+	var specifications []*domain.Specification
+
+	err := dbconfig.Postgres.Where("car_id = ?", carID).Find(&specifications).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return specifications, nil
+}
+
+
 // FindSpecificationByName retrieves a specification from the database by its name.
 // It takes a string (name) as a parameter, queries the database for a specification with that name,
 // and returns a pointer to the specification or nil if the specification is not found. It also returns an error.
@@ -42,6 +75,8 @@ func (repo *PGSpecification) FindSpecificationByName(name string) (*domain.Speci
 	}
 	return &specification, nil
 }
+
+
 
 // GetAll retrieves all specifications from the database.
 // It returns a slice of pointers to domain.Specification and an error.

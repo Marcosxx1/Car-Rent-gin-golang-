@@ -22,7 +22,7 @@ import (
 // @Success	    201   				{object} 	dtos.CarOutputDTO "Successfully updated car"
 // @Failure			400       		{object} 	validation_errors.HTTPErrorCar
 // @Router			/api/v1/cars/create [put]
-func UpdateCarController(context *gin.Context, carRepository repositories.CarRepository) {
+func UpdateCarController(context *gin.Context, carRepository repositories.CarRepository, specificationRepository repositories.SpecificationRepository) {
 
 	var request dtos.CarOutputDTO
 	if err := context.ShouldBindJSON(&request); err != nil { 
@@ -31,31 +31,21 @@ func UpdateCarController(context *gin.Context, carRepository repositories.CarRep
 	}
 
 	id := context.Param("id")
-
-	foundCar, err := usecases.GetCarByIdUseCase(id, carRepository)
 	if err := context.ShouldBindJSON(&request); err != nil { 
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return
 	}
 
+	findByIdUseCase := *usecases.NewFindCarByIdUseCase(carRepository, specificationRepository)
+	updateCarUseCase := *usecases.NewUpdateCarUseCase(carRepository, specificationRepository)
+
+	foundCar, err := findByIdUseCase.Execute(id)
 	if foundCar != nil { 
 		validation_errors.NewError(context, http.StatusNotFound, err)
 		return
 	}
 
-	car := &dtos.CarOutputDTO{
-		ID:           id,
-		Name:         request.Name,
-		Description:  request.Description,
-		DailyRate:    request.DailyRate,
-		Available:    request.Available,
-		LicensePlate: request.LicensePlate,
-		FineAmount:   request.FineAmount,
-		Brand:        request.Brand,
-		CategoryID:   request.CategoryID,
-	}
-
-	updatedCar, err := usecases.PutCarUseCase(id, *car, carRepository)
+	updatedCar, err := updateCarUseCase.Execute(id, &request)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

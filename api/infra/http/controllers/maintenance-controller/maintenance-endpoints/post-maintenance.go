@@ -1,7 +1,6 @@
 package maintenanceendpoints
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
@@ -29,10 +28,8 @@ func RegisterMaintenanceController(context *gin.Context, carRepository repositor
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return
 	}
-	fmt.Println(request)
-	fmt.Printf("%+v\n", request)
+
 	carID := context.Param("carID")
-	fmt.Printf("%+v\n", carID)
 
 	postMaintenanceUseCase := usecases.NewPostMaintenanceUseCase(carRepository, maintenanceRepository)
 

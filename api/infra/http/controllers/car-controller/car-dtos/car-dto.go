@@ -1,8 +1,6 @@
 package dtos
 
 import (
-	"time"
-
 	specificationdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/specification-controller/specification-dtos"
 )
 
@@ -41,6 +39,5 @@ type CarOutputDTO struct {
 	FineAmount    float64                `json:"fine_amount"`
 	Brand         string                 `json:"brand"`
 	CategoryID    string                 `json:"category_id"`
-	CreatedAt     time.Time              `json:"created_at"`
 	Specification []specificationdtos.SpecificationOutputDto `json:"specification"`
 }

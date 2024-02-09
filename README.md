@@ -1,11 +1,44 @@
 # Car-Rent-gin-golang-
 
 ## (Work in Progress)
+# Car Rental Service API Documentation
 
-### Overview
+This document provides information about the Car Rental Service API. The API is built using the Gin framework and allows users to perform various operations related to car rental, maintenance, categories, and specifications. (WIP)
 
-This repository is an upgrade of my previous node-typescript project for a car dealership.
-[View Database Diagram](https://dbdiagram.io/d/car-rent-go-65ad8309ac844320ae6349d4)
 
-####side note: GORM doesn't suport []string (got error unsupported data type: &[])... to add later on the readme
-####side note: $ swag init --parseDependency --parseInternal due to package problems
+Up to this point (2024/02/09)
+## Car Endpoints
+
+### GET /api/v1/cars
+List all cars.
+
+### PUT /api/v1/cars/create
+Update a car.
+
+### POST /api/v1/cars/create
+Create a new car.
+
+### DELETE /api/v1/cars/delete/{id}
+Delete a car.
+
+### GET /api/v1/cars/{id}
+Find car by ID.
+
+## Maintenance Endpoints
+
+### POST /api/v1/cars/{carID}/maintenance/create
+Create a new maintenance record for a car.
+
+## Category Endpoints
+
+### POST /api/v1/category/create
+Create a new category.
+
+### GET /api/v1/category/list
+Retrieve a list of categories.
+
+## Specification Endpoints
+
+### POST /api/v1/specification/create
+Create a new specification.
+

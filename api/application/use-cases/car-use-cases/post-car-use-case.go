@@ -15,14 +15,6 @@ func PostCarUseCase(
 	registerRequest dtos.CarInputDTO,
 	carRepository repositories.CarRepository) (*dtos.CarOutputDTO, error) {
 
-	existCar, err := carRepository.FindCarByLicensePlate(registerRequest.LicensePlate)
-	if err != nil {
-		return nil, err
-	}
-	if existCar != nil {
-		return nil, errors.New("car already exists")
-	}
-
 	var specifications []domain.Specification
 	for _, specification := range registerRequest.Specification {
 		specifications = append(specifications, domain.Specification{
@@ -49,8 +41,16 @@ func PostCarUseCase(
 		return nil, err
 	}
 
+	existCar, err := carRepository.FindCarByLicensePlate(registerRequest.LicensePlate)
+	if err != nil {
+		return nil, err
+	}
+	if existCar != nil {
+		return nil, errors.New("car already exists")
+	}
+
 	if err := carRepository.RegisterCar(newCar); err != nil {
-		return nil, fmt.Errorf("failed to create car: %w", err)
+		return nil, fmt.Errorf("A car needs a category to be registrated")
 	}
 
 	outPut := &dtos.CarOutputDTO{

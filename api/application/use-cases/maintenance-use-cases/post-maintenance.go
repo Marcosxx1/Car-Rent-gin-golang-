@@ -26,16 +26,8 @@ func NewPostMaintenanceUseCase(
 }
 
 func (useCase *PostMaintenanceUseCase) Execute(carID string, inputDTO m.MaintenanceInputDTO) (*m.MaintenanceOutputDTO, error) {
-	existingCar, err := useCase.carRepository.FindCarById(carID)
-	if err != nil {
-		return nil, err
-	}
-	if existingCar == nil {
-		return nil, errors.New("car not found")
-	}
 
 	newMaintenanceID := xid.New().String()
-
 	var parts []domain.Part
 	for _, partDTO := range inputDTO.Parts {
 		parts = append(parts, domain.Part{
@@ -62,10 +54,18 @@ func (useCase *PostMaintenanceUseCase) Execute(carID string, inputDTO m.Maintena
 		NextMaintenanceDueDate:    inputDTO.NextMaintenanceDueDate,
 		MaintenanceCompletionDate: inputDTO.MaintenanceCompletionDate,
 		Parts:                     parts,
-	}
-
+	}	
+ 
 	if err := validation_errors.ValidateStruct(newMaintenance); err != nil {
 		return nil, err
+	}
+
+	existingCar, err := useCase.carRepository.FindCarById(carID)
+	if err != nil {
+		return nil, err
+	}
+	if existingCar == nil {
+		return nil, errors.New("car not found")
 	}
 
 	if err := useCase.maintenanceRepository.CreateMaintenance(newMaintenance); err != nil {

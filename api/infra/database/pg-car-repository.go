@@ -10,6 +10,108 @@ import (
 
 type PGCarRepository struct{}
 
+// FindAvailableCars retrieves available cars from the database based on criteria.
+// It returns the brand, category ID, name, and a slice of pointers to available cars.
+//
+// Example:
+//
+//	brand := "Toyota"
+//	categoryID := "123"
+//	name := "Camry"
+//	availableCars := carRepository.FindAvailableCars(brand, categoryID, name)
+//	fmt.Println("Available Cars:", availableCars)
+//
+// Returns:
+//   - brand: The brand of the available cars.
+//   - categoryID: The category ID of the available cars.
+//   - name: The name of the available cars.
+//   - []*domain.Car: A slice of pointers to available cars.
+func (repo *PGCarRepository) FindAvailableCars(brand string, categoryID string, name string) (string, string, string, []*domain.Car) {
+	var cars []*domain.Car
+
+	// Create a query based on provided criteria
+	query := dbconfig.Postgres.Where("available = ?", true)
+	if brand != "" {
+		query = query.Where("brand = ?", brand)
+	}
+	if categoryID != "" {
+		query = query.Where("category_id = ?", categoryID)
+	}
+	if name != "" {
+		query = query.Where("name = ?", name)
+	}
+
+	err := query.Find(&cars).Error
+	if err != nil {
+		return "", "", "", nil
+	}
+
+	return brand, categoryID, name, cars
+}
+
+// FindAvailableCarById finds an available car in the database based on its ID.
+// It takes the ID as a parameter, queries the database, and returns a pointer
+// to the found available car or nil if not found.
+//
+// Example:
+//
+//	availableCarID := "456"
+//	foundAvailableCar := carRepository.FindAvailableCarById(availableCarID)
+//	fmt.Println("Found Available Car:", foundAvailableCar)
+//
+// Parameters:
+//   - id: The ID of the available car to be found.
+//
+// Returns:
+//   - *domain.Car: A pointer to the found available car, or nil if not found.
+func (repo *PGCarRepository) FindAvailableCarById(id string) *domain.Car {
+	var car domain.Car
+	err := dbconfig.Postgres.Where("id = ? AND available = ?", id, true).First(&car).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil
+		}
+		return nil
+	}
+
+	return &car
+}
+
+// UpdateAvailableCar updates the availability of a car in the database based on its ID.
+// It takes the ID and a boolean indicating availability, performs the update,
+// and returns an error if the car is not found or if there's any issue.
+//
+// Example:
+//
+//	availableCarID := "456"
+//	err := carRepository.UpdateAvailableCar(availableCarID, false)
+//	if err != nil {
+//	    fmt.Println("Error:", err)
+//	} else {
+//	    fmt.Println("Available Car updated successfully.")
+//	}
+//
+// Parameters:
+//   - id: The ID of the available car to be updated.
+//   - available: A boolean indicating the new availability status.
+//
+// Returns:
+//   - error: An error, if any.
+func (repo *PGCarRepository) UpdateAvailableCar(id string, available bool) error {
+	result := dbconfig.Postgres.Where("id = ?", id).Updates(map[string]interface{}{"available": available})
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return errors.New("available car not found")
+	}
+
+	return nil
+}
+
 // RegisterCar registers a new car in the database.
 // It takes a domain.Car as a parameter, creates a new record in the database,
 // and returns a pointer to the registered car.

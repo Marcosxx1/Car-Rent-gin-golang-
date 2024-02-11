@@ -27,43 +27,51 @@ func NewUpdateCarUseCase(
 
 func (useCase *PutCarUseCase) Execute(id string, updateRequest *dtos.CarOutputDTO) (*dtos.CarOutputDTO, error) {
 
-
-
-	carToBeUpdated := &domain.Car{
-		ID:            id,
-		Name:          updateRequest.Name,
-		Description:   updateRequest.Description,
-		DailyRate:     updateRequest.DailyRate,
-		Available:     updateRequest.Available,
-		LicensePlate:  updateRequest.LicensePlate,
-		FineAmount:    updateRequest.FineAmount,
-		Brand:         updateRequest.Brand,
-		Specification: repoutils.FuncConvertSpecificationToDomain(updateRequest.Specification),
-	}
-
-	if err := validation_errors.ValidateStruct(carToBeUpdated); err != nil {
+	if err := validation_errors.ValidateStruct(updateRequest); err != nil {
 		return nil, err
 	}
 
-	car, err := useCase.carRepository.UpdateCar(id, *carToBeUpdated)
+	var domainSpecification []*domain.Specification
+
+	if len(updateRequest.Specification) > 0 {
+		domainSpecification = repoutils.ConvertSpecificationToDomainUpdate(updateRequest.Specification)
+
+		if err := validation_errors.ValidateStruct(domainSpecification); err != nil {
+			return nil, err
+		}
+	}
+
+	carToBeUpdated := &domain.Car{
+		ID:           id,
+		Name:         updateRequest.Name,
+		Description:  updateRequest.Description,
+		DailyRate:    updateRequest.DailyRate,
+		Available:    updateRequest.Available,
+		LicensePlate: updateRequest.LicensePlate,
+		FineAmount:   updateRequest.FineAmount,
+		Brand:        updateRequest.Brand,
+	}
+
+	carUpdated, err := useCase.carRepository.UpdateCar(id, *carToBeUpdated)
+	if err != nil {
+		return nil, err
+	}
+
+	specificationUpdated, err := useCase.specificationRepository.UpdateSpecification(id, domainSpecification)
 	if err != nil {
 		return nil, err
 	}
 
 	carToBeReturned := &dtos.CarOutputDTO{
-		ID:           car.ID,
-		Name:         car.Name,
-		Description:  car.Description,
-		Available:    car.Available,
-		LicensePlate: car.LicensePlate,
-		FineAmount:   car.FineAmount,
-		Brand:        car.Brand,
-		Specification: repoutils.ConvertSpecificationToDTO(car.Specification),
-
+		ID:            carUpdated.ID,
+		Name:          carUpdated.Name,
+		Description:   carUpdated.Description,
+		Available:     carUpdated.Available,
+		LicensePlate:  carUpdated.LicensePlate,
+		FineAmount:    carUpdated.FineAmount,
+		Brand:         carUpdated.Brand,
+		Specification: repoutils.ConvertSpecificationToDTO(specificationUpdated),
 	}
-
-	/* 	println(carToBeReturned)
-	   	fmt.Printf("%+v\n", carToBeReturned) */
 
 	return carToBeReturned, nil
 }

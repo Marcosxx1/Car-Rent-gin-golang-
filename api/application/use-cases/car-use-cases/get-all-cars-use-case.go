@@ -2,11 +2,26 @@ package usecases
 
 import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
+	repoutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/repo-utils"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
 )
 
-func GetAllCarsUseCase(carRepository repositories.CarRepository, page, pageSize int) ([]*dtos.CarOutputDTO, error) {
-	allCars, err := carRepository.FindAllCars(page, pageSize)
+type GetAllCarsUseCase struct {
+	carRepository           repositories.CarRepository
+	specificationRepository repositories.SpecificationRepository
+}
+
+func NewGetAllCarsUseCase(
+	carRepository repositories.CarRepository,
+	specificationRepository repositories.SpecificationRepository) *GetAllCarsUseCase {
+	return &GetAllCarsUseCase{
+		carRepository:           carRepository,
+		specificationRepository: specificationRepository,
+	}
+}
+
+func (useCase *GetAllCarsUseCase) Execute(page, pageSize int) ([]*dtos.CarOutputDTO, error) {
+	allCars, err := useCase.carRepository.FindAllCars(page, pageSize)
 	if err != nil {
 		return nil, err
 	}
@@ -14,6 +29,11 @@ func GetAllCarsUseCase(carRepository repositories.CarRepository, page, pageSize 
 	outputDTO := make([]*dtos.CarOutputDTO, 0)
 
 	for _, car := range allCars {
+		specifications, err := useCase.specificationRepository.FindAllSpecificationsByCarId(car.ID)
+		if err != nil {
+			return nil, err
+		}
+
 		dto := &dtos.CarOutputDTO{
 			ID:           car.ID,
 			Name:         car.Name,
@@ -23,7 +43,7 @@ func GetAllCarsUseCase(carRepository repositories.CarRepository, page, pageSize 
 			LicensePlate: car.LicensePlate,
 			FineAmount:   car.FineAmount,
 			Brand:        car.Brand,
-			CreatedAt:    car.CreatedAt,
+			Specification: repoutils.ConvertSpecificationToDTO(specifications),
 		}
 
 		outputDTO = append(outputDTO, dto)

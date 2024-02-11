@@ -21,7 +21,7 @@ import (
 // @Param				request				body 		  dtos.CarInputDTO	true "Car information to be updated"
 // @Success	    201   				{object} 	dtos.CarOutputDTO "Successfully updated car"
 // @Failure			400       		{object} 	validation_errors.HTTPErrorCar
-// @Router			/api/v1/cars/create [put]
+// @Router			/api/v1/cars/update/:id [put]
 func UpdateCarController(context *gin.Context, carRepository repositories.CarRepository, specificationRepository repositories.SpecificationRepository) {
 
 	var request dtos.CarOutputDTO

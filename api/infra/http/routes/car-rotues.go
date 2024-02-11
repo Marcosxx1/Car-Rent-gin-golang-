@@ -12,7 +12,7 @@ func SetupCarRoutes(router *gin.Engine) {
 	specificationRepository := database.PGSpecification{}
 
 	router.GET("/api/v1/cars", func(context *gin.Context) {
-			endpoints.ListCarController(context, &carRepository)
+		endpoints.GetAllCarsController(context, &carRepository, &specificationRepository)
 	})
 
 	router.GET("/api/v1/cars/:id", func(context *gin.Context) {
@@ -20,7 +20,7 @@ func SetupCarRoutes(router *gin.Engine) {
 	})
 
 	router.POST("/api/v1/cars/create", func(context *gin.Context) {
-			endpoints.RegisterCarController(context, &carRepository)
+			endpoints.RegisterCarController(context, &carRepository, &specificationRepository)
 	})
 
 	router.DELETE("/api/v1/cars/delete/:id", func(context *gin.Context) {

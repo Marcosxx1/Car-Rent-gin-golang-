@@ -42,7 +42,6 @@ func TestFindCarById(t *testing.T) {
 		LicensePlate: inputCar.LicensePlate,
 		FineAmount:   inputCar.FineAmount,
 		Brand:        inputCar.Brand,
-		CreatedAt:    inputCar.CreatedAt,
 	}
 
 

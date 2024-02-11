@@ -1,12 +1,13 @@
 package carendpoints
 
 import (
+	"errors"
+	"net/http"
 	"strconv"
-	"sync"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
-	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,50 +22,30 @@ import (
 // @Success 200 {array} dtos.CarOutputDTO "List of cars"
 // @Failure				422					{array}		validation_errors.HTTPError
 // @Router /api/v1/cars [get]
-func ListCarController(context *gin.Context, carRepository repositories.CarRepository) {
-	page, pageSize := getPaginationParameters(context)
+func GetAllCarsController(context *gin.Context,carRepository repositories.CarRepository,specificationRepository repositories.SpecificationRepository) {
 
-	var wg sync.WaitGroup
-	carChannel := make(chan []*dtos.CarOutputDTO)
-	errChannel := make(chan error)
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		listOfCars, err := usecases.GetAllCarsUseCase(carRepository, page, pageSize)
-		if err != nil {
-			errChannel <- err
+	pageStr := context.Query("page")
+	pageSizeStr := context.Query("pageSize")
+	
+	page, err := strconv.Atoi(pageStr)
+	if err != nil {
+			validation_errors.NewError(context, http.StatusBadRequest, errors.New("invalid 'page' value"))
 			return
-		}
-		carChannel <- listOfCars
-	}()
-
-	go func() {
-		wg.Wait()
-		close(carChannel)
-		close(errChannel)
-	}()
-
-	select {
-	case listOfCars := <-carChannel:
-		context.JSON(200, listOfCars)
-	case err := <-errChannel:
-		context.JSON(400, gin.H{
-			"error": err.Error(),
-		})
 	}
-}
+	
+	pageSize, err := strconv.Atoi(pageSizeStr)
+	if err != nil {
+			validation_errors.NewError(context, http.StatusBadRequest, errors.New("invalid 'pageSize' value"))
+			return
+	}
+	
+	findAllCarsUseCase := *usecases.NewGetAllCarsUseCase(carRepository, specificationRepository)
 
-func getPaginationParameters(context *gin.Context) (int, int) {
-	page, err := strconv.Atoi(context.Query("page"))
-	if err != nil || page <= 0 {
-		page = 1
+	car, err := findAllCarsUseCase.Execute(page, pageSize) 
+	if err != nil {
+		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
+		return
 	}
 
-	pageSize, err := strconv.Atoi(context.Query("pageSize"))
-	if err != nil || pageSize <= 0 {
-		pageSize = 10
-	}
-
-	return page, pageSize
+	context.JSON(http.StatusOK, car)
 }

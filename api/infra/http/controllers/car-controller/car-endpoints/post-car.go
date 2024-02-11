@@ -21,30 +21,22 @@ import (
 // @Success	    	201   			{object} 	dtos.CarOutputDTO "Successfully created car"
 // @Failure				422					{array}		validation_errors.HTTPErrorCar
 // @Router				/api/v1/cars/create [post]
-func RegisterCarController(context *gin.Context, carRepository repositories.CarRepository) {
+func RegisterCarController(context *gin.Context, carRepository repositories.CarRepository, specificationRepository repositories.SpecificationRepository) {
 
 	var request dtos.CarInputDTO
 	if err := context.ShouldBindJSON(&request); err != nil { 
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return
 	}
-	//fmt.Printf("%+v\n", request)
-	car := dtos.CarInputDTO{
-		Name:         request.Name,
-		Description:  request.Description,
-		DailyRate:    request.DailyRate,
-		Available:    request.Available,
-		LicensePlate: request.LicensePlate,
-		FineAmount:   request.FineAmount,
-		Brand:        request.Brand,
-		CategoryID:   request.CategoryID,
-	}
 
-	createdCar, err := usecases.PostCarUseCase(car, carRepository)
+	postCarUseCase := usecases.NewPostCarUseCase(carRepository, specificationRepository)
+
+	createdCar, err := postCarUseCase.Execute(request)
 	if err != nil {
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return
-	} else {
-		context.JSON(http.StatusOK, createdCar)
 	}
+
+	context.JSON(http.StatusOK, createdCar)
+
 }

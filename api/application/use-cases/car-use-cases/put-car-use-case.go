@@ -34,7 +34,7 @@ func (useCase *PutCarUseCase) Execute(id string, updateRequest *dtos.CarOutputDT
 	var domainSpecification []*domain.Specification
 
 	if len(updateRequest.Specification) > 0 {
-		domainSpecification = repoutils.FuncConvertSpecificationToDomain(updateRequest.Specification)
+		domainSpecification = repoutils.ConvertSpecificationToDomainUpdate(updateRequest.Specification)
 
 		if err := validation_errors.ValidateStruct(domainSpecification); err != nil {
 			return nil, err

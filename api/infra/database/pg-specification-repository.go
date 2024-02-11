@@ -10,7 +10,7 @@ import (
 
 type PGSpecification struct{}
 
-func (repo *PGSpecification) UpdateSpecification(carID string, specifications []domain.Specification) ([]*domain.Specification, error) {
+func (repo *PGSpecification) UpdateSpecification(carID string, specifications []*domain.Specification) ([]*domain.Specification, error) {
 	db := dbconfig.Postgres
 
 	tx := db.Begin()
@@ -156,4 +156,19 @@ func (repo *PGSpecification) GetAll() ([]*domain.Specification, error) {
 //   - error: An error, if any, during the creation process.
 func (repo *PGSpecification) PostSpecification(specification *domain.Specification) error {
 	return dbconfig.Postgres.Create(specification).Error
+}
+
+func (repo *PGSpecification) PostMultipleSpecifications(specifications []*domain.Specification) error {
+	tx := dbconfig.Postgres.Begin()
+
+	for _, spec := range specifications {
+		if err := tx.Create(spec).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	tx.Commit()
+
+	return nil
 }

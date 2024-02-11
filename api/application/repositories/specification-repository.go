@@ -8,4 +8,5 @@ type SpecificationRepository interface {
 	PostSpecification(specification *domain.Specification) error
 	FindAllSpecificationsByCarId(carID string) ([]*domain.Specification, error)
 	UpdateSpecification(car_id string, specification []*domain.Specification) ([]*domain.Specification, error)
+	PostMultipleSpecifications(specifications []*domain.Specification) error
 }

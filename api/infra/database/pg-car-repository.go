@@ -289,7 +289,7 @@ func (repo *PGCarRepository) FindCarById(id string) (*domain.Car, error) {
 // Returns:
 //   - *domain.Car: A pointer to the updated car.
 //   - error: An error, if any.
-func (repo *PGCarRepository) UpdateCar(id string, car domain.Car) (*domain.Car, error) {
+func (repo *PGCarRepository) UpdateCar(id string, car *domain.Car) (*domain.Car, error) {
 	dbconfig.Postgres.Model(&car).Where("id = ?", id).Updates(&car)
-	return &car, nil
+	return car, nil
 }

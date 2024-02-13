@@ -8,7 +8,7 @@ type CarRepository interface {
 	FindAllCars(page, pageSize int) ([]*domain.Car, error)
 	DeleteCar(id string) error
 	FindCarById(id string) (*domain.Car, error)
-	UpdateCar(id string, car domain.Car) (*domain.Car, error)
+	UpdateCar(id string, car *domain.Car) (*domain.Car, error)
 
 	/*
 		FindAvailableCars() (brand string, category_id string, name string, cars []*domain.Car)

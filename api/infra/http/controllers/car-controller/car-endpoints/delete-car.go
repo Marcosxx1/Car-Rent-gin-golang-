@@ -1,12 +1,10 @@
 package carendpoints
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,15 +18,12 @@ import (
 // @Success 200 "Car deleted successfully"
 // @Failure 400 {object} validation_errors.HTTPErrorCar "Error details"
 // @Router /api/v1/cars/delete/{id} [delete]
-func DeleteCarController(context *gin.Context, carRepository repositories.CarRepository) {
- 
+func DeleteCarController(context *gin.Context, carRepository repositories.CarRepository, specificationRepository repositories.SpecificationRepository) {
 	id := context.Param("id")
 
-	err := usecases.DeleteCarUseCase(carRepository, id)
-	if err != nil {
-		log.Println("Error deleting car:", err)
-		validation_errors.NewError(context, http.StatusBadRequest, err)
-		return
-	}
-	context.JSON(http.StatusOK, gin.H{"message": "Car deleted successfully"})
+	deleteUseCase := *usecases.NewDeleteCarUseCase(carRepository, specificationRepository)
+
+	deleteUseCase.Execute(id)
+
+	context.JSON(http.StatusOK, nil)
 }

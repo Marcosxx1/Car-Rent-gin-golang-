@@ -35,14 +35,14 @@ func (useCase *GetAllCarsUseCase) Execute(page, pageSize int) ([]*dtos.CarOutput
 		}
 
 		dto := &dtos.CarOutputDTO{
-			ID:           car.ID,
-			Name:         car.Name,
-			Description:  car.Description,
-			DailyRate:    car.DailyRate,
-			Available:    car.Available,
-			LicensePlate: car.LicensePlate,
-			FineAmount:   car.FineAmount,
-			Brand:        car.Brand,
+			ID:            car.ID,
+			Name:          car.Name,
+			Description:   car.Description,
+			DailyRate:     car.DailyRate,
+			Available:     car.Available,
+			LicensePlate:  car.LicensePlate,
+			FineAmount:    car.FineAmount,
+			Brand:         car.Brand,
 			Specification: repoutils.ConvertSpecificationToDTO(specifications),
 		}
 

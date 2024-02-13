@@ -9,8 +9,6 @@ type MockCategoryRepository struct {
 	mock.Mock
 }
 
-
-
 func (m *MockCategoryRepository) FindCategoryByName(name string) (*domain.Category, error) {
 	args := m.Called(name)
 	return args.Get(0).(*domain.Category), args.Error(1)

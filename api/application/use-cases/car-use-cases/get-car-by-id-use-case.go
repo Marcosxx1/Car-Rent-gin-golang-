@@ -1,6 +1,8 @@
 package usecases
 
 import (
+	"errors"
+
 	r "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	repoutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/repo-utils"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
@@ -27,9 +29,17 @@ func (useCase *GetCarByIdUseCase) Execute(id string) (*dtos.CarOutputDTO, error)
 		return nil, err
 	}
 
+	if existCar == nil {
+		return nil, errors.New("car not found")
+	}
+
 	existSpecification, err := useCase.specificationRepository.FindAllSpecificationsByCarId(id)
 	if err != nil {
-		return nil, nil
+		return nil, err
+	}
+
+	if existSpecification == nil {
+		return nil, errors.New("specifications not found")
 	}
 
 	carToBeReturned := &dtos.CarOutputDTO{
@@ -46,4 +56,3 @@ func (useCase *GetCarByIdUseCase) Execute(id string) (*dtos.CarOutputDTO, error)
 
 	return carToBeReturned, nil
 }
-

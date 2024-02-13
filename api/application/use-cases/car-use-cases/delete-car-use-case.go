@@ -1,6 +1,8 @@
 package usecases
 
 import (
+	"errors"
+
 	r "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 )
 
@@ -26,12 +28,8 @@ func (useCase *DeleteCarUseCase) Execute(id string) error {
 	}
 
 	if existCar == nil {
-		return err // implementar melhor erro
+		return errors.New("car not found")
 	}
 
-	err = useCase.carRepository.DeleteCar(id)
-	if err != nil {
-		return err
-	}
-	return nil
+	return useCase.carRepository.DeleteCar(id)
 }

@@ -258,7 +258,7 @@ func (repo *PGCarRepository) FindCarById(id string) (*domain.Car, error) {
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
+			return nil, gorm.ErrRecordNotFound
 		}
 		return nil, err
 	}

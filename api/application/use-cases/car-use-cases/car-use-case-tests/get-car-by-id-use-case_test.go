@@ -20,10 +20,10 @@ func TestFindCarByIdUseCase_Success(t *testing.T) {
 
 	carID := "mockedID"
 
-	expectedCar := m.MockInputCar()
+	expectedCar := m.MockCarFromDataBase()
 
 	mockCarRepo.On("FindCarById", carID).Return(expectedCar, nil)
-	mockSpecRepo.On("FindAllSpecificationsByCarId", carID).Return(m.MockInputSpecifications(), nil)
+	mockSpecRepo.On("FindAllSpecificationsByCarId", carID).Return(m.MockSpecificationsFromDatabase(), nil)
 
 	// Act
 	result, err := useCase.Execute(carID)
@@ -71,7 +71,7 @@ func TestFindCarByIdUseCase_SpecificationNotFound(t *testing.T) {
 
 	carID := "mockedID"
 
-	expectedCar := m.MockInputCar()
+	expectedCar := m.MockCarFromDataBase()
 
 	mockCarRepo.On("FindCarById", carID).Return(expectedCar, nil)
 	mockSpecRepo.On("FindAllSpecificationsByCarId", carID).Return([]*domain.Specification{}, errors.New("specifications not found"))

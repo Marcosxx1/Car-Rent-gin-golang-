@@ -5,7 +5,7 @@ import (
 	specificationdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/specification-controller/specification-dtos"
 )
 
-func MockOutPutCar() *dtos.CarOutputDTO {
+func MockReturningCar() *dtos.CarOutputDTO {
 	return &dtos.CarOutputDTO{
 		ID:            "mockedID",
 		Name:          "Mocked Car",
@@ -16,11 +16,11 @@ func MockOutPutCar() *dtos.CarOutputDTO {
 		FineAmount:    10.0,
 		Brand:         "Mocked Brand",
 		CategoryID:    "mockedCategoryID",
-		Specification: MockOutPutSpecifications(),
+		Specification: MockReturningSpecifications(),
 	}
 }
 
-func MockOutPutSpecifications() []*specificationdtos.SpecificationOutputDto {
+func MockReturningSpecifications() []*specificationdtos.SpecificationOutputDto {
 	return []*specificationdtos.SpecificationOutputDto{
 		{
 			ID:          "spec1",

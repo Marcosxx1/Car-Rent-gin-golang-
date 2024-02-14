@@ -22,11 +22,11 @@ func TestGetAllCarsUseCase_Success(t *testing.T) {
 	page := 1
 	pageSize := 10
 
-	expectedCars := m.MockInputCars(5)
+	expectedCars := m.MockListOfCarsFromDatabase(5)
 	mockCarRepo.On("FindAllCars", page, pageSize).Return(expectedCars, nil)
 
 	for _, car := range expectedCars {
-		mockSpecRepo.On("FindAllSpecificationsByCarId", car.ID).Return(m.MockInputSpecifications(), nil)
+		mockSpecRepo.On("FindAllSpecificationsByCarId", car.ID).Return(m.MockSpecificationsFromDatabase(), nil)
 	}
 
 	// Act
@@ -79,7 +79,7 @@ func TestGetAllCarsUseCase_ErrorFindingSpecifications(t *testing.T) {
 	page := 1
 	pageSize := 10
 
-	expectedCars := m.MockInputCars(5)
+	expectedCars := m.MockListOfCarsFromDatabase(5)
 	mockCarRepo.On("FindAllCars", page, pageSize).Return(expectedCars, nil)
 
 	mockSpecRepo.On("FindAllSpecificationsByCarId", expectedCars[0].ID).Return([]*domain.Specification{}, errors.New("error finding specifications"))

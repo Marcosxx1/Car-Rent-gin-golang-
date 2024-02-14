@@ -36,14 +36,14 @@ As well in with the other projects this architecture enables enhanced modularity
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
   - [Authentication(WIP)](#authentication)
-  - [Category](#categories)
+  - [Category](#categorie)
   - [Car](#car)
-  - [Specification](#specifications)
-  - [Maintenance](#specifications)
+  - [Specification](#specification)
+  - [Maintenance](#specification)
   - [User](#user)
-  - [Orders(WIP)](#orders)
-  - [Payments(WIP)](#paymants)
-  - [Reviews(WIP)](#reviews)
+  - [Orders(WIP)](#order)
+  - [Payments(WIP)](#paymant)
+  - [Reviews(WIP)](#review)
 - [Folder Structure](#folder-structure)
 - [Contributing](#contributing)
 - [Functional Requirements (FR)](#functional-requirements-fr)
@@ -113,6 +113,7 @@ The application offers various API endpoints catering to different functionaliti
 
 
 ### Specification
+
 #### Create Specification
 - **Endpoint:** `POST /api/v1/specification/create`
 - **Description:** Creates a new specification.

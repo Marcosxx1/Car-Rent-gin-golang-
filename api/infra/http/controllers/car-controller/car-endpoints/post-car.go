@@ -23,8 +23,8 @@ import (
 // @Router				/api/v1/cars/create [post]
 func RegisterCarController(context *gin.Context, carRepository repositories.CarRepository, specificationRepository repositories.SpecificationRepository) {
 
-	var request dtos.CarInputDTO
-	if err := context.ShouldBindJSON(&request); err != nil { 
+	var request *dtos.CarInputDTO
+	if err := context.ShouldBindJSON(&request); err != nil {
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return
 	}

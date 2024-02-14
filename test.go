@@ -88,6 +88,7 @@ func (useCase *PostMaintenanceUseCase) performMaintenanceCreation(wg *sync.WaitG
 	defer wg.Done()
 
 	newMaintenance, err := useCase.createMaintenanceInstance(newMaintenanceID, carID, inputDTO)
+	fmt.Printf("+%v newMaintenance\n", newMaintenance)
 
 	if err != nil {
 		errorChan <- err

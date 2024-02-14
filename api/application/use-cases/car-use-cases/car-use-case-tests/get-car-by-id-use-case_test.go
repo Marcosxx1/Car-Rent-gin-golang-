@@ -47,7 +47,6 @@ func TestFindCarByIdUseCase_CarNotFound(t *testing.T) {
 
 	carID := "nonExistentID"
 
-	// Simulate an error during car retrieval
 	mockCarRepo.On("FindCarById", carID).Return(&domain.Car{}, errors.New("car not found"))
 
 	// Act

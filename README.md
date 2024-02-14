@@ -13,14 +13,10 @@ Welcome to the Car Rental API repository! 🚗 This project represents my ongoin
 - **Language:** Golang
 - **Framework:** Gin
 - **Architecture:** Clean Architecture
-- **Database:** Explore the Entity-Relationship Diagram (ERD) [here](https://dbdiagram.io/d/car-rent-go-65ad8309ac844320ae6349d4).
+- **Database:** Explore the Entity-Relationship Diagram (ERD) [here](https://dbdiagram.io/d/car-rent-go-65ad8309ac844320ae6349d4) or you can check the current iteration for the database here: <img width="1980" alt="Db diagram" src="https://github.com/Marcosxx1/Car-Rent-gin-golang-/assets/37447545/968e8525-f5a7-4372-8b2b-3a82f02b9a55">
+
 
 Stay tuned for updates as this project evolves into a comprehensive Car Rental API, offering advanced functionalities and leveraging the strengths of Golang. Your feedback and contributions are highly appreciated! 🌟
-
-### Db diagram
-<img width="1980" alt="Db diagram" src="https://github.com/Marcosxx1/Car-Rent-gin-golang-/assets/37447545/968e8525-f5a7-4372-8b2b-3a82f02b9a55">
-
-
 
 
 ## Car Rental Architecture Explanation

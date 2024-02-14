@@ -36,13 +36,13 @@ As well in with the other projects this architecture enables enhanced modularity
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
   - [Authentication(WIP)](#authentication)
-  - [Category](#categorie)
+  - [Category](#category)
   - [Car](#car)
   - [Specification](#specification)
   - [Maintenance](#specification)
   - [User](#user)
   - [Orders(WIP)](#order)
-  - [Payments(WIP)](#paymant)
+  - [Payments(WIP)](#payment)
   - [Reviews(WIP)](#review)
 - [Folder Structure](#folder-structure)
 - [Contributing](#contributing)
@@ -68,6 +68,7 @@ The application offers various API endpoints catering to different functionaliti
 - `POST /sessions`: WIP.
 
 ### Category
+
 #### Create Category
 
 - **Endpoint:** `POST /api/v1/category/create`
@@ -147,6 +148,7 @@ The application offers various API endpoints catering to different functionaliti
 
 
 ### User
+
 #### Create User
 - **Endpoint:** `POST /api/v1/user/create`
 - **Description:** Registers a new user.
@@ -209,7 +211,7 @@ The application offers various API endpoints catering to different functionaliti
 - **Handler Function:** `payments_endpoints.GetPaymentByIdController`
 
 ### Reviews(WIP)
- 
+
 ### Create Review (WIP)
 
 - **Endpoint:** `POST /api/v1/reviews/create`

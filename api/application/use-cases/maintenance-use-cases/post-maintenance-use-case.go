@@ -54,8 +54,8 @@ func (useCase *PostMaintenanceUseCase) Execute(carID string, inputDTO m.Maintena
 		NextMaintenanceDueDate:    inputDTO.NextMaintenanceDueDate,
 		MaintenanceCompletionDate: inputDTO.MaintenanceCompletionDate,
 		Parts:                     parts,
-	}	
- 
+	}
+
 	if err := validation_errors.ValidateStruct(newMaintenance); err != nil {
 		return nil, err
 	}

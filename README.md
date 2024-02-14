@@ -39,6 +39,7 @@ As well in with the other projects this architecture enables enhanced modularity
   - [Category Routes](#categories)
   - [Car Routes](#car_routes)
   - [Specifications Routes](#specifications)
+  - [Maintenance Routes](#specifications)
   - [User Routes](#user_routes)
   - [Orders Routes(WIP)](#order_routes)
   - [Payments Routes(WIP)](#paymant_routes)
@@ -116,6 +117,33 @@ The application offers various API endpoints catering to different functionaliti
 - **Endpoint:** `POST /api/v1/specification/create`
 - **Description:** Creates a new specification.
 - **Handler Function:** `specificationendpoints.PostSpecificationController`
+
+## Maintenance Routes
+
+### Register Maintenance
+
+- **Endpoint:** `POST /api/v1/cars/:carID/maintenance/create`
+- **Description:** Registers maintenance for a specific car.
+- **Handler Function:** `maintenanceendpoints.RegisterMaintenanceController`
+
+### Get Maintenance by ID
+
+- **Endpoint:** `GET /api/v1/maintenance/:id`
+- **Description:** Retrieves details of specific maintenance by ID.
+- **Handler Function:** `maintenanceendpoints.GetMaintenanceByIdController`
+
+### Update Maintenance
+
+- **Endpoint:** `PATCH /api/v1/maintenance/:id`
+- **Description:** Updates information for specific maintenance.
+- **Handler Function:** `maintenanceendpoints.UpdateMaintenanceController`
+
+### Delete Maintenance
+
+- **Endpoint:** `DELETE /api/v1/maintenance/:id`
+- **Description:** Deletes specific maintenance.
+- **Handler Function:** `maintenanceendpoints.DeleteMaintenanceController`
+
 
 ## User Routes
 ### Create User

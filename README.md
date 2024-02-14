@@ -196,7 +196,7 @@ The application offers various API endpoints catering to different functionaliti
 - **Description:** Cancels a specific order.
 - **Handler Function:** `orders_endpoints.CancelOrderController`
 
-### Payments(WIP)
+### Payments
 
 #### Make Payment (WIP)
 
@@ -210,7 +210,7 @@ The application offers various API endpoints catering to different functionaliti
 - **Description:** Retrieves details of a specific payment by ID.
 - **Handler Function:** `payments_endpoints.GetPaymentByIdController`
 
-### Reviews(WIP)
+### Reviews
 
 ### Create Review (WIP)
 

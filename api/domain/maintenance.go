@@ -28,6 +28,7 @@ type Maintenance struct {
 
 type Part struct {
 	gorm.Model
+	ID              string    `json:"id"`
 	MaintenanceID   string    `json:"maintenance_id"`
 	Name            string    `json:"name"`
 	Cost            int       `json:"cost"`

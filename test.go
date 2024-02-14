@@ -27,32 +27,40 @@ func NewPostMaintenanceUseCase(
 
 func (useCase *PostMaintenanceUseCase) ExecuteConcurrently(carID string, inputDTO m.MaintenanceInputDTO) (*m.MaintenanceOutputDTO, error) {
 	newMaintenanceID := xid.New().String()
-	fmt.Printf("+%v\n", carID)
-	fmt.Printf("+%v\n", inputDTO)
-	// Create channels for results and errors
+
+	// Criamos channels para o resultado e os erros
 	resultChan := make(chan *m.MaintenanceOutputDTO)
 	errorChan := make(chan error)
 
-	// Create WaitGroup to wait for goroutines to finish
+	// Criamos um waitgroup para aguardar a finalização das goroutines
 	var wg sync.WaitGroup
 
-	// Launch goroutines for each task
-	wg.Add(2) // Number of tasks to be executed concurrently
+	// Criamos um Once para garantir que o fechamento dos canais ocorra apenas uma vez
+	var once sync.Once
+	closeChannels := func() {
+		once.Do(func() {
+			close(resultChan)
+			close(errorChan)
+		})
+	}
+
+	// Criamos goroutines para cada tarefa
+	wg.Add(3)
 	go useCase.performValidation(&wg, errorChan, newMaintenanceID, carID, inputDTO, resultChan)
 	go useCase.performMaintenanceCreation(&wg, resultChan, errorChan, newMaintenanceID, carID, inputDTO)
 
-	// Start a goroutine to close channels and wait for all tasks to finish
+	// Iniciamos a goroutine para fechar os canais e aguardar todas as tarefas terminarem
 	go func() {
 		wg.Wait()
-		close(resultChan)
-		close(errorChan)
+		closeChannels()
 	}()
 
-	// Wait for results or errors
+	// Esperamos pelos resultados ou erros
 	select {
 	case createdMaintenance := <-resultChan:
 		return createdMaintenance, nil
 	case err := <-errorChan:
+		closeChannels() // Fechamos os canais caso ocorra um erro antes de esperar a conclusão
 		return nil, err
 	}
 }
@@ -66,13 +74,13 @@ func (useCase *PostMaintenanceUseCase) performValidation(wg *sync.WaitGroup, err
 		return
 	}
 
-	// Validate maintenance using a separate goroutine
-	go func() {//        C:/Users/marcos.s/Documents/prjetos/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/post-maintenance-use-case.go:70 +0x165
+	go func() {
 		if err := validation_errors.ValidateStruct(newMaintenance); err != nil {
 			errorChan <- err
 			return
 		}
-		resultChan <- convertToOutputDTO(newMaintenance) //        C:/Users/marcos.s/Documents/prjetos/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/post-maintenance-use-case.go:75 +0x79
+		resultChan <- convertToOutputDTO(newMaintenance)
+
 	}()
 }
 
@@ -80,23 +88,25 @@ func (useCase *PostMaintenanceUseCase) performMaintenanceCreation(wg *sync.WaitG
 	defer wg.Done()
 
 	newMaintenance, err := useCase.createMaintenanceInstance(newMaintenanceID, carID, inputDTO)
+	fmt.Printf("+%v newMaintenance\n", newMaintenance)
+
 	if err != nil {
 		errorChan <- err
 		return
 	}
 
-	// Create maintenance using a separate goroutine
 	go func() {
 		if err := useCase.maintenanceRepository.CreateMaintenance(newMaintenance); err != nil {
 			errorChan <- fmt.Errorf("failed to create maintenance record: %w", err)
 			return
 		}
 		resultChan <- convertToOutputDTO(newMaintenance)
+
 	}()
 }
 
 func (useCase *PostMaintenanceUseCase) createMaintenanceInstance(newMaintenanceID, carID string, inputDTO m.MaintenanceInputDTO) (*domain.Maintenance, error) {
-	parts := ConvertPartsInputToDTO(inputDTO.Parts)
+	parts := ConvertPartsInputToDTO(inputDTO.Parts, newMaintenanceID)
 
 	return &domain.Maintenance{
 		ID:                        newMaintenanceID,
@@ -150,10 +160,12 @@ func convertPartsOutPutToDTO(parts []domain.Part) []m.PartOutputDTO {
 	return partsDTO
 }
 
-func ConvertPartsInputToDTO(parts []m.PartInputDTO) []domain.Part {
+func ConvertPartsInputToDTO(parts []m.PartInputDTO, newMaintenanceID string) []domain.Part {
 	var partsDTO []domain.Part
 	for _, part := range parts {
 		partsDTO = append(partsDTO, domain.Part{
+			ID:              xid.New().String(),
+			MaintenanceID:   newMaintenanceID,
 			Name:            part.Name,
 			Cost:            part.Cost,
 			Quantity:        part.Quantity,

@@ -24,7 +24,7 @@ import (
 // @Router				/api/v1/cars/{carID}/maintenance/create [post]
 func RegisterMaintenanceController(context *gin.Context, carRepository repositories.CarRepository, maintenanceRepository repositories.MaintenanceRepository) {
 	var request maintenancedtos.MaintenanceInputDTO
-	if err := context.ShouldBindJSON(&request); err != nil { 
+	if err := context.ShouldBindJSON(&request); err != nil {
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return
 	}

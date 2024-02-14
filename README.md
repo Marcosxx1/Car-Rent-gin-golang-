@@ -38,7 +38,7 @@ As well in with the other projects this architecture enables enhanced modularity
   - [Authentication(WIP)](#authentication)
   - [Category](#categories)
   - [Car](#car)
-  - [Specifications](#specifications)
+  - [Specification](#specifications)
   - [Maintenance](#specifications)
   - [User](#user)
   - [Orders(WIP)](#orders)
@@ -67,8 +67,8 @@ The application offers various API endpoints catering to different functionaliti
 
 - `POST /sessions`: WIP.
 
-## Category Routes
-### Create Category
+### Category
+#### Create Category
 
 - **Endpoint:** `POST /api/v1/category/create`
 - **Description:** Creates a new category.
@@ -79,9 +79,9 @@ The application offers various API endpoints catering to different functionaliti
 - **Description:** Retrieves a list of categories.
 - **Handler Function:** `category_endpoints.ListCategoriesController`
 
-## Car Routes
+### Car
 
-### Get All Cars
+#### Get All Cars
 
 - **Endpoint:** `GET /api/v1/cars`
 - **Description:** Retrieves a list of all cars.
@@ -112,15 +112,15 @@ The application offers various API endpoints catering to different functionaliti
 - **Handler Function:** `endpoints.UpdateCarController`
 
 
-## Specification Routes
-### Create Specification
+### Specification
+#### Create Specification
 - **Endpoint:** `POST /api/v1/specification/create`
 - **Description:** Creates a new specification.
 - **Handler Function:** `specificationendpoints.PostSpecificationController`
 
-## Maintenance Routes
+### Maintenance
 
-### Register Maintenance
+#### Register Maintenance
 
 - **Endpoint:** `POST /api/v1/cars/:carID/maintenance/create`
 - **Description:** Registers maintenance for a specific car.
@@ -145,8 +145,8 @@ The application offers various API endpoints catering to different functionaliti
 - **Handler Function:** `maintenanceendpoints.DeleteMaintenanceController`
 
 
-## User Routes
-### Create User
+### User
+#### Create User
 - **Endpoint:** `POST /api/v1/user/create`
 - **Description:** Registers a new user.
 - **Handler Function:** `userendpoints.RegisterUserController`
@@ -167,9 +167,9 @@ The application offers various API endpoints catering to different functionaliti
 - **Description:** Changes the password for a user.
 - **Handler Function:** `userendpoints.ChangePasswordController`
 
-## Orders Routes
+### Orders
 
-### Create Order (WIP)
+#### Create Order (WIP)
 
 - **Endpoint:** `POST /api/v1/orders/create`
 - **Description:** Creates a new order.
@@ -193,9 +193,9 @@ The application offers various API endpoints catering to different functionaliti
 - **Description:** Cancels a specific order.
 - **Handler Function:** `orders_endpoints.CancelOrderController`
 
-## Payments Routes (WIP)
+### Payments(WIP)
 
-### Make Payment (WIP)
+#### Make Payment (WIP)
 
 - **Endpoint:** `POST /api/v1/payments/make-payment`
 - **Description:** Processes a payment for an order.
@@ -207,7 +207,7 @@ The application offers various API endpoints catering to different functionaliti
 - **Description:** Retrieves details of a specific payment by ID.
 - **Handler Function:** `payments_endpoints.GetPaymentByIdController`
 
-## Reviews Routes (WIP)
+### Reviews(WIP)
  
 ### Create Review (WIP)
 

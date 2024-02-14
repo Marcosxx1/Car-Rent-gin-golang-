@@ -20,7 +20,7 @@ import (
 // @Success	    	201   			{object} 	dtos.CarOutputDTO "car"
 // @Failure				422					{array}		validation_errors.HTTPError
 // @Router				/api/v1/cars/{id} [get]
-func FindCarByIdController(context *gin.Context,carRepository repositories.CarRepository, specificationRepository repositories.SpecificationRepository) {
+func FindCarByIdController(context *gin.Context, carRepository repositories.CarRepository, specificationRepository repositories.SpecificationRepository) {
 
 	id := context.Param("id")
 

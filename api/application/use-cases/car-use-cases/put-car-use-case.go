@@ -52,7 +52,7 @@ func (useCase *PutCarUseCase) Execute(id string, updateRequest *dtos.CarOutputDT
 		Brand:        updateRequest.Brand,
 	}
 
-	carUpdated, err := useCase.carRepository.UpdateCar(id, *carToBeUpdated)
+	carUpdated, err := useCase.carRepository.UpdateCar(id, carToBeUpdated)
 	if err != nil {
 		return nil, err
 	}

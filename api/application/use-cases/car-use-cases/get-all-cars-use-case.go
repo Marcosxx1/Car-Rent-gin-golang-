@@ -1,6 +1,8 @@
 package usecases
 
 import (
+	"errors"
+
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	repoutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/repo-utils"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
@@ -23,7 +25,7 @@ func NewGetAllCarsUseCase(
 func (useCase *GetAllCarsUseCase) Execute(page, pageSize int) ([]*dtos.CarOutputDTO, error) {
 	allCars, err := useCase.carRepository.FindAllCars(page, pageSize)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("error finding cars")
 	}
 
 	outputDTO := make([]*dtos.CarOutputDTO, 0)
@@ -35,14 +37,14 @@ func (useCase *GetAllCarsUseCase) Execute(page, pageSize int) ([]*dtos.CarOutput
 		}
 
 		dto := &dtos.CarOutputDTO{
-			ID:           car.ID,
-			Name:         car.Name,
-			Description:  car.Description,
-			DailyRate:    car.DailyRate,
-			Available:    car.Available,
-			LicensePlate: car.LicensePlate,
-			FineAmount:   car.FineAmount,
-			Brand:        car.Brand,
+			ID:            car.ID,
+			Name:          car.Name,
+			Description:   car.Description,
+			DailyRate:     car.DailyRate,
+			Available:     car.Available,
+			LicensePlate:  car.LicensePlate,
+			FineAmount:    car.FineAmount,
+			Brand:         car.Brand,
 			Specification: repoutils.ConvertSpecificationToDTO(specifications),
 		}
 

@@ -157,12 +157,9 @@ func (repo *PGCarRepository) RegisterCar(car *domain.Car) error {
 //   - error: An error, if any.
 func (repo *PGCarRepository) FindCarByLicensePlate(licensePlate string) (*domain.Car, error) {
 	var car domain.Car
-	err := dbconfig.Postgres.Where("license_plate = ?", licensePlate).First(&car).Error
+	err := dbconfig.Postgres.Select("id").Where("license_plate = ?", licensePlate).First(&car).Error
 
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
 		return nil, err
 	}
 
@@ -228,6 +225,7 @@ func (repo *PGCarRepository) DeleteCar(id string) error {
 	}
 
 	return nil
+	
 }
 
 // FindCarById finds a car in the database based on its ID.

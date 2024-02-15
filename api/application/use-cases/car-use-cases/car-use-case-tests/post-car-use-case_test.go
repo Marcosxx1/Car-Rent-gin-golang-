@@ -25,7 +25,7 @@ func TestPostCar_Success(t *testing.T) {
 	mockSpecRepo.On("PostMultipleSpecifications").Return(nil)                    // Assume specification creation is successful
 
 	// Execute the use case
-	outputDTO, err := useCase.Execute(inputDTOS)
+	outputDTO, err := useCase.ExecuteConcurrently(inputDTOS)
 
 	// Assert the results
 	assert.NoError(t, err, "Unexpected error in PostCarUseCase.Execute")

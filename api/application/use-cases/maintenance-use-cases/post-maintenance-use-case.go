@@ -31,7 +31,7 @@ func (useCase *PostMaintenanceUseCase) ExecuteConcurrently(carID string, inputDT
 	// Criamos channels para o resultado e os erros
 	resultChan := make(chan *m.MaintenanceOutputDTO)
 	errorChan := make(chan error)
-
+ 
 	// Criamos um waitgroup para aguardar a finalização das goroutines
 	var wg sync.WaitGroup
 

@@ -45,14 +45,16 @@ func (useCase *PostMaintenanceUseCase) ExecuteConcurrently(carID string, inputDT
 	}
 
 	// Criamos goroutines para cada tarefa
-	wg.Add(3)
+	wg.Add(2)
 	go useCase.performValidation(&wg, errorChan, newMaintenanceID, carID, inputDTO, resultChan)
 	go useCase.performMaintenanceCreation(&wg, resultChan, errorChan, newMaintenanceID, carID, inputDTO)
-
+	
 	// Iniciamos a goroutine para fechar os canais e aguardar todas as tarefas terminarem
+	wg.Add(1) // adicionamos uma goroutine que aguarda e garante as conclusões das duas goroutines acima antes de chamar o closeChannels
 	go func() {
-		wg.Wait()
-		closeChannels()
+			defer wg.Done() // executado por último
+			wg.Wait() // Aguarda a conclusão das goroutines de validação e criação
+			closeChannels() // fecha!
 	}()
 
 	// Esperamos pelos resultados ou erros

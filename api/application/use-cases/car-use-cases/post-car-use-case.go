@@ -25,7 +25,7 @@ func NewPostCarUseCase(
 		carRepository:           carRepository,
 		specificationRepository: specificationRepository,
 	}
-}
+}   
 
 func (useCase *PostCarUseCase) ExecuteConcurrently(inputDTO *dtos.CarInputDTO) (*dtos.CarOutputDTO, error) {
 	carID := xid.New().String()

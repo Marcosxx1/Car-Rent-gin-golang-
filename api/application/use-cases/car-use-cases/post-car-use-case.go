@@ -25,7 +25,7 @@ func NewPostCarUseCase(
 		carRepository:           carRepository,
 		specificationRepository: specificationRepository,
 	}
-}
+}   
 
 func (useCase *PostCarUseCase) ExecuteConcurrently(inputDTO *dtos.CarInputDTO) (*dtos.CarOutputDTO, error) {
 	carID := xid.New().String()
@@ -108,23 +108,5 @@ func (useCase *PostCarUseCase) performCarCreation(wg *sync.WaitGroup, resultChan
 			return
 	}
 
-	resultChan <- convertToOutputDTO(carID, inputDTO)
-}
-
-
-func convertToOutputDTO(carID string, inputDTO *dtos.CarInputDTO) *dtos.CarOutputDTO {
-	specificaDomain := repoutils.ConvertSpecificationToDomainCreate(inputDTO.Specification, carID)
-	specificationOutPut := repoutils.ConvertSpecificationToDTO(specificaDomain)
-	return &dtos.CarOutputDTO{
-		ID:            carID,
-		Name:          inputDTO.Name,
-		Description:   inputDTO.Description,
-		DailyRate:     inputDTO.DailyRate,
-		Available:     inputDTO.Available,
-		LicensePlate:  inputDTO.LicensePlate,
-		FineAmount:    inputDTO.FineAmount,
-		Brand:         inputDTO.Brand,
-		CategoryID:    inputDTO.CategoryID,
-		Specification: specificationOutPut,
-	}
+	resultChan <- dtos.ConvertToOutputDTO(carID, inputDTO)
 }

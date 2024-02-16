@@ -12,14 +12,14 @@ type Maintenance struct {
 	CarID                     string    `json:"car_id"`
 	MaintenanceType           string    `json:"maintenance_type" binding:"required"`
 	OdometerReading           int       `json:"odometer_reading" binding:"required"`
-	LastMaintenanceDate       time.Time `json:"last_maintenance_date" binding:"required"`
+	LastMaintenanceDate       time.Time `json:"last_maintenance_date" binding:"required" validate:"gte=0"`
 	ScheduledMaintenance      bool      `json:"scheduled_maintenance" binding:"required"`
 	MaintenanceStatus         string    `json:"maintenance_status" binding:"required"`
 	MaintenanceDuration       string    `json:"maintenance_duration" binding:"required"`
 	Description               string    `json:"description" binding:"required"`
 	MaintenanceNotes          string    `json:"maintenance_notes" binding:"required"`
-	LaborCost                 int       `json:"labor_cost" binding:"required"`
-	PartsCost                 int       `json:"parts_cost" binding:"required"`
+	LaborCost                 int       `json:"labor_cost" binding:"required" validate:"gte=0"`
+	PartsCost                 int       `json:"parts_cost" binding:"required" validate:"gte=0"`
 	NextMaintenanceDueDate    time.Time `json:"next_maintenance_due_date" binding:"required"`
 	MaintenanceCompletionDate time.Time `json:"maintenance_completion_date" binding:"required"`
 	Car                       []*Car    `gorm:"many2many:car_maintenances"`
@@ -31,7 +31,7 @@ type Part struct {
 	ID              string    `json:"id"`
 	MaintenanceID   string    `json:"maintenance_id"`
 	Name            string    `json:"name"`
-	Cost            int       `json:"cost"`
-	Quantity        int       `json:"quantity"`
+	Cost            int       `json:"cost" validate:"gte=0"`
+	Quantity        int       `json:"quantity" validate:"gte=0"`
 	ReplacementDate time.Time `json:"replacement_date"`
 }

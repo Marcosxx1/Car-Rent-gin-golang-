@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
+	maintUt "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/maintenance-dtos.go"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
@@ -31,30 +32,20 @@ func (useCase *PostMaintenanceUseCase) ExecuteConcurrently(carID string, inputDT
 	// Criamos channels para o resultado e os erros
 	resultChan := make(chan *m.MaintenanceOutputDTO)
 	errorChan := make(chan error)
- 
-	// Criamos um waitgroup para aguardar a finalização das goroutines
+	validationErrorSignal := make(chan bool) // Um sinal para caso tenhamos um erro > true
+
 	var wg sync.WaitGroup
 
-	// Criamos um Once para garantir que o fechamento dos canais ocorra apenas uma vez
-	var once sync.Once
-	closeChannels := func() {
-		once.Do(func() {
-			close(resultChan)
-			close(errorChan)
-		})
-	}
-
-	// Criamos goroutines para cada tarefa
 	wg.Add(2)
-	go useCase.performValidation(&wg, errorChan, newMaintenanceID, carID, inputDTO, resultChan)
-	go useCase.performMaintenanceCreation(&wg, resultChan, errorChan, newMaintenanceID, carID, inputDTO)
-	
-	// Iniciamos a goroutine para fechar os canais e aguardar todas as tarefas terminarem
-	wg.Add(1) // adicionamos uma goroutine que aguarda e garante as conclusões das duas goroutines acima antes de chamar o closeChannels
+	go useCase.performValidation(validationErrorSignal, &wg, errorChan, newMaintenanceID, carID, inputDTO, resultChan)
+	go useCase.performMaintenanceCreation(validationErrorSignal, &wg, resultChan, errorChan, newMaintenanceID, carID, inputDTO)
+
+	wg.Add(1)
 	go func() {
-			defer wg.Done() // executado por último
-			wg.Wait() // Aguarda a conclusão das goroutines de validação e criação
-			closeChannels() // fecha!
+		defer wg.Done()
+		wg.Wait()
+		close(resultChan)
+		close(errorChan)
 	}()
 
 	// Esperamos pelos resultados ou erros
@@ -62,52 +53,48 @@ func (useCase *PostMaintenanceUseCase) ExecuteConcurrently(carID string, inputDT
 	case createdMaintenance := <-resultChan:
 		return createdMaintenance, nil
 	case err := <-errorChan:
-		closeChannels() // Fechamos os canais caso ocorra um erro antes de esperar a conclusão
 		return nil, err
 	}
 }
 
-func (useCase *PostMaintenanceUseCase) performValidation(wg *sync.WaitGroup, errorChan chan<- error, newMaintenanceID, carID string, inputDTO m.MaintenanceInputDTO, resultChan chan<- *m.MaintenanceOutputDTO) {
+func (useCase *PostMaintenanceUseCase) performValidation(validationErrorSignal chan<- bool, wg *sync.WaitGroup, errorChan chan<- error, newMaintenanceID, carID string, inputDTO m.MaintenanceInputDTO, resultChan chan<- *m.MaintenanceOutputDTO) {
 	defer wg.Done()
 
-	newMaintenance, err := useCase.createMaintenanceInstance(newMaintenanceID, carID, inputDTO)
-	if err != nil {
+ 	if err := validation_errors.ValidateStruct(inputDTO); err != nil {
 		errorChan <- err
+		validationErrorSignal <- true
 		return
 	}
 
-	go func() {
-		if err := validation_errors.ValidateStruct(newMaintenance); err != nil {
-			errorChan <- err
-			return
-		}
-		resultChan <- convertToOutputDTO(newMaintenance)
+	validationErrorSignal <- false // Sinaliza que a validação foi bem-sucedida
 
-	}()
 }
 
-func (useCase *PostMaintenanceUseCase) performMaintenanceCreation(wg *sync.WaitGroup, resultChan chan<- *m.MaintenanceOutputDTO, errorChan chan<- error, newMaintenanceID, carID string, inputDTO m.MaintenanceInputDTO) {
+func (useCase *PostMaintenanceUseCase) performMaintenanceCreation(validationErrorSignal chan<- bool, wg *sync.WaitGroup, resultChan chan<- *m.MaintenanceOutputDTO, errorChan chan<- error, newMaintenanceID, carID string, inputDTO m.MaintenanceInputDTO) {
 	defer wg.Done()
 
 	newMaintenance, err := useCase.createMaintenanceInstance(newMaintenanceID, carID, inputDTO)
-
 	if err != nil {
 		errorChan <- err
+		validationErrorSignal <- true // Sinaliza que ocorreu um erro de validação
 		return
 	}
 
 	go func() {
 		if err := useCase.maintenanceRepository.CreateMaintenance(newMaintenance); err != nil {
 			errorChan <- fmt.Errorf("failed to create maintenance record: %w", err)
+			validationErrorSignal <- true // Sinaliza que ocorreu um erro de validação
 			return
 		}
-		resultChan <- convertToOutputDTO(newMaintenance)
-
 	}()
+
+	resultChan <- maintUt.ConvertToOutputDTO(newMaintenance)
+	validationErrorSignal <- false // Sinaliza que a validação foi bem-sucedida
+
 }
 
 func (useCase *PostMaintenanceUseCase) createMaintenanceInstance(newMaintenanceID, carID string, inputDTO m.MaintenanceInputDTO) (*domain.Maintenance, error) {
-	parts := ConvertPartsInputToDTO(inputDTO.Parts, newMaintenanceID)
+	parts := maintUt.ConvertPartsInputToDTO(inputDTO.Parts, newMaintenanceID)
 
 	return &domain.Maintenance{
 		ID:                        newMaintenanceID,
@@ -126,52 +113,4 @@ func (useCase *PostMaintenanceUseCase) createMaintenanceInstance(newMaintenanceI
 		MaintenanceCompletionDate: inputDTO.MaintenanceCompletionDate,
 		Parts:                     parts,
 	}, nil
-}
-
-func convertToOutputDTO(maintenance *domain.Maintenance) *m.MaintenanceOutputDTO {
-	return &m.MaintenanceOutputDTO{
-		ID:                        maintenance.ID,
-		CarID:                     maintenance.CarID,
-		MaintenanceType:           maintenance.MaintenanceType,
-		OdometerReading:           maintenance.OdometerReading,
-		LastMaintenanceDate:       maintenance.LastMaintenanceDate,
-		ScheduledMaintenance:      maintenance.ScheduledMaintenance,
-		MaintenanceStatus:         maintenance.MaintenanceStatus,
-		MaintenanceDuration:       maintenance.MaintenanceDuration,
-		Description:               maintenance.Description,
-		MaintenanceNotes:          maintenance.MaintenanceNotes,
-		LaborCost:                 maintenance.LaborCost,
-		PartsCost:                 maintenance.PartsCost,
-		NextMaintenanceDueDate:    maintenance.NextMaintenanceDueDate,
-		MaintenanceCompletionDate: maintenance.MaintenanceCompletionDate,
-		Parts:                     convertPartsOutPutToDTO(maintenance.Parts),
-	}
-}
-func convertPartsOutPutToDTO(parts []domain.Part) []m.PartOutputDTO {
-	var partsDTO []m.PartOutputDTO
-	for _, part := range parts {
-		partsDTO = append(partsDTO, m.PartOutputDTO{
-			MaintenanceID:   part.MaintenanceID,
-			Name:            part.Name,
-			Cost:            part.Cost,
-			Quantity:        part.Quantity,
-			ReplacementDate: part.ReplacementDate,
-		})
-	}
-	return partsDTO
-}
-
-func ConvertPartsInputToDTO(parts []m.PartInputDTO, newMaintenanceID string) []domain.Part {
-	var partsDTO []domain.Part
-	for _, part := range parts {
-		partsDTO = append(partsDTO, domain.Part{
-			ID:              xid.New().String(),
-			MaintenanceID:   newMaintenanceID,
-			Name:            part.Name,
-			Cost:            part.Cost,
-			Quantity:        part.Quantity,
-			ReplacementDate: part.ReplacementDate,
-		})
-	}
-	return partsDTO
 }

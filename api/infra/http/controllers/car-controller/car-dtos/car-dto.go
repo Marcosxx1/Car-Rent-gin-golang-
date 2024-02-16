@@ -1,6 +1,7 @@
 package dtos
 
 import (
+	repoutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/repo-utils"
 	specificationdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/specification-controller/specification-dtos"
 )
 
@@ -19,7 +20,7 @@ Quando acessamos um elemento deste slice, acessamos uma instancia direta de doma
 
 type CarInputDTO struct {
 	Name          string                                     `json:"name" validate:"required"`
-	Description   string                                     `json:"description" validate:"required"`
+	Description   string                                      `json:"description" validate:"required"`
 	DailyRate     float64                                    `json:"daily_rate" validate:"required"`
 	Available     bool                                       `json:"available" validate:"required"`
 	LicensePlate  string                                     `json:"license_plate" validate:"required"`
@@ -40,4 +41,23 @@ type CarOutputDTO struct {
 	Brand         string                                      `json:"brand"`
 	CategoryID    string                                      `json:"category_id"`
 	Specification []*specificationdtos.SpecificationOutputDto `json:"specification"`
+}
+
+
+
+func ConvertToOutputDTO(carID string, inputDTO *CarInputDTO) *CarOutputDTO {
+	specificaDomain := repoutils.ConvertSpecificationToDomainCreate(inputDTO.Specification, carID)
+	specificationOutPut := repoutils.ConvertSpecificationToDTO(specificaDomain)
+	return &CarOutputDTO{
+		ID:            carID,
+		Name:          inputDTO.Name,
+		Description:   inputDTO.Description,
+		DailyRate:     inputDTO.DailyRate,
+		Available:     inputDTO.Available,
+		LicensePlate:  inputDTO.LicensePlate,
+		FineAmount:    inputDTO.FineAmount,
+		Brand:         inputDTO.Brand,
+		CategoryID:    inputDTO.CategoryID,
+		Specification: specificationOutPut,
+	}
 }

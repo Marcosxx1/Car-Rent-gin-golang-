@@ -27,7 +27,6 @@ func NewPostMaintenanceUseCase(
 }
 
 func (useCase *PostMaintenanceUseCase) ExecuteConcurrently(carID string, inputDTO m.MaintenanceInputDTO) (*m.MaintenanceOutputDTO, error) {
-	newMaintenanceID := xid.New().String()
 
 	// Criamos channels para o resultado e os erros
 	resultChan := make(chan *m.MaintenanceOutputDTO)
@@ -36,9 +35,10 @@ func (useCase *PostMaintenanceUseCase) ExecuteConcurrently(carID string, inputDT
 
 	var wg sync.WaitGroup
 
-	wg.Add(2)
-	go useCase.performValidation(validationErrorSignal, &wg, errorChan, newMaintenanceID, carID, inputDTO, resultChan)
-	go useCase.performMaintenanceCreation(validationErrorSignal, &wg, resultChan, errorChan, newMaintenanceID, carID, inputDTO)
+	wg.Add(3)
+	go useCase.performValidation(validationErrorSignal, &wg, errorChan, inputDTO)
+	go useCase.checkCarStatus(validationErrorSignal, &wg, errorChan, carID, resultChan)
+	go useCase.performMaintenanceCreation(validationErrorSignal, &wg, resultChan, errorChan, carID, inputDTO)
 
 	wg.Add(1)
 	go func() {
@@ -57,23 +57,41 @@ func (useCase *PostMaintenanceUseCase) ExecuteConcurrently(carID string, inputDT
 	}
 }
 
-func (useCase *PostMaintenanceUseCase) performValidation(validationErrorSignal chan<- bool, wg *sync.WaitGroup, errorChan chan<- error, newMaintenanceID, carID string, inputDTO m.MaintenanceInputDTO, resultChan chan<- *m.MaintenanceOutputDTO) {
+func (useCase *PostMaintenanceUseCase) performValidation(validationErrorSignal chan<- bool, wg *sync.WaitGroup, errorChan chan<- error, inputDTO m.MaintenanceInputDTO) {
 	defer wg.Done()
 
- 	if err := validation_errors.ValidateStruct(inputDTO); err != nil {
+	if err := validation_errors.ValidateStruct(inputDTO); err != nil {
 		errorChan <- err
 		validationErrorSignal <- true
 		return
 	}
 
-	validationErrorSignal <- false // Sinaliza que a validação foi bem-sucedida
-
+	validationErrorSignal <- false
 }
 
-func (useCase *PostMaintenanceUseCase) performMaintenanceCreation(validationErrorSignal chan<- bool, wg *sync.WaitGroup, resultChan chan<- *m.MaintenanceOutputDTO, errorChan chan<- error, newMaintenanceID, carID string, inputDTO m.MaintenanceInputDTO) {
+func (useCase *PostMaintenanceUseCase) checkCarStatus(validationErrorSignal chan<- bool, wg *sync.WaitGroup, errorChan chan<- error, carID string, resultChan chan<- *m.MaintenanceOutputDTO) {
 	defer wg.Done()
 
-	newMaintenance, err := useCase.createMaintenanceInstance(newMaintenanceID, carID, inputDTO)
+	car, err := useCase.carRepository.FindCarById(carID)
+	if err != nil {
+		errorChan <- err
+		validationErrorSignal <- true
+		return
+	}
+
+	if !car.Available {
+		errorChan <- fmt.Errorf("car with id %s is not avaliable or in maintenance", carID)
+		validationErrorSignal <- true
+		return
+	}
+
+	validationErrorSignal <- false
+}
+
+func (useCase *PostMaintenanceUseCase) performMaintenanceCreation(validationErrorSignal chan<- bool, wg *sync.WaitGroup, resultChan chan<- *m.MaintenanceOutputDTO, errorChan chan<- error, carID string, inputDTO m.MaintenanceInputDTO) {
+	defer wg.Done()
+
+	newMaintenance, err := useCase.createMaintenanceInstance(carID, inputDTO)
 	if err != nil {
 		errorChan <- err
 		validationErrorSignal <- true // Sinaliza que ocorreu um erro de validação
@@ -89,11 +107,13 @@ func (useCase *PostMaintenanceUseCase) performMaintenanceCreation(validationErro
 	}()
 
 	resultChan <- maintUt.ConvertToOutputDTO(newMaintenance)
-	validationErrorSignal <- false // Sinaliza que a validação foi bem-sucedida
+	validationErrorSignal <- false
 
 }
 
-func (useCase *PostMaintenanceUseCase) createMaintenanceInstance(newMaintenanceID, carID string, inputDTO m.MaintenanceInputDTO) (*domain.Maintenance, error) {
+func (useCase *PostMaintenanceUseCase) createMaintenanceInstance(carID string, inputDTO m.MaintenanceInputDTO) (*domain.Maintenance, error) {
+	newMaintenanceID := xid.New().String()
+
 	parts := maintUt.ConvertPartsInputToDTO(inputDTO.Parts, newMaintenanceID)
 
 	return &domain.Maintenance{

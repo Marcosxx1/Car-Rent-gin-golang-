@@ -3,6 +3,8 @@ package domain
 import (
 	"time"
 
+	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/maintenance-dtos.go"
+	"github.com/rs/xid"
 	"gorm.io/gorm"
 )
 
@@ -34,4 +36,57 @@ type Part struct {
 	Cost            int       `json:"cost" validate:"gte=0"`
 	Quantity        int       `json:"quantity" validate:"gte=0"`
 	ReplacementDate time.Time `json:"replacement_date"`
+}
+
+func CreateMaintenanceInstance(carID string, inputDTO m.MaintenanceInputDTO) (*Maintenance, error) {
+	newMaintenanceID := xid.New().String()
+
+	parts := ConvertPartsInputToDTO(inputDTO.Parts, newMaintenanceID)
+
+	return &Maintenance{
+		ID:                        newMaintenanceID,
+		CarID:                     carID,
+		MaintenanceType:           inputDTO.MaintenanceType,
+		OdometerReading:           inputDTO.OdometerReading,
+		LastMaintenanceDate:       inputDTO.LastMaintenanceDate,
+		ScheduledMaintenance:      inputDTO.ScheduledMaintenance,
+		MaintenanceStatus:         inputDTO.MaintenanceStatus,
+		MaintenanceDuration:       inputDTO.MaintenanceDuration,
+		Description:               inputDTO.Description,
+		MaintenanceNotes:          inputDTO.MaintenanceNotes,
+		LaborCost:                 inputDTO.LaborCost,
+		PartsCost:                 inputDTO.PartsCost,
+		NextMaintenanceDueDate:    inputDTO.NextMaintenanceDueDate,
+		MaintenanceCompletionDate: inputDTO.MaintenanceCompletionDate,
+		Parts:                     parts,
+	}, nil
+}
+
+func ConvertPartsOutPutToDTO(parts []Part) []m.PartOutputDTO {
+	var partsDTO []m.PartOutputDTO
+	for _, part := range parts {
+		partsDTO = append(partsDTO, m.PartOutputDTO{
+			MaintenanceID:   part.MaintenanceID,
+			Name:            part.Name,
+			Cost:            part.Cost,
+			Quantity:        part.Quantity,
+			ReplacementDate: part.ReplacementDate,
+		})
+	}
+	return partsDTO
+}
+
+func ConvertPartsInputToDTO(parts []m.PartInputDTO, newMaintenanceID string) []Part {
+	var partsDTO []Part
+	for _, part := range parts {
+		partsDTO = append(partsDTO, Part{
+			ID:              xid.New().String(),
+			MaintenanceID:   newMaintenanceID,
+			Name:            part.Name,
+			Cost:            part.Cost,
+			Quantity:        part.Quantity,
+			ReplacementDate: part.ReplacementDate,
+		})
+	}
+	return partsDTO
 }

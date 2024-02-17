@@ -9,7 +9,7 @@ type CarRepository interface {
 	DeleteCar(id string) error
 	FindCarById(id string) (*domain.Car, error)
 	UpdateCar(id string, car *domain.Car) (*domain.Car, error)
-
+	AlterCarStatus(id string, available bool) error
 	/*
 		FindAvailableCars() (brand string, category_id string, name string, cars []*domain.Car)
 		FindAvailableCarById(id string) *domain.Car

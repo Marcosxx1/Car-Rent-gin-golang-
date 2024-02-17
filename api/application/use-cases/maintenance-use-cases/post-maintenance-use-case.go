@@ -8,8 +8,6 @@ import (
 	maintUt "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/maintenance-dtos.go"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
-	"github.com/rs/xid"
 )
 
 type PostMaintenanceUseCase struct {
@@ -26,7 +24,7 @@ func NewPostMaintenanceUseCase(
 	}
 }
 
-func (useCase *PostMaintenanceUseCase) ExecuteConcurrently(carID string, inputDTO m.MaintenanceInputDTO) (*m.MaintenanceOutputDTO, error) {
+func (useCase *PostMaintenanceUseCase) Execute(carID string, inputDTO m.MaintenanceInputDTO) (*m.MaintenanceOutputDTO, error) {
 
 	// Criamos channels para o resultado e os erros
 	resultChan := make(chan *m.MaintenanceOutputDTO)
@@ -35,11 +33,13 @@ func (useCase *PostMaintenanceUseCase) ExecuteConcurrently(carID string, inputDT
 
 	var wg sync.WaitGroup
 
+	// Adiciona contadores para as goroutines
 	wg.Add(3)
-	go useCase.performValidation(validationErrorSignal, &wg, errorChan, inputDTO)
-	go useCase.checkCarStatus(validationErrorSignal, &wg, errorChan, carID, resultChan)
-	go useCase.performMaintenanceCreation(validationErrorSignal, &wg, resultChan, errorChan, carID, inputDTO)
+	go maintUt.PerformMaintenanceValidation(&wg, errorChan, validationErrorSignal, inputDTO)
+	go maintUt.CheckAndSetStatus(&wg, errorChan, validationErrorSignal, resultChan, carID, useCase.carRepository)
+	go useCase.performMaintenanceCreation(&wg, errorChan, validationErrorSignal, resultChan, carID, inputDTO)
 
+	// Adiciona contador para a goroutine de fechamento de canais
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -57,47 +57,17 @@ func (useCase *PostMaintenanceUseCase) ExecuteConcurrently(carID string, inputDT
 	}
 }
 
-func (useCase *PostMaintenanceUseCase) performValidation(validationErrorSignal chan<- bool, wg *sync.WaitGroup, errorChan chan<- error, inputDTO m.MaintenanceInputDTO) {
+func (useCase *PostMaintenanceUseCase) performMaintenanceCreation(wg *sync.WaitGroup, errorChan chan<- error, validationErrorSignal chan<- bool, resultChan chan<- *m.MaintenanceOutputDTO, carID string, inputDTO m.MaintenanceInputDTO) {
 	defer wg.Done()
 
-	if err := validation_errors.ValidateStruct(inputDTO); err != nil {
-		errorChan <- err
-		validationErrorSignal <- true
-		return
-	}
-
-	validationErrorSignal <- false
-}
-
-func (useCase *PostMaintenanceUseCase) checkCarStatus(validationErrorSignal chan<- bool, wg *sync.WaitGroup, errorChan chan<- error, carID string, resultChan chan<- *m.MaintenanceOutputDTO) {
-	defer wg.Done()
-
-	car, err := useCase.carRepository.FindCarById(carID)
-	if err != nil {
-		errorChan <- err
-		validationErrorSignal <- true
-		return
-	}
-
-	if !car.Available {
-		errorChan <- fmt.Errorf("car with id %s is not avaliable or in maintenance", carID)
-		validationErrorSignal <- true
-		return
-	}
-
-	validationErrorSignal <- false
-}
-
-func (useCase *PostMaintenanceUseCase) performMaintenanceCreation(validationErrorSignal chan<- bool, wg *sync.WaitGroup, resultChan chan<- *m.MaintenanceOutputDTO, errorChan chan<- error, carID string, inputDTO m.MaintenanceInputDTO) {
-	defer wg.Done()
-
-	newMaintenance, err := useCase.createMaintenanceInstance(carID, inputDTO)
+	newMaintenance, err := domain.CreateMaintenanceInstance(carID, inputDTO)
 	if err != nil {
 		errorChan <- err
 		validationErrorSignal <- true // Sinaliza que ocorreu um erro de validação
 		return
 	}
 
+	// Inicia uma goroutine para criar a manutenção
 	go func() {
 		if err := useCase.maintenanceRepository.CreateMaintenance(newMaintenance); err != nil {
 			errorChan <- fmt.Errorf("failed to create maintenance record: %w", err)
@@ -108,29 +78,4 @@ func (useCase *PostMaintenanceUseCase) performMaintenanceCreation(validationErro
 
 	resultChan <- maintUt.ConvertToOutputDTO(newMaintenance)
 	validationErrorSignal <- false
-
-}
-
-func (useCase *PostMaintenanceUseCase) createMaintenanceInstance(carID string, inputDTO m.MaintenanceInputDTO) (*domain.Maintenance, error) {
-	newMaintenanceID := xid.New().String()
-
-	parts := maintUt.ConvertPartsInputToDTO(inputDTO.Parts, newMaintenanceID)
-
-	return &domain.Maintenance{
-		ID:                        newMaintenanceID,
-		CarID:                     carID,
-		MaintenanceType:           inputDTO.MaintenanceType,
-		OdometerReading:           inputDTO.OdometerReading,
-		LastMaintenanceDate:       inputDTO.LastMaintenanceDate,
-		ScheduledMaintenance:      inputDTO.ScheduledMaintenance,
-		MaintenanceStatus:         inputDTO.MaintenanceStatus,
-		MaintenanceDuration:       inputDTO.MaintenanceDuration,
-		Description:               inputDTO.Description,
-		MaintenanceNotes:          inputDTO.MaintenanceNotes,
-		LaborCost:                 inputDTO.LaborCost,
-		PartsCost:                 inputDTO.PartsCost,
-		NextMaintenanceDueDate:    inputDTO.NextMaintenanceDueDate,
-		MaintenanceCompletionDate: inputDTO.MaintenanceCompletionDate,
-		Parts:                     parts,
-	}, nil
 }

@@ -27,11 +27,11 @@ func RegisterCarController(context *gin.Context, carRepository repositories.CarR
 	if err := context.ShouldBindJSON(&request); err != nil {
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return
-	}
+	} 
 
 	postCarUseCase := usecases.NewPostCarUseCase(carRepository, specificationRepository)
 
-	createdCar, err := postCarUseCase.Execute(request)
+	createdCar, err := postCarUseCase.ExecuteConcurrently(request)
 	if err != nil {
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return

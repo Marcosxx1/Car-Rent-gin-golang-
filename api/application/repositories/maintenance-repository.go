@@ -5,7 +5,6 @@ import "github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 type MaintenanceRepository interface {
 	// CreateMaintenance adiciona uma nova manutenção ao repositório
 	CreateMaintenance(maintenance *domain.Maintenance) error
-
 	/* 	// GetMaintenanceByID retorna uma manutenção com base no ID
 	   	GetMaintenanceByID(id string) (*domain.Maintenance, error)
 

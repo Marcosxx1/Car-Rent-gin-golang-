@@ -67,3 +67,8 @@ func (m *MockCarRepository) UpdateCar(id string, car *domain.Car) (*domain.Car, 
 	args := m.Called(id, car)
 	return args.Get(0).(*domain.Car), args.Error(1)
 }
+
+func (m *MockCarRepository) AlterCarStatus(id string, available bool) error {
+	args := m.Called(id, available)
+	return args.Error(0)
+}

@@ -2,12 +2,13 @@ package usecases
 
 import (
 	"fmt"
+	"sync"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
+	carutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases/car-use-case-tests/car-utils"
 	repoutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/repo-utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/rs/xid"
 )
 
@@ -25,18 +26,47 @@ func NewPostCarUseCase(
 	}
 }
 
-func (useCase *PostCarUseCase) Execute(inputDTO *dtos.CarInputDTO) (*dtos.CarOutputDTO, error) {
-	if err := validation_errors.ValidateStruct(inputDTO); err != nil {
-		return nil, err
-	}
-
+func (useCase *PostCarUseCase) ExecuteConcurrently(inputDTO *dtos.CarInputDTO) (*dtos.CarOutputDTO, error) {
 	carID := xid.New().String()
 
-	specifications := repoutils.ConvertSpecificationToDomainCreate(inputDTO.Specification, carID)
+	resultChan := make(chan *dtos.CarOutputDTO)
+	errorChan := make(chan error)
+	validationErrorSignal := make(chan bool) // Um sinal para caso tenhamos um erro > true
 
-	for _, spec := range specifications {
-		fmt.Printf("%+v\n", spec)
+	var wg sync.WaitGroup
+
+	wg.Add(2) // passamos ele nas goroutines
+	go carutils.PerformValidation(&wg, errorChan, validationErrorSignal, inputDTO, useCase.carRepository)
+	go useCase.performCarCreation(&wg, resultChan, errorChan, validationErrorSignal, carID, inputDTO)
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		wg.Wait()
+		close(resultChan)
+		close(errorChan)
+	}()
+
+	select {
+	case createdCar := <-resultChan:
+		return createdCar, nil
+	case err := <-errorChan:
+		return nil, err
 	}
+}
+
+func (useCase *PostCarUseCase) performCarCreation(wg *sync.WaitGroup, resultChan chan<- *dtos.CarOutputDTO, errorChan chan<- error, validationErrorSignal <-chan bool, carID string, inputDTO *dtos.CarInputDTO) {
+	defer wg.Done()
+
+	if <-validationErrorSignal { // Verifica se houve erro de validação
+		// Não prossegue com a criação da instância se houver erro de validação
+		return
+	}
+
+	var specifications []*domain.Specification
+	go func() {
+		specifications = repoutils.ConvertSpecificationToDomainCreate(inputDTO.Specification, carID)
+	}()
 
 	newCar := &domain.Car{
 		ID:           carID,
@@ -50,31 +80,15 @@ func (useCase *PostCarUseCase) Execute(inputDTO *dtos.CarInputDTO) (*dtos.CarOut
 		CategoryID:   inputDTO.CategoryID,
 	}
 
-	_, err := useCase.carRepository.FindCarByLicensePlate(newCar.LicensePlate)
-	if err != nil {
-		return nil, err
-	}
-
 	if err := useCase.carRepository.RegisterCar(newCar); err != nil {
-		return nil, fmt.Errorf("failed to create car record: %w", err)
+		errorChan <- fmt.Errorf("failed to create car record: %w", err)
+		return
 	}
 
 	if err := useCase.specificationRepository.PostMultipleSpecifications(specifications); err != nil {
-		return nil, fmt.Errorf("failed to create specification record: %w", err)
+		errorChan <- fmt.Errorf("failed to create specification record: %w", err)
+		return
 	}
 
-	outPut := &dtos.CarOutputDTO{
-		ID:            newCar.ID,
-		Name:          newCar.Name,
-		Description:   newCar.Description,
-		DailyRate:     newCar.DailyRate,
-		Available:     newCar.Available,
-		LicensePlate:  newCar.LicensePlate,
-		FineAmount:    newCar.FineAmount,
-		Brand:         newCar.Brand,
-		CategoryID:    newCar.CategoryID,
-		Specification: repoutils.ConvertSpecificationToDTO(specifications),
-	}
-
-	return outPut, nil
+	resultChan <- dtos.ConvertToOutputDTO(carID, inputDTO)
 }

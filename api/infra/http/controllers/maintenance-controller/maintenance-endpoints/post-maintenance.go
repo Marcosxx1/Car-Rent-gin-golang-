@@ -12,14 +12,14 @@ import (
 
 // RegisterMaintenanceController handles the HTTP POST request to create a new maintenance.
 // @Summary				Create a new maintenance
-// @Description		Create a new maintenance with the provided information
-// @ID						post-car
-// @Tags					Maintenance
+// @Description			Create a new maintenance with the provided information
+// @ID					post-car
+// @Tags				Maintenance
 // @Accept				json
 // @Produce				json
-// @Param        	carID   		path   		 string  true  "CarID"
-// @Param					request			body 		  maintenancedtos.MaintenanceInputDTO	true "Maintenance information to be created"
-// @Success	    	201   			{object} 	maintenancedtos.MaintenanceOutputDTO "Successfully created maintenance"
+// @Param        		carID   			path   		string  true  "CarID"
+// @Param				request				body 		maintenancedtos.MaintenanceInputDTO	true "Maintenance information to be created"
+// @Success	    		201   				{object} 	maintenancedtos.MaintenanceOutputDTO "Successfully created maintenance"
 // @Failure				422					{array}		validation_errors.HTTPErrorCar
 // @Router				/api/v1/cars/{carID}/maintenance/create [post]
 func RegisterMaintenanceController(context *gin.Context, carRepository repositories.CarRepository, maintenanceRepository repositories.MaintenanceRepository) {
@@ -33,7 +33,7 @@ func RegisterMaintenanceController(context *gin.Context, carRepository repositor
 
 	postMaintenanceUseCase := usecases.NewPostMaintenanceUseCase(carRepository, maintenanceRepository)
 
-	createdMaintenance, err := postMaintenanceUseCase.ExecuteConcurrently(carID, request)
+	createdMaintenance, err := postMaintenanceUseCase.Execute(carID, request)
 	if err != nil {
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return

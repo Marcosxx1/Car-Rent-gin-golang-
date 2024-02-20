@@ -157,12 +157,9 @@ func (repo *PGCarRepository) RegisterCar(car *domain.Car) error {
 //   - error: An error, if any.
 func (repo *PGCarRepository) FindCarByLicensePlate(licensePlate string) (*domain.Car, error) {
 	var car domain.Car
-	err := dbconfig.Postgres.Where("license_plate = ?", licensePlate).First(&car).Error
+	err := dbconfig.Postgres.Select("id").Where("license_plate = ?", licensePlate).First(&car).Error
 
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
 		return nil, err
 	}
 
@@ -228,6 +225,7 @@ func (repo *PGCarRepository) DeleteCar(id string) error {
 	}
 
 	return nil
+
 }
 
 // FindCarById finds a car in the database based on its ID.
@@ -292,4 +290,20 @@ func (repo *PGCarRepository) FindCarById(id string) (*domain.Car, error) {
 func (repo *PGCarRepository) UpdateCar(id string, car *domain.Car) (*domain.Car, error) {
 	dbconfig.Postgres.Model(&car).Where("id = ?", id).Updates(&car)
 	return car, nil
+}
+
+// Alter the car available, if the car is available, it will be set to false, if the car is not available, it will be set to true.
+// AlterCarStatus(id string, available bool) error
+func (repo *PGCarRepository) AlterCarStatus(id string, available bool) error {
+	result := dbconfig.Postgres.Model(&domain.Car{}).Where("id = ?", id).Select("available").Update("available", available)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return errors.New("no car found with the provided ID")
+	}
+
+	return nil
 }

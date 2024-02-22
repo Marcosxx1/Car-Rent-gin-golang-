@@ -13,7 +13,7 @@ import (
 // RegisterMaintenanceController handles the HTTP POST request to create a new maintenance.
 // @Summary				Create a new maintenance
 // @Description			Create a new maintenance with the provided information
-// @ID					post-car
+// @ID					post-maintenance
 // @Tags				Maintenance
 // @Accept				json
 // @Produce				json

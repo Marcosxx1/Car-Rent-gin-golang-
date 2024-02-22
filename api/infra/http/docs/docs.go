@@ -66,52 +66,6 @@ const docTemplate = `{
             }
         },
         "/api/v1/cars/create": {
-            "put": {
-                "description": "Update a car with the provided ID.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Car"
-                ],
-                "summary": "Update a car",
-                "operationId": "put-car",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Car ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Car information to be updated",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dtos.CarInputDTO"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Successfully updated car",
-                        "schema": {
-                            "$ref": "#/definitions/dtos.CarOutputDTO"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/validation_errors.HTTPErrorCar"
-                        }
-                    }
-                }
-            },
             "post": {
                 "description": "Create a new car with the provided information",
                 "consumes": [
@@ -191,6 +145,54 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/cars/update/:id": {
+            "put": {
+                "description": "Update a car with the provided ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Update a car",
+                "operationId": "put-car",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Car ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Car information to be updated",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CarInputDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully updated car",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CarOutputDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/validation_errors.HTTPErrorCar"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/cars/{carID}/maintenance/create": {
             "post": {
                 "description": "Create a new maintenance with the provided information",
@@ -204,7 +206,7 @@ const docTemplate = `{
                     "Maintenance"
                 ],
                 "summary": "Create a new maintenance",
-                "operationId": "post-car",
+                "operationId": "post-maintenance",
                 "parameters": [
                     {
                         "type": "string",
@@ -267,7 +269,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": " car",
+                        "description": "car",
                         "schema": {
                             "$ref": "#/definitions/dtos.CarOutputDTO"
                         }
@@ -361,6 +363,48 @@ const docTemplate = `{
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/validation_errors.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/maintenance/{maintenanceID}": {
+            "patch": {
+                "description": "Update an existing maintenance with the provided information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Maintenance"
+                ],
+                "summary": "Update an existing maintenance",
+                "operationId": "patch-maintenance",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Maintenance ID",
+                        "name": "maintenanceID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Maintenance information to be updated",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/maintenancedtos.MaintenanceInputDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated maintenance",
+                        "schema": {
+                            "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
                         }
                     }
                 }
@@ -500,9 +544,6 @@ const docTemplate = `{
                 "category_id": {
                     "type": "string"
                 },
-                "created_at": {
-                    "type": "string"
-                },
                 "daily_rate": {
                     "type": "number"
                 },
@@ -532,9 +573,12 @@ const docTemplate = `{
         "maintenancedtos.MaintenanceInputDTO": {
             "type": "object",
             "required": [
-                "car_id",
+                "last_maintenance_date",
+                "maintenance_completion_date",
                 "maintenance_status",
-                "maintenance_type"
+                "maintenance_type",
+                "next_maintenance_due_date",
+                "odometer_reading"
             ],
             "properties": {
                 "car_id": {
@@ -544,7 +588,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "labor_cost": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 1
                 },
                 "last_maintenance_date": {
                     "type": "string"
@@ -568,7 +613,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "odometer_reading": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 0
                 },
                 "parts": {
                     "type": "array",
@@ -577,7 +623,8 @@ const docTemplate = `{
                     }
                 },
                 "parts_cost": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 1
                 },
                 "scheduled_maintenance": {
                     "type": "boolean"
@@ -586,6 +633,11 @@ const docTemplate = `{
         },
         "maintenancedtos.MaintenanceOutputDTO": {
             "type": "object",
+            "required": [
+                "last_maintenance_date",
+                "maintenance_completion_date",
+                "next_maintenance_due_date"
+            ],
             "properties": {
                 "car_id": {
                     "type": "string"

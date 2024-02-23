@@ -462,3 +462,5 @@ The Car Rental App's architecture provides clarity, modularity, and scalability.
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
 
+####side note: GORM doesn't suport []string (got error unsupported data type: &[])... to add later on the readme
+####side note: $ swag init --parseDependency --parseInternal due to package problems

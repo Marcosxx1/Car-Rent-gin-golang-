@@ -13,4 +13,12 @@ func SetupMaintenanceRoutes(router *gin.Engine) {
 	router.POST("/api/v1/cars/:carID/maintenance/create", func(context *gin.Context) {
 		maintenanceendpoints.RegisterMaintenanceController(context, &carRepository, &maintenanceRepository)
 	})
+
+	router.PATCH("/api/v1/maintenance/:maintenanceID", func(context *gin.Context) {
+		maintenanceendpoints.PatchMaintenanceController(context, &carRepository, &maintenanceRepository)
+	})
+
+	router.DELETE("/api/v1/maintenance/:maintenanceID", func(context *gin.Context) {
+		maintenanceendpoints.DeleteMaintenanceController(context, &carRepository, &maintenanceRepository)
+	})
 }

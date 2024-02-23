@@ -16,5 +16,9 @@ func SetupMaintenanceRoutes(router *gin.Engine) {
 
 	router.PATCH("/api/v1/maintenance/:maintenanceID", func(context *gin.Context) {
 		maintenanceendpoints.PatchMaintenanceController(context, &carRepository, &maintenanceRepository)
-})
+	})
+
+	router.DELETE("/api/v1/maintenance/:maintenanceID", func(context *gin.Context) {
+		maintenanceendpoints.DeleteMaintenanceController(context, &carRepository, &maintenanceRepository)
+	})
 }

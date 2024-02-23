@@ -362,6 +362,40 @@
             }
         },
         "/api/v1/maintenance/{maintenanceID}": {
+            "delete": {
+                "description": "Delete a maintenance with the provided ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Maintenance"
+                ],
+                "summary": "Delete a maintenance",
+                "operationId": "delete-maintenance",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Maintenance ID to be deleted",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Maintenance deleted successfully"
+                    },
+                    "400": {
+                        "description": "Error details",
+                        "schema": {
+                            "$ref": "#/definitions/validation_errors.HTTPErrorCar"
+                        }
+                    }
+                }
+            },
             "patch": {
                 "description": "Update an existing maintenance with the provided information",
                 "consumes": [

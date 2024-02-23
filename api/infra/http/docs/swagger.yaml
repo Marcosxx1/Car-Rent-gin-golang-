@@ -481,6 +481,29 @@ paths:
       tags:
       - Category
   /api/v1/maintenance/{maintenanceID}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a maintenance with the provided ID.
+      operationId: delete-maintenance
+      parameters:
+      - description: Maintenance ID to be deleted
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Maintenance deleted successfully
+        "400":
+          description: Error details
+          schema:
+            $ref: '#/definitions/validation_errors.HTTPErrorCar'
+      summary: Delete a maintenance
+      tags:
+      - Maintenance
     patch:
       consumes:
       - application/json

@@ -15,7 +15,7 @@ func (r *PGMaintenanceRepository) CreateMaintenance(maintenance *domain.Maintena
 	return dbconfig.Postgres.Create(maintenance).Error
 }
 
-func (r *PGMaintenanceRepository) GetMaintenanceByID(id string) (*domain.Maintenance, error){
+func (r *PGMaintenanceRepository) GetMaintenanceByID(id string) (*domain.Maintenance, error) {
 	var maintenance domain.Maintenance
 
 	err := dbconfig.Postgres.Where("id = ?", id, true).First(&maintenance).Error
@@ -33,13 +33,27 @@ func (r *PGMaintenanceRepository) UpdateMaintenance(maintenance *domain.Maintena
 	result := dbconfig.Postgres.Model(&domain.Maintenance{}).Where("id = ?", id).Updates(maintenance)
 
 	if result.Error != nil {
-			return fmt.Errorf("failed to update maintenance record: %w", result.Error)
+		return fmt.Errorf("failed to update maintenance record: %w", result.Error)
 	}
 
 	if result.RowsAffected == 0 {
-			return fmt.Errorf("no maintenance record found with id: %s", id)
+		return fmt.Errorf("no maintenance record found with id: %s", id)
 	}
 
 	return nil
 }
 
+func (r *PGMaintenanceRepository) DeleteMaintenance(id string) error {
+	result := dbconfig.Postgres.Where("id = ?", id).Delete(&domain.Maintenance{})
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return errors.New("maintenance not found")
+	}
+
+	return nil
+
+}

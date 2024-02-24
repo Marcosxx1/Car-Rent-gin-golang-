@@ -186,57 +186,6 @@
                 }
             }
         },
-        "/api/v1/cars/{carID}/maintenance/create": {
-            "post": {
-                "description": "Create a new maintenance with the provided information",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Maintenance"
-                ],
-                "summary": "Create a new maintenance",
-                "operationId": "post-maintenance",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "CarID",
-                        "name": "carID",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Maintenance information to be created",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/maintenancedtos.MaintenanceInputDTO"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Successfully created maintenance",
-                        "schema": {
-                            "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/validation_errors.HTTPErrorCar"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/cars/{id}": {
             "get": {
                 "description": "Find a car with the provided id",
@@ -356,6 +305,90 @@
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/validation_errors.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/maintenance/:carID/maintenance/create": {
+            "post": {
+                "description": "Create a new maintenance with the provided information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Maintenance"
+                ],
+                "summary": "Create a new maintenance",
+                "operationId": "post-maintenance",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "CarID",
+                        "name": "carID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Maintenance information to be created",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/maintenancedtos.MaintenanceInputDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created maintenance",
+                        "schema": {
+                            "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/validation_errors.HTTPErrorCar"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/maintenance/maintenances": {
+            "get": {
+                "description": "Retrieve a list of maintenance records for a specific car",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Maintenance"
+                ],
+                "summary": "Retrieve a list of maintenance records",
+                "operationId": "get-maintenance-list",
+                "responses": {
+                    "200": {
+                        "description": "List of maintenance records",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/validation_errors.HTTPErrorCar"
                         }
                     }
                 }

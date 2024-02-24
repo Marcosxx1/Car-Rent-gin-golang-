@@ -279,40 +279,6 @@ paths:
       summary: List all cars
       tags:
       - Car
-  /api/v1/cars/{carID}/maintenance/create:
-    post:
-      consumes:
-      - application/json
-      description: Create a new maintenance with the provided information
-      operationId: post-maintenance
-      parameters:
-      - description: CarID
-        in: path
-        name: carID
-        required: true
-        type: string
-      - description: Maintenance information to be created
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/maintenancedtos.MaintenanceInputDTO'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Successfully created maintenance
-          schema:
-            $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
-        "422":
-          description: Unprocessable Entity
-          schema:
-            items:
-              $ref: '#/definitions/validation_errors.HTTPErrorCar'
-            type: array
-      summary: Create a new maintenance
-      tags:
-      - Maintenance
   /api/v1/cars/{id}:
     get:
       consumes:
@@ -480,6 +446,40 @@ paths:
       summary: Retrieve a list of categories
       tags:
       - Category
+  /api/v1/maintenance/:carID/maintenance/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new maintenance with the provided information
+      operationId: post-maintenance
+      parameters:
+      - description: CarID
+        in: path
+        name: carID
+        required: true
+        type: string
+      - description: Maintenance information to be created
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/maintenancedtos.MaintenanceInputDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created maintenance
+          schema:
+            $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            items:
+              $ref: '#/definitions/validation_errors.HTTPErrorCar'
+            type: array
+      summary: Create a new maintenance
+      tags:
+      - Maintenance
   /api/v1/maintenance/{maintenanceID}:
     delete:
       consumes:
@@ -529,6 +529,28 @@ paths:
           schema:
             $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
       summary: Update an existing maintenance
+      tags:
+      - Maintenance
+  /api/v1/maintenance/maintenances:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of maintenance records for a specific car
+      operationId: get-maintenance-list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of maintenance records
+          schema:
+            items:
+              $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/validation_errors.HTTPErrorCar'
+      summary: Retrieve a list of maintenance records
       tags:
       - Maintenance
   /api/v1/specification/create:

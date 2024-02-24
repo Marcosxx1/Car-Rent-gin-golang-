@@ -57,3 +57,17 @@ func (r *PGMaintenanceRepository) DeleteMaintenance(id string) error {
 	return nil
 
 }
+
+func (r *PGMaintenanceRepository) ListAllMaintenances() ([]*domain.Maintenance, error) {
+	var maintenances []*domain.Maintenance
+
+	err := dbconfig.Postgres.Find(&maintenances).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return []*domain.Maintenance{}, nil
+		}
+		return nil, err
+	}
+
+	return maintenances, nil
+}

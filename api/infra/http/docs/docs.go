@@ -382,6 +382,20 @@ const docTemplate = `{
                 ],
                 "summary": "Retrieve a list of maintenance records",
                 "operationId": "get-maintenance-list",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number (default is 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of items per page (default is 10)",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "List of maintenance records",

@@ -58,10 +58,15 @@ func (r *PGMaintenanceRepository) DeleteMaintenance(id string) error {
 
 }
 
-func (r *PGMaintenanceRepository) ListAllMaintenances() ([]*domain.Maintenance, error) {
+func (r *PGMaintenanceRepository) ListAllMaintenances(page, pageSize int) ([]*domain.Maintenance, error) {
 	var maintenances []*domain.Maintenance
 
-	err := dbconfig.Postgres.Find(&maintenances).Error
+	// TODO retirar quando sair de dev
+	db := dbconfig.Postgres.Debug()
+
+	offset := (page - 1) * pageSize
+
+	err := db.Offset(offset).Limit(pageSize).Preload("Parts").Find(&maintenances).Error // 69
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return []*domain.Maintenance{}, nil

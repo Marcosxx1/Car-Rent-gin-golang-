@@ -12,10 +12,9 @@ type MaintenanceRepository interface {
 	// DeleteMaintenance remove uma manutenção do repositório com base no ID
 	DeleteMaintenance(id string) error
 	ListAllMaintenances(page, pageSize int) ([]*domain.Maintenance, error)
+	// GetMaintenancesByCarID retorna todas as manutenções associadas a um carro específico
+	GetMaintenancesByCarID(carID string) ([]*domain.Maintenance, error)
 	/*
-		// GetMaintenancesByCarID retorna todas as manutenções associadas a um carro específico
-		GetMaintenancesByCarID(carID string) ([]*domain.Maintenance, error)
-
 		// GetMaintenancesByType retorna todas as manutenções de um determinado tipo
 		GetMaintenancesByType(maintenanceType string) ([]*domain.Maintenance, error)
 

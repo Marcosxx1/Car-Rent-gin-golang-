@@ -76,3 +76,20 @@ func (r *PGMaintenanceRepository) ListAllMaintenances(page, pageSize int) ([]*do
 
 	return maintenances, nil
 }
+
+func (r *PGMaintenanceRepository) GetMaintenancesByCarID(carID string) ([]*domain.Maintenance, error) {
+	var maintenances []*domain.Maintenance
+
+	// TODO retirar quando sair de dev
+	db := dbconfig.Postgres.Debug()
+
+	err := db.Where("car_id = ?", carID).Preload("Parts").Find(&maintenances).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return []*domain.Maintenance{}, nil
+		}
+		return nil, err
+	}
+
+	return maintenances, nil
+}

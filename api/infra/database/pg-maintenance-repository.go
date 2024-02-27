@@ -93,3 +93,17 @@ func (r *PGMaintenanceRepository) GetMaintenancesByCarID(carID string) ([]*domai
 
 	return maintenances, nil
 }
+
+func (r *PGMaintenanceRepository) GetScheduledMaintenances() ([]*domain.Maintenance, error) {
+	var scheduledMaintenances []*domain.Maintenance
+
+	err := dbconfig.Postgres.Where("scheduled_maintenance = ?", true).Preload("Parts").Find(&scheduledMaintenances).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return []*domain.Maintenance{}, nil
+		}
+		return nil, err
+	}
+
+	return scheduledMaintenances, nil
+}

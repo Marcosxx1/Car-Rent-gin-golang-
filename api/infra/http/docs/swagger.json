@@ -465,6 +465,62 @@
                 }
             }
         },
+        "/api/v1/maintenance/scheduled": {
+            "get": {
+                "description": "Get a list of scheduled maintenances based on the next maintenance due date",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Maintenance"
+                ],
+                "summary": "Get scheduled maintenances",
+                "operationId": "get-scheduled-maintenances",
+                "parameters": [
+                    {
+                        "description": "Next Maintenance Due Date",
+                        "name": "next_maintenance_due_date",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved scheduled maintenances",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/maintenance/{maintenanceID}": {
             "delete": {
                 "description": "Delete a maintenance with the provided ID.",

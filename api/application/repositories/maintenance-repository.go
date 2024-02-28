@@ -17,7 +17,7 @@ type MaintenanceRepository interface {
 	// GetScheduledMaintenances retorna todas as manutenções programadas
 	GetScheduledMaintenances() ([]*domain.Maintenance, error)
 	// GetMaintenanceByStatus retorna todas as manutenções com um determinado status
-	GetMaintenancesByStatus(status string) ([]*domain.Maintenance, error)
+	GetMaintenancesByStatus(status bool) ([]*domain.Maintenance, error)
 	/*
 				// GetMaintenancesByType retorna todas as manutenções de um determinado tipo
 				GetMaintenancesByType(maintenanceType string) ([]*domain.Maintenance, error)

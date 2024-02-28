@@ -518,6 +518,36 @@ paths:
       summary: Get maintenances by carID
       tags:
       - Maintenance
+  /api/v1/maintenance/:status/maintenances:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of maintenances by its status
+      operationId: get-maintenances-by-status
+      parameters:
+      - description: CarID
+        in: path
+        name: carID
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved maintenances
+          schema:
+            items:
+              $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
+            type: array
+        "422":
+          description: Validation errors
+          schema:
+            items:
+              $ref: '#/definitions/validation_errors.HTTPError'
+            type: array
+      summary: Get maintenances by its status
+      tags:
+      - Maintenance
   /api/v1/maintenance/{maintenanceID}:
     delete:
       consumes:

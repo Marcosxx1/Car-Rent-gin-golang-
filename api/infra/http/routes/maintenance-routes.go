@@ -32,4 +32,7 @@ func SetupMaintenanceRoutes(router *gin.Engine) {
 	router.GET("/api/v1/maintenance/scheduled", func(context *gin.Context) {
 		maintenanceendpoints.GetScheduledMaintenancesController(context, &maintenanceRepository)
 	})
+	router.GET("/api/v1/maintenance/:status/maintenances", func(context *gin.Context) {
+		maintenanceendpoints.GetMaintenanceByStatusController(context, &maintenanceRepository)
+	})
 }

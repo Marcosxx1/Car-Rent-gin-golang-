@@ -425,6 +425,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/maintenance/:status/maintenances": {
+            "get": {
+                "description": "Get a list of maintenances by its status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Maintenance"
+                ],
+                "summary": "Get maintenances by its status",
+                "operationId": "get-maintenances-by-status",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "CarID",
+                        "name": "carID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved maintenances",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/validation_errors.HTTPError"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/maintenance/maintenances": {
             "get": {
                 "description": "Retrieve a list of maintenance records for a specific car",

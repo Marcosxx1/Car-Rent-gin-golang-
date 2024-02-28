@@ -158,7 +158,7 @@ func (r *PGMaintenanceRepository) GetScheduledMaintenances() ([]*domain.Maintena
 // - @param status The maintenance status to filter by.
 //
 // - @return ([]*domain.Maintenance, error) A slice of pointers to retrieved maintenance records and any error encountered.
-func (r *PGMaintenanceRepository) GetMaintenancesByStatus(status string) ([]*domain.Maintenance, error) {
+func (r *PGMaintenanceRepository) GetMaintenancesByStatus(status bool) ([]*domain.Maintenance, error) {
 	var maintenances []*domain.Maintenance
 
 	err := dbconfig.Postgres.Where("maintenance_status = ?", status).Preload("Parts").Find(&maintenances).Error

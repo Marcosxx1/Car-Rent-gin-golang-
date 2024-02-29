@@ -632,18 +632,9 @@ paths:
       - Maintenance
   /api/v1/maintenance/scheduled:
     get:
-      consumes:
-      - application/json
       description: Get a list of scheduled maintenances based on the next maintenance
         due date
       operationId: get-scheduled-maintenances
-      parameters:
-      - description: Next Maintenance Due Date
-        in: body
-        name: next_maintenance_due_date
-        required: true
-        schema:
-          type: string
       produces:
       - application/json
       responses:

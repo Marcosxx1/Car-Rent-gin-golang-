@@ -520,9 +520,6 @@ const docTemplate = `{
         "/api/v1/maintenance/scheduled": {
             "get": {
                 "description": "Get a list of scheduled maintenances based on the next maintenance due date",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -531,17 +528,6 @@ const docTemplate = `{
                 ],
                 "summary": "Get scheduled maintenances",
                 "operationId": "get-scheduled-maintenances",
-                "parameters": [
-                    {
-                        "description": "Next Maintenance Due Date",
-                        "name": "next_maintenance_due_date",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Successfully retrieved scheduled maintenances",

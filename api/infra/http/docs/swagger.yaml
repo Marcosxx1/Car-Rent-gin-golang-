@@ -518,6 +518,34 @@ paths:
       summary: Get maintenances by carID
       tags:
       - Maintenance
+  /api/v1/maintenance/:maintenanceID:
+    patch:
+      consumes:
+      - application/json
+      description: Update an existing maintenance with the provided information
+      operationId: patch-maintenance
+      parameters:
+      - description: maintenanceID
+        in: path
+        name: maintenanceID
+        required: true
+        type: string
+      - description: Maintenance information to be updated
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/maintenancedtos.MaintenanceInputDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully updated maintenance
+          schema:
+            $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
+      summary: Update an existing maintenance
+      tags:
+      - Maintenance
   /api/v1/maintenance/:status/maintenances:
     get:
       consumes:
@@ -525,9 +553,9 @@ paths:
       description: Get a list of maintenances by its status
       operationId: get-maintenances-by-status
       parameters:
-      - description: CarID
+      - description: maintenance_status
         in: path
-        name: carID
+        name: maintenance_status
         required: true
         type: boolean
       produces:
@@ -570,33 +598,6 @@ paths:
           schema:
             $ref: '#/definitions/validation_errors.HTTPErrorCar'
       summary: Delete a maintenance
-      tags:
-      - Maintenance
-    patch:
-      consumes:
-      - application/json
-      description: Update an existing maintenance with the provided information
-      operationId: patch-maintenance
-      parameters:
-      - description: Maintenance ID
-        in: path
-        name: maintenanceID
-        required: true
-        type: string
-      - description: Maintenance information to be updated
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/maintenancedtos.MaintenanceInputDTO'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successfully updated maintenance
-          schema:
-            $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
-      summary: Update an existing maintenance
       tags:
       - Maintenance
   /api/v1/maintenance/maintenances:

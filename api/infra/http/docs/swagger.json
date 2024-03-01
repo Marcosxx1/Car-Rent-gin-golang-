@@ -418,6 +418,48 @@
                 }
             }
         },
+        "/api/v1/maintenance/:maintenanceID": {
+            "patch": {
+                "description": "Update an existing maintenance with the provided information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Maintenance"
+                ],
+                "summary": "Update an existing maintenance",
+                "operationId": "patch-maintenance",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "maintenanceID",
+                        "name": "maintenanceID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Maintenance information to be updated",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/maintenancedtos.MaintenanceInputDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated maintenance",
+                        "schema": {
+                            "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/maintenance/:status/maintenances": {
             "get": {
                 "description": "Get a list of maintenances by its status",
@@ -435,8 +477,8 @@
                 "parameters": [
                     {
                         "type": "boolean",
-                        "description": "CarID",
-                        "name": "carID",
+                        "description": "maintenance_status",
+                        "name": "maintenance_status",
                         "in": "path",
                         "required": true
                     }
@@ -583,46 +625,6 @@
                         "description": "Error details",
                         "schema": {
                             "$ref": "#/definitions/validation_errors.HTTPErrorCar"
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "description": "Update an existing maintenance with the provided information",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Maintenance"
-                ],
-                "summary": "Update an existing maintenance",
-                "operationId": "patch-maintenance",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Maintenance ID",
-                        "name": "maintenanceID",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Maintenance information to be updated",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/maintenancedtos.MaintenanceInputDTO"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully updated maintenance",
-                        "schema": {
-                            "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
                         }
                     }
                 }

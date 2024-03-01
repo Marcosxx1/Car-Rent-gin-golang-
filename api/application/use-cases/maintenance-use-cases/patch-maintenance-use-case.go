@@ -6,6 +6,7 @@ import (
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	maintUt "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/maintenance-dtos.go"
 )
 
@@ -63,15 +64,27 @@ func (useCase *PatchMaintenanceUseCase) performMaintenanceUpdate(wg *sync.WaitGr
 		validationErrorSignal <- true
 		return
 	}
+	if existingMaintenance == nil {
+		errorChan <- fmt.Errorf("maintenance not found")
+		validationErrorSignal <- true
+		return
+	}
+
+	maintenanceToUpdate, err := domain.CreateMaintenanceInstance(inputDTO.CarID, inputDTO)
+	if err != nil {
+		errorChan <- err
+		validationErrorSignal <- true // Sinaliza que ocorreu um erro de validação
+		return
+	}
 
 	go func() {
-		if err := useCase.maintenanceRepository.UpdateMaintenance(existingMaintenance, maintenanceID); err != nil {
+		if err := useCase.maintenanceRepository.UpdateMaintenance(maintenanceToUpdate, maintenanceID); err != nil {
 			errorChan <- fmt.Errorf("failed to update maintenance record: %w", err)
 			validationErrorSignal <- true
 			return
 		}
 	}()
 
-	resultChan <- maintUt.ConvertToOutputDTO(existingMaintenance)
+	resultChan <- maintUt.ConvertToOutputDTO(maintenanceToUpdate)
 	validationErrorSignal <- false
 }

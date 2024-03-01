@@ -17,7 +17,7 @@ import (
 // @Tags                Maintenance
 // @Accept              json
 // @Produce             json
-// @Param               carID       path    boolean  true  "CarID"
+// @Param               maintenance_status       path    boolean  true  "maintenance_status"
 // @Success             200         {array} maintenancedtos.MaintenanceOutputDTO "Successfully retrieved maintenances"
 // @Failure             422         {array} validation_errors.HTTPError "Validation errors"
 // @Router              /api/v1/maintenance/:status/maintenances [get]

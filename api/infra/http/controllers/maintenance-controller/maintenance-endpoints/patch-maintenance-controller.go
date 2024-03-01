@@ -16,10 +16,10 @@ import (
 // @Tags				Maintenance
 // @Accept				json
 // @Produce				json
-// @Param				maintenanceID		path		string	true	"Maintenance ID"
+// @Param				maintenanceID		path		string	true	"maintenanceID"
 // @Param				request				body 		maintenancedtos.MaintenanceInputDTO	true "Maintenance information to be updated"
 // @Success	    		200   				{object} 	maintenancedtos.MaintenanceOutputDTO "Successfully updated maintenance"
-// @Router				/api/v1/maintenance/{maintenanceID} [patch]
+// @Router				/api/v1/maintenance/:maintenanceID [patch]
 func PatchMaintenanceController(context *gin.Context, carRepository repositories.CarRepository, maintenanceRepository repositories.MaintenanceRepository) {
 	var request maintenancedtos.MaintenanceInputDTO
 	if err := context.ShouldBindJSON(&request); err != nil {
@@ -27,7 +27,7 @@ func PatchMaintenanceController(context *gin.Context, carRepository repositories
 		return
 	}
 
-	maintenanceID := context.Param("maintenance_id")
+	maintenanceID := context.Param("maintenanceID")
 
 	patchMaintenanceUseCase := maintenanceusecases.NewPatchMaintenanceUseCase(carRepository, maintenanceRepository)
 

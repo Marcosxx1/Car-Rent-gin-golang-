@@ -30,12 +30,21 @@ func (r *PGMaintenanceRepository) CreateMaintenance(maintenance *domain.Maintena
 func (r *PGMaintenanceRepository) GetMaintenanceByID(id string) (*domain.Maintenance, error) {
 	var maintenance domain.Maintenance
 
-	err := dbconfig.Postgres.Where("id = ?", id, true).First(&maintenance).Error
+	rows, err := dbconfig.Postgres.Raw("SELECT * FROM maintenances WHERE id = ?", id).Rows()
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	defer rows.Close()
+
+	if !rows.Next() {
+		if err := rows.Err(); err != nil {
 			return nil, err
 		}
-		return nil, nil
+		return nil, gorm.ErrRecordNotFound
+	}
+
+	if err := dbconfig.Postgres.ScanRows(rows, &maintenance); err != nil {
+		return nil, err
 	}
 
 	return &maintenance, nil

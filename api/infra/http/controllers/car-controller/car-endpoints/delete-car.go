@@ -25,5 +25,5 @@ func DeleteCarController(context *gin.Context, carRepository repositories.CarRep
 
 	deleteUseCase.Execute(id)
 
-	context.JSON(http.StatusOK, nil)
+	context.JSON(http.StatusOK, "Car deleted")
 }

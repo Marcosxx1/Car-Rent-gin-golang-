@@ -17,35 +17,24 @@ import (
 // @Tags        Car
 // @Accept      json
 // @Produce     json
-// @Param       id         		path   		string  true  "Car ID"
-// @Param				request				body 		  dtos.CarInputDTO	true "Car information to be updated"
+// @Param       id         		    path   		string  true  "id"
+// @Param		request				body 		dtos.CarInputDTO	true "Car information to be updated"
 // @Success	    201   				{object} 	dtos.CarOutputDTO "Successfully updated car"
-// @Failure			400       		{object} 	validation_errors.HTTPErrorCar
-// @Router			/api/v1/cars/update/:id [put]
+// @Failure		400       		    {object} 	validation_errors.HTTPErrorCar
+// @Router		/api/v1/cars/update/{id} [put]
 func UpdateCarController(context *gin.Context, carRepository repositories.CarRepository, specificationRepository repositories.SpecificationRepository) {
 
-	var request dtos.CarOutputDTO
-	if err := context.ShouldBindJSON(&request); err != nil { 
+	var request *dtos.CarInputDTO
+	if err := context.ShouldBindJSON(&request); err != nil {
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return
 	}
 
 	id := context.Param("id")
-	if err := context.ShouldBindJSON(&request); err != nil { 
-		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
-		return
-	}
 
-	findByIdUseCase := *usecases.NewFindCarByIdUseCase(carRepository, specificationRepository)
 	updateCarUseCase := *usecases.NewUpdateCarUseCase(carRepository, specificationRepository)
 
-	foundCar, err := findByIdUseCase.Execute(id)
-	if foundCar != nil { 
-		validation_errors.NewError(context, http.StatusNotFound, err)
-		return
-	}
-
-	updatedCar, err := updateCarUseCase.Execute(id, &request)
+	updatedCar, err := updateCarUseCase.Execute(id, request)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

@@ -12,14 +12,14 @@ import (
 // FindCarByIdController handles the HTTP GET request find a car.
 // @Summary				Find car
 // @Description		Find a car with the provided id
-// @ID						get-car
-// @Tags					Car
-// @Accept				json
-// @Produce				json
-// @Param        	id   				path   		 string  true  		"Car ID"
+// @ID				get-car
+// @Tags			Car
+// @Accept			json
+// @Produce			json
+// @Param        	id   			path   		string  true  	  "Car ID"
 // @Success	    	201   			{object} 	dtos.CarOutputDTO "car"
-// @Failure				422					{array}		validation_errors.HTTPError
-// @Router				/api/v1/cars/{id} [get]
+// @Failure			422				{array}		validation_errors.HTTPError
+// @Router			/api/v1/cars/{id} [get]
 func FindCarByIdController(context *gin.Context, carRepository repositories.CarRepository, specificationRepository repositories.SpecificationRepository) {
 
 	id := context.Param("id")

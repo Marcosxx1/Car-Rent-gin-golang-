@@ -1,14 +1,15 @@
 package usecases
 
 import (
+	"fmt"
+	"sync"
+
 	r "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
+	carutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases/car-use-case-tests/car-utils"
 	repoutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/repo-utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 )
-
-//updateCarUseCase := *usecases.NewUpdateCarUseCase(carRepository, specificationRepository)
 
 type PutCarUseCase struct {
 	carRepository           r.CarRepository
@@ -25,53 +26,70 @@ func NewUpdateCarUseCase(
 	}
 }
 
-func (useCase *PutCarUseCase) Execute(id string, updateRequest *dtos.CarOutputDTO) (*dtos.CarOutputDTO, error) {
+func (useCase *PutCarUseCase) Execute(carID string, inputDTO *dtos.CarInputDTO) (*dtos.CarOutputDTO, error) {
 
-	if err := validation_errors.ValidateStruct(updateRequest); err != nil {
+	resultChan := make(chan *dtos.CarOutputDTO)
+	errorChan := make(chan error)
+	validationErrorSignal := make(chan bool)
+
+	var wg sync.WaitGroup
+
+	wg.Add(2)
+ 	go carutils.PerformValidationForUpdate(&wg, errorChan, validationErrorSignal, inputDTO, useCase.carRepository)
+	go useCase.performCarUpdate(&wg, resultChan, errorChan, validationErrorSignal, carID, inputDTO)
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		wg.Wait()
+		close(resultChan)
+		close(errorChan)
+	}()
+
+	select {
+	case createdCar := <-resultChan:
+		return createdCar, nil
+	case err := <-errorChan:
 		return nil, err
+	}
+}
+
+ 
+
+func (useCase *PutCarUseCase) performCarUpdate(wg *sync.WaitGroup, resultChan chan<- *dtos.CarOutputDTO, errorChan chan<- error, validationErrorSignal <-chan bool, carID string, inputDTO *dtos.CarInputDTO) {
+	defer wg.Done()
+
+	if <-validationErrorSignal {
+		return
 	}
 
 	var domainSpecification []*domain.Specification
 
-	if len(updateRequest.Specification) > 0 {
-		domainSpecification = repoutils.ConvertSpecificationToDomainUpdate(updateRequest.Specification)
-
-		if err := validation_errors.ValidateStruct(domainSpecification); err != nil {
-			return nil, err
-		}
+	if len(inputDTO.Specification) > 0 {
+		domainSpecification = repoutils.ConvertInputSpecificationToDomainUpdate(inputDTO.Specification)
 	}
 
 	carToBeUpdated := &domain.Car{
-		ID:           id,
-		Name:         updateRequest.Name,
-		Description:  updateRequest.Description,
-		DailyRate:    updateRequest.DailyRate,
-		Available:    updateRequest.Available,
-		LicensePlate: updateRequest.LicensePlate,
-		FineAmount:   updateRequest.FineAmount,
-		Brand:        updateRequest.Brand,
+		ID:           carID,
+		Name:         inputDTO.Name,
+		Description:  inputDTO.Description,
+		DailyRate:    inputDTO.DailyRate,
+		Available:    inputDTO.Available,
+		LicensePlate: inputDTO.LicensePlate,
+		FineAmount:   inputDTO.FineAmount,
+		Brand:        inputDTO.Brand,
 	}
 
-	carUpdated, err := useCase.carRepository.UpdateCar(id, carToBeUpdated)
+	carUpdated, err := useCase.carRepository.UpdateCar(carID, carToBeUpdated)
 	if err != nil {
-		return nil, err
+		errorChan <- fmt.Errorf("failed to update car record: %w", err)
+		return
 	}
 
-	specificationUpdated, err := useCase.specificationRepository.UpdateSpecification(id, domainSpecification)
+	specificationUpdated, err := useCase.specificationRepository.UpdateSpecification(carID, domainSpecification)
 	if err != nil {
-		return nil, err
+		errorChan <- fmt.Errorf("failed to update specification record: %w", err)
 	}
 
-	carToBeReturned := &dtos.CarOutputDTO{
-		ID:            carUpdated.ID,
-		Name:          carUpdated.Name,
-		Description:   carUpdated.Description,
-		Available:     carUpdated.Available,
-		LicensePlate:  carUpdated.LicensePlate,
-		FineAmount:    carUpdated.FineAmount,
-		Brand:         carUpdated.Brand,
-		Specification: repoutils.ConvertSpecificationToDTO(specificationUpdated),
-	}
-
-	return carToBeReturned, nil
+	resultChan <- dtos.ConvertDomainToOutPut(carID, carUpdated, specificationUpdated)
 }

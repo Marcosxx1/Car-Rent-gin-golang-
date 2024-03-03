@@ -19,7 +19,7 @@ import (
 // @Param               carID       path    string  true  "CarID"
 // @Success             200         {array} maintenancedtos.MaintenanceOutputDTO "Successfully retrieved maintenances"
 // @Failure             422         {array} validation_errors.HTTPError "Validation errors"
-// @Router              /api/v1/maintenance/:carID/latest [get]
+// @Router              /api/v1/maintenance/latest/:carID [get]
 func GetLatestMaintenanceByCarController(context *gin.Context, maintenanceRepository repositories.MaintenanceRepository) {
 	carID := context.Param("carID")
 

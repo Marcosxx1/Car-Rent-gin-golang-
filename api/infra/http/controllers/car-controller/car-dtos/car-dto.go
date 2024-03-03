@@ -2,6 +2,7 @@ package dtos
 
 import (
 	repoutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/repo-utils"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	specificationdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/specification-controller/specification-dtos"
 )
 
@@ -20,7 +21,7 @@ Quando acessamos um elemento deste slice, acessamos uma instancia direta de doma
 
 type CarInputDTO struct {
 	Name          string                                     `json:"name" validate:"required"`
-	Description   string                                      `json:"description" validate:"required"`
+	Description   string                                     `json:"description" validate:"required"`
 	DailyRate     float64                                    `json:"daily_rate" validate:"required"`
 	Available     bool                                       `json:"available" validate:"required"`
 	LicensePlate  string                                     `json:"license_plate" validate:"required"`
@@ -43,8 +44,6 @@ type CarOutputDTO struct {
 	Specification []*specificationdtos.SpecificationOutputDto `json:"specification"`
 }
 
-
-
 func ConvertToOutputDTO(carID string, inputDTO *CarInputDTO) *CarOutputDTO {
 	specificaDomain := repoutils.ConvertSpecificationToDomainCreate(inputDTO.Specification, carID)
 	specificationOutPut := repoutils.ConvertSpecificationToDTO(specificaDomain)
@@ -59,5 +58,21 @@ func ConvertToOutputDTO(carID string, inputDTO *CarInputDTO) *CarOutputDTO {
 		Brand:         inputDTO.Brand,
 		CategoryID:    inputDTO.CategoryID,
 		Specification: specificationOutPut,
+	}
+}
+
+func ConvertDomainToOutPut(carID string, domainCarToBeConvertedToOutPut *domain.Car, specificationUpdated []*domain.Specification) *CarOutputDTO {
+
+	return &CarOutputDTO{
+		ID:            carID,
+		Name:          domainCarToBeConvertedToOutPut.Name,
+		Description:   domainCarToBeConvertedToOutPut.Description,
+		DailyRate:     domainCarToBeConvertedToOutPut.DailyRate,
+		Available:     domainCarToBeConvertedToOutPut.Available,
+		LicensePlate:  domainCarToBeConvertedToOutPut.LicensePlate,
+		FineAmount:    domainCarToBeConvertedToOutPut.FineAmount,
+		Brand:         domainCarToBeConvertedToOutPut.Brand,
+		CategoryID:    domainCarToBeConvertedToOutPut.CategoryID,
+		Specification: repoutils.ConvertSpecificationToDTO(specificationUpdated),
 	}
 }

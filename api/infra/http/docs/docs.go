@@ -145,7 +145,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/cars/update/:id": {
+        "/api/v1/cars/update/{id}": {
             "put": {
                 "description": "Update a car with the provided ID.",
                 "consumes": [
@@ -467,7 +467,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/maintenance/:status/maintenances": {
+        "/api/v1/maintenance/:status": {
             "get": {
                 "description": "Get a list of maintenances by its status",
                 "consumes": [
@@ -486,6 +486,51 @@ const docTemplate = `{
                         "type": "boolean",
                         "description": "maintenance_status",
                         "name": "maintenance_status",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved maintenances",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/validation_errors.HTTPError"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/maintenance/latest/:carID": {
+            "get": {
+                "description": "Get latest maintenance associated with a specific carID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Maintenance"
+                ],
+                "summary": "Get latest maintenance by carID",
+                "operationId": "get-latest-maintenances-by-carID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "CarID",
+                        "name": "carID",
                         "in": "path",
                         "required": true
                     }

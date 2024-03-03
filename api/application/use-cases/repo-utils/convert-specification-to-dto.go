@@ -19,7 +19,23 @@ func ConvertSpecificationToDTO(specificaion []*domain.Specification) []*s.Specif
 	return SpecificationsDTO
 }
 
-func ConvertSpecificationToDomainUpdate(specification []*s.SpecificationOutputDto) []*domain.Specification {
+func ConvertOutPutSpecificationToDomainUpdate(specification []*s.SpecificationOutputDto) []*domain.Specification {
+	var specifications []*domain.Specification
+
+	for _, inputDto := range specification {
+		spec := &domain.Specification{
+			Name:        inputDto.Name,
+			Description: inputDto.Description,
+			CarID:       inputDto.CarID,
+		}
+
+		specifications = append(specifications, spec)
+	}
+
+	return specifications
+}
+
+func ConvertInputSpecificationToDomainUpdate(specification []*s.SpecificationInputDto) []*domain.Specification {
 	var specifications []*domain.Specification
 
 	for _, inputDto := range specification {

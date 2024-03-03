@@ -360,7 +360,7 @@ paths:
       summary: Delete a car
       tags:
       - Car
-  /api/v1/cars/update/:id:
+  /api/v1/cars/update/{id}:
     put:
       consumes:
       - application/json
@@ -546,7 +546,7 @@ paths:
       summary: Update an existing maintenance
       tags:
       - Maintenance
-  /api/v1/maintenance/:status/maintenances:
+  /api/v1/maintenance/:status:
     get:
       consumes:
       - application/json
@@ -598,6 +598,36 @@ paths:
           schema:
             $ref: '#/definitions/validation_errors.HTTPErrorCar'
       summary: Delete a maintenance
+      tags:
+      - Maintenance
+  /api/v1/maintenance/latest/:carID:
+    get:
+      consumes:
+      - application/json
+      description: Get latest maintenance associated with a specific carID
+      operationId: get-latest-maintenances-by-carID
+      parameters:
+      - description: CarID
+        in: path
+        name: carID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved maintenances
+          schema:
+            items:
+              $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
+            type: array
+        "422":
+          description: Validation errors
+          schema:
+            items:
+              $ref: '#/definitions/validation_errors.HTTPError'
+            type: array
+      summary: Get latest maintenance by carID
       tags:
       - Maintenance
   /api/v1/maintenance/maintenances:

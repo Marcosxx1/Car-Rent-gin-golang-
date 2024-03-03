@@ -180,3 +180,24 @@ func (r *PGMaintenanceRepository) GetMaintenancesByStatus(status bool) ([]*domai
 
 	return maintenances, nil
 }
+
+func (r *PGMaintenanceRepository) GetLatestMaintenanceByCar(carID string) (*domain.Maintenance, error) {
+	var latestMaintenance domain.Maintenance
+
+	err := dbconfig.Postgres.
+		Where("car_id = ?", carID).
+		Order("maintenance_completion_date desc").
+		Limit(1).
+		Preload("Parts").
+		First(&latestMaintenance).
+		Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &latestMaintenance, nil
+}

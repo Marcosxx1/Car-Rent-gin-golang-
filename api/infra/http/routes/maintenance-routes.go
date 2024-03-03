@@ -25,8 +25,12 @@ func SetupMaintenanceRoutes(router *gin.Engine) {
 		maintenanceendpoints.ListMaintenanceController(context, &maintenanceRepository)
 	})
 
-	router.GET(" /api/v1/maintenance/:carID/maintenances", func(context *gin.Context) {
+	router.GET("/api/v1/maintenance/:carID/maintenances", func(context *gin.Context) {
 		maintenanceendpoints.GetMaintenancesByCarIDController(context, &maintenanceRepository)
+	})
+
+	router.GET("/api/v1/maintenance/:carID/latest", func(context *gin.Context) {
+		maintenanceendpoints.GetLatestMaintenanceByCarController(context, &maintenanceRepository)
 	})
 
 	router.GET("/api/v1/maintenance/scheduled", func(context *gin.Context) {

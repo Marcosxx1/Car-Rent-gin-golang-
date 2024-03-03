@@ -10,6 +10,7 @@ func ConvertPartsOutPutToDTO(parts []domain.Part) []m.PartOutputDTO {
 	var partsDTO []m.PartOutputDTO
 	for _, part := range parts {
 		partsDTO = append(partsDTO, m.PartOutputDTO{
+			ID:              part.ID,
 			MaintenanceID:   part.MaintenanceID,
 			Name:            part.Name,
 			Cost:            part.Cost,

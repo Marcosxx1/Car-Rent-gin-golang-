@@ -279,40 +279,6 @@ paths:
       summary: List all cars
       tags:
       - Car
-  /api/v1/cars/{carID}/maintenance/create:
-    post:
-      consumes:
-      - application/json
-      description: Create a new maintenance with the provided information
-      operationId: post-maintenance
-      parameters:
-      - description: CarID
-        in: path
-        name: carID
-        required: true
-        type: string
-      - description: Maintenance information to be created
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/maintenancedtos.MaintenanceInputDTO'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Successfully created maintenance
-          schema:
-            $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
-        "422":
-          description: Unprocessable Entity
-          schema:
-            items:
-              $ref: '#/definitions/validation_errors.HTTPErrorCar'
-            type: array
-      summary: Create a new maintenance
-      tags:
-      - Maintenance
   /api/v1/cars/{id}:
     get:
       consumes:
@@ -480,6 +446,136 @@ paths:
       summary: Retrieve a list of categories
       tags:
       - Category
+  /api/v1/maintenance/:carID/maintenance/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new maintenance with the provided information
+      operationId: post-maintenance
+      parameters:
+      - description: CarID
+        in: path
+        name: carID
+        required: true
+        type: string
+      - description: Maintenance information to be created
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/maintenancedtos.MaintenanceInputDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created maintenance
+          schema:
+            $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            items:
+              $ref: '#/definitions/validation_errors.HTTPErrorCar'
+            type: array
+      summary: Create a new maintenance
+      tags:
+      - Maintenance
+  /api/v1/maintenance/:carID/maintenances:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of maintenances associated with a specific carID
+      operationId: get-maintenances-by-carID
+      parameters:
+      - description: CarID
+        in: path
+        name: carID
+        required: true
+        type: string
+      - description: Page number (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page (default 10)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved maintenances
+          schema:
+            items:
+              $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
+            type: array
+        "422":
+          description: Validation errors
+          schema:
+            items:
+              $ref: '#/definitions/validation_errors.HTTPError'
+            type: array
+      summary: Get maintenances by carID
+      tags:
+      - Maintenance
+  /api/v1/maintenance/:maintenanceID:
+    patch:
+      consumes:
+      - application/json
+      description: Update an existing maintenance with the provided information
+      operationId: patch-maintenance
+      parameters:
+      - description: maintenanceID
+        in: path
+        name: maintenanceID
+        required: true
+        type: string
+      - description: Maintenance information to be updated
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/maintenancedtos.MaintenanceInputDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully updated maintenance
+          schema:
+            $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
+      summary: Update an existing maintenance
+      tags:
+      - Maintenance
+  /api/v1/maintenance/:status/maintenances:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of maintenances by its status
+      operationId: get-maintenances-by-status
+      parameters:
+      - description: maintenance_status
+        in: path
+        name: maintenance_status
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved maintenances
+          schema:
+            items:
+              $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
+            type: array
+        "422":
+          description: Validation errors
+          schema:
+            items:
+              $ref: '#/definitions/validation_errors.HTTPError'
+            type: array
+      summary: Get maintenances by its status
+      tags:
+      - Maintenance
   /api/v1/maintenance/{maintenanceID}:
     delete:
       consumes:
@@ -504,31 +600,64 @@ paths:
       summary: Delete a maintenance
       tags:
       - Maintenance
-    patch:
+  /api/v1/maintenance/maintenances:
+    get:
       consumes:
       - application/json
-      description: Update an existing maintenance with the provided information
-      operationId: patch-maintenance
+      description: Retrieve a list of maintenance records for a specific car
+      operationId: get-maintenance-list
       parameters:
-      - description: Maintenance ID
-        in: path
-        name: maintenanceID
-        required: true
-        type: string
-      - description: Maintenance information to be updated
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/maintenancedtos.MaintenanceInputDTO'
+      - description: Page number (default is 1)
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page (default is 10)
+        in: query
+        name: pageSize
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: Successfully updated maintenance
+          description: List of maintenance records
           schema:
-            $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
-      summary: Update an existing maintenance
+            items:
+              $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/validation_errors.HTTPErrorCar'
+      summary: Retrieve a list of maintenance records
+      tags:
+      - Maintenance
+  /api/v1/maintenance/scheduled:
+    get:
+      description: Get a list of scheduled maintenances based on the next maintenance
+        due date
+      operationId: get-scheduled-maintenances
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved scheduled maintenances
+          schema:
+            items:
+              $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get scheduled maintenances
       tags:
       - Maintenance
   /api/v1/specification/create:

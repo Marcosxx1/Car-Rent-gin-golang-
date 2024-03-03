@@ -5,6 +5,16 @@ import (
 	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/maintenance-dtos.go"
 )
 
+func ConvertMaintenanceListToDTOs(maintenanceList []*domain.Maintenance) []*m.MaintenanceOutputDTO {
+	outputDTOList := make([]*m.MaintenanceOutputDTO, len(maintenanceList))
+
+	for i, maintenance := range maintenanceList {
+		outputDTOList[i] = ConvertToOutputDTO(maintenance)
+	}
+
+	return outputDTOList
+}
+
 func ConvertToOutputDTO(maintenance *domain.Maintenance) *m.MaintenanceOutputDTO {
 	return &m.MaintenanceOutputDTO{
 		ID:                        maintenance.ID,

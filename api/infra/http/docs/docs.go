@@ -193,57 +193,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/cars/{carID}/maintenance/create": {
-            "post": {
-                "description": "Create a new maintenance with the provided information",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Maintenance"
-                ],
-                "summary": "Create a new maintenance",
-                "operationId": "post-maintenance",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "CarID",
-                        "name": "carID",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Maintenance information to be created",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/maintenancedtos.MaintenanceInputDTO"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Successfully created maintenance",
-                        "schema": {
-                            "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/validation_errors.HTTPErrorCar"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/cars/{id}": {
             "get": {
                 "description": "Find a car with the provided id",
@@ -368,6 +317,290 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/maintenance/:carID/maintenance/create": {
+            "post": {
+                "description": "Create a new maintenance with the provided information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Maintenance"
+                ],
+                "summary": "Create a new maintenance",
+                "operationId": "post-maintenance",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "CarID",
+                        "name": "carID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Maintenance information to be created",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/maintenancedtos.MaintenanceInputDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created maintenance",
+                        "schema": {
+                            "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/validation_errors.HTTPErrorCar"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/maintenance/:carID/maintenances": {
+            "get": {
+                "description": "Get a list of maintenances associated with a specific carID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Maintenance"
+                ],
+                "summary": "Get maintenances by carID",
+                "operationId": "get-maintenances-by-carID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "CarID",
+                        "name": "carID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of items per page (default 10)",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved maintenances",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/validation_errors.HTTPError"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/maintenance/:maintenanceID": {
+            "patch": {
+                "description": "Update an existing maintenance with the provided information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Maintenance"
+                ],
+                "summary": "Update an existing maintenance",
+                "operationId": "patch-maintenance",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "maintenanceID",
+                        "name": "maintenanceID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Maintenance information to be updated",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/maintenancedtos.MaintenanceInputDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated maintenance",
+                        "schema": {
+                            "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/maintenance/:status/maintenances": {
+            "get": {
+                "description": "Get a list of maintenances by its status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Maintenance"
+                ],
+                "summary": "Get maintenances by its status",
+                "operationId": "get-maintenances-by-status",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "maintenance_status",
+                        "name": "maintenance_status",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved maintenances",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/validation_errors.HTTPError"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/maintenance/maintenances": {
+            "get": {
+                "description": "Retrieve a list of maintenance records for a specific car",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Maintenance"
+                ],
+                "summary": "Retrieve a list of maintenance records",
+                "operationId": "get-maintenance-list",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number (default is 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of items per page (default is 10)",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of maintenance records",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/validation_errors.HTTPErrorCar"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/maintenance/scheduled": {
+            "get": {
+                "description": "Get a list of scheduled maintenances based on the next maintenance due date",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Maintenance"
+                ],
+                "summary": "Get scheduled maintenances",
+                "operationId": "get-scheduled-maintenances",
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved scheduled maintenances",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/maintenance/{maintenanceID}": {
             "delete": {
                 "description": "Delete a maintenance with the provided ID.",
@@ -399,46 +632,6 @@ const docTemplate = `{
                         "description": "Error details",
                         "schema": {
                             "$ref": "#/definitions/validation_errors.HTTPErrorCar"
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "description": "Update an existing maintenance with the provided information",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Maintenance"
-                ],
-                "summary": "Update an existing maintenance",
-                "operationId": "patch-maintenance",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Maintenance ID",
-                        "name": "maintenanceID",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Maintenance information to be updated",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/maintenancedtos.MaintenanceInputDTO"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully updated maintenance",
-                        "schema": {
-                            "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
                         }
                     }
                 }

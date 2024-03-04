@@ -21,7 +21,7 @@ import (
 // @Param               pageSize    query   int     false "Number of items per page (default 10)"
 // @Success             200         {array} maintenancedtos.MaintenanceOutputDTO "Successfully retrieved maintenances"
 // @Failure             422         {array} validation_errors.HTTPError "Validation errors"
-// @Router              /api/v1/maintenance/:carID/maintenances [get]
+// @Router              /api/v1/maintenance/{carID}/maintenances [get]
 func GetMaintenancesByCarIDController(context *gin.Context, maintenanceRepository repositories.MaintenanceRepository) {
 	carID := context.Param("carID")
 

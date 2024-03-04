@@ -20,7 +20,7 @@ import (
 // @Param               maintenance_status       path    boolean  true  "maintenance_status"
 // @Success             200         {array} maintenancedtos.MaintenanceOutputDTO "Successfully retrieved maintenances"
 // @Failure             422         {array} validation_errors.HTTPError "Validation errors"
-// @Router              /api/v1/maintenance/by/:status [get]
+// @Router              /api/v1/maintenance/by/{status} [get]
 func GetMaintenanceByStatusController(context *gin.Context, maintenanceRepository repositories.MaintenanceRepository) {
 	maintenanceStatusStr := context.Query("maintenance_status")
 

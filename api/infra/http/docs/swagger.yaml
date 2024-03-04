@@ -473,7 +473,7 @@ paths:
       summary: Retrieve a list of categories
       tags:
       - Category
-  /api/v1/maintenance/:carID/maintenance/create:
+  /api/v1/maintenance/{carID}/maintenance/create:
     post:
       consumes:
       - application/json
@@ -507,7 +507,7 @@ paths:
       summary: Create a new maintenance
       tags:
       - Maintenance
-  /api/v1/maintenance/:carID/maintenances:
+  /api/v1/maintenance/{carID}/maintenances:
     get:
       consumes:
       - application/json
@@ -545,7 +545,30 @@ paths:
       summary: Get maintenances by carID
       tags:
       - Maintenance
-  /api/v1/maintenance/:maintenanceID:
+  /api/v1/maintenance/{maintenanceID}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a maintenance with the provided ID.
+      operationId: delete-maintenance
+      parameters:
+      - description: Maintenance ID to be deleted
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Maintenance deleted successfully
+        "400":
+          description: Error details
+          schema:
+            $ref: '#/definitions/validation_errors.HTTPErrorCar'
+      summary: Delete a maintenance
+      tags:
+      - Maintenance
     patch:
       consumes:
       - application/json
@@ -573,31 +596,7 @@ paths:
       summary: Update an existing maintenance
       tags:
       - Maintenance
-  /api/v1/maintenance/{maintenanceID}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete a maintenance with the provided ID.
-      operationId: delete-maintenance
-      parameters:
-      - description: Maintenance ID to be deleted
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Maintenance deleted successfully
-        "400":
-          description: Error details
-          schema:
-            $ref: '#/definitions/validation_errors.HTTPErrorCar'
-      summary: Delete a maintenance
-      tags:
-      - Maintenance
-  /api/v1/maintenance/by/:status:
+  /api/v1/maintenance/by/{status}:
     get:
       consumes:
       - application/json
@@ -627,7 +626,7 @@ paths:
       summary: Get maintenances by its status
       tags:
       - Maintenance
-  /api/v1/maintenance/latest/:carID:
+  /api/v1/maintenance/latest/{carID}:
     get:
       consumes:
       - application/json

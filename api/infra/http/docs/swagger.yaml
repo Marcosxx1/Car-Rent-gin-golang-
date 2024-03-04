@@ -79,6 +79,30 @@ definitions:
           $ref: '#/definitions/specificationdtos.SpecificationOutputDto'
         type: array
     type: object
+  enums.MaintenanceStatus:
+    enum:
+    - Scheduled
+    - In Progress
+    - Completed
+    - Pending Approval
+    - Canceled
+    - Awaiting Parts
+    - Awaiting Payment
+    - Rescheduled
+    - Maintenance Failed
+    - Awaiting Inspection
+    type: string
+    x-enum-varnames:
+    - Scheduled
+    - InProgress
+    - Completed
+    - PendingApproval
+    - Canceled
+    - AwaitingParts
+    - AwaitingPayment
+    - Rescheduled
+    - MaintenanceFailed
+    - AwaitingInspection
   maintenancedtos.MaintenanceInputDTO:
     properties:
       car_id:
@@ -97,7 +121,7 @@ definitions:
       maintenance_notes:
         type: string
       maintenance_status:
-        type: string
+        $ref: '#/definitions/enums.MaintenanceStatus'
       maintenance_type:
         type: string
       next_maintenance_due_date:
@@ -141,7 +165,7 @@ definitions:
       maintenance_notes:
         type: string
       maintenance_status:
-        type: string
+        $ref: '#/definitions/enums.MaintenanceStatus'
       maintenance_type:
         type: string
       next_maintenance_due_date:
@@ -159,6 +183,7 @@ definitions:
     required:
     - last_maintenance_date
     - maintenance_completion_date
+    - maintenance_status
     - next_maintenance_due_date
     type: object
   maintenancedtos.PartInputDTO:
@@ -198,6 +223,8 @@ definitions:
       name:
         type: string
     required:
+    - car_id
+    - description
     - name
     type: object
   specificationdtos.SpecificationOutputDto:
@@ -367,7 +394,7 @@ paths:
       description: Update a car with the provided ID.
       operationId: put-car
       parameters:
-      - description: Car ID
+      - description: id
         in: path
         name: id
         required: true
@@ -546,7 +573,31 @@ paths:
       summary: Update an existing maintenance
       tags:
       - Maintenance
-  /api/v1/maintenance/:status:
+  /api/v1/maintenance/{maintenanceID}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a maintenance with the provided ID.
+      operationId: delete-maintenance
+      parameters:
+      - description: Maintenance ID to be deleted
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Maintenance deleted successfully
+        "400":
+          description: Error details
+          schema:
+            $ref: '#/definitions/validation_errors.HTTPErrorCar'
+      summary: Delete a maintenance
+      tags:
+      - Maintenance
+  /api/v1/maintenance/by/:status:
     get:
       consumes:
       - application/json
@@ -574,30 +625,6 @@ paths:
               $ref: '#/definitions/validation_errors.HTTPError'
             type: array
       summary: Get maintenances by its status
-      tags:
-      - Maintenance
-  /api/v1/maintenance/{maintenanceID}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete a maintenance with the provided ID.
-      operationId: delete-maintenance
-      parameters:
-      - description: Maintenance ID to be deleted
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Maintenance deleted successfully
-        "400":
-          description: Error details
-          schema:
-            $ref: '#/definitions/validation_errors.HTTPErrorCar'
-      summary: Delete a maintenance
       tags:
       - Maintenance
   /api/v1/maintenance/latest/:carID:

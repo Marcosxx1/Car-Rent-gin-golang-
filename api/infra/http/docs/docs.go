@@ -162,7 +162,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Car ID",
+                        "description": "id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -467,7 +467,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/maintenance/:status": {
+        "/api/v1/maintenance/by/:status": {
             "get": {
                 "description": "Get a list of maintenances by its status",
                 "consumes": [
@@ -842,6 +842,33 @@ const docTemplate = `{
                 }
             }
         },
+        "enums.MaintenanceStatus": {
+            "type": "string",
+            "enum": [
+                "Scheduled",
+                "In Progress",
+                "Completed",
+                "Pending Approval",
+                "Canceled",
+                "Awaiting Parts",
+                "Awaiting Payment",
+                "Rescheduled",
+                "Maintenance Failed",
+                "Awaiting Inspection"
+            ],
+            "x-enum-varnames": [
+                "Scheduled",
+                "InProgress",
+                "Completed",
+                "PendingApproval",
+                "Canceled",
+                "AwaitingParts",
+                "AwaitingPayment",
+                "Rescheduled",
+                "MaintenanceFailed",
+                "AwaitingInspection"
+            ]
+        },
         "maintenancedtos.MaintenanceInputDTO": {
             "type": "object",
             "required": [
@@ -876,7 +903,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "maintenance_status": {
-                    "type": "string"
+                    "$ref": "#/definitions/enums.MaintenanceStatus"
                 },
                 "maintenance_type": {
                     "type": "string"
@@ -908,6 +935,7 @@ const docTemplate = `{
             "required": [
                 "last_maintenance_date",
                 "maintenance_completion_date",
+                "maintenance_status",
                 "next_maintenance_due_date"
             ],
             "properties": {
@@ -936,7 +964,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "maintenance_status": {
-                    "type": "string"
+                    "$ref": "#/definitions/enums.MaintenanceStatus"
                 },
                 "maintenance_type": {
                     "type": "string"
@@ -1007,6 +1035,8 @@ const docTemplate = `{
         "specificationdtos.SpecificationInputDto": {
             "type": "object",
             "required": [
+                "car_id",
+                "description",
                 "name"
             ],
             "properties": {

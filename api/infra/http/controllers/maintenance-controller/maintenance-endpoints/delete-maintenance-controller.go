@@ -19,8 +19,12 @@ import (
 // @Failure 400 {object} validation_errors.HTTPErrorCar "Error details"
 // @Router				/api/v1/maintenance/{maintenanceID} [delete]
 func DeleteMaintenanceController(context *gin.Context, carRepository repositories.CarRepository, maintenanceRepository repositories.MaintenanceRepository) {
-
 	maintenanceID := context.Param("maintenance_id")
+
+	if maintenanceID == "" {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid maintenance ID"})
+		return
+	}
 
 	deleteMaintenanceUseCase := maintenanceusecases.NewDeleteMaintenanceUseCase(carRepository, maintenanceRepository)
 

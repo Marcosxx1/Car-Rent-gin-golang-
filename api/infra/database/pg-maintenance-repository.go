@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain/enums"
 	dbconfig "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database/postgres/db-config"
 	"gorm.io/gorm"
 )
@@ -167,10 +168,13 @@ func (r *PGMaintenanceRepository) GetScheduledMaintenances() ([]*domain.Maintena
 // - @param status The maintenance status to filter by.
 //
 // - @return ([]*domain.Maintenance, error) A slice of pointers to retrieved maintenance records and any error encountered.
-func (r *PGMaintenanceRepository) GetMaintenancesByStatus(status bool) ([]*domain.Maintenance, error) {
+func (r *PGMaintenanceRepository) GetMaintenancesByStatus(status enums.MaintenanceStatus) ([]*domain.Maintenance, error) {
 	var maintenances []*domain.Maintenance
 
-	err := dbconfig.Postgres.Where("maintenance_status = ?", status).Preload("Parts").Find(&maintenances).Error
+	// Enable Gorm logging
+	db := dbconfig.Postgres.Debug()
+
+	err := db.Where("maintenance_status = ?", status).Preload("Parts").Find(&maintenances).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return []*domain.Maintenance{}, nil

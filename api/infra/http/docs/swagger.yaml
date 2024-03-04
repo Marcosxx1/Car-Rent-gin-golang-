@@ -596,7 +596,7 @@ paths:
       summary: Update an existing maintenance
       tags:
       - Maintenance
-  /api/v1/maintenance/by/{status}:
+  /api/v1/maintenance/by/{maintenance_status}:
     get:
       consumes:
       - application/json
@@ -604,10 +604,21 @@ paths:
       operationId: get-maintenances-by-status
       parameters:
       - description: maintenance_status
+        enum:
+        - Scheduled
+        - InProgress
+        - Completed
+        - PendingApproval
+        - Canceled
+        - AwaitingParts
+        - AwaitingPayment
+        - Rescheduled
+        - MaintenanceFailed
+        - AwaitingInspection
         in: path
         name: maintenance_status
         required: true
-        type: boolean
+        type: string
       produces:
       - application/json
       responses:

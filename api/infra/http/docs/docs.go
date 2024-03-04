@@ -317,7 +317,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/maintenance/by/{status}": {
+        "/api/v1/maintenance/by/{maintenance_status}": {
             "get": {
                 "description": "Get a list of maintenances by its status",
                 "consumes": [
@@ -333,7 +333,19 @@ const docTemplate = `{
                 "operationId": "get-maintenances-by-status",
                 "parameters": [
                     {
-                        "type": "boolean",
+                        "enum": [
+                            "Scheduled",
+                            "InProgress",
+                            "Completed",
+                            "PendingApproval",
+                            "Canceled",
+                            "AwaitingParts",
+                            "AwaitingPayment",
+                            "Rescheduled",
+                            "MaintenanceFailed",
+                            "AwaitingInspection"
+                        ],
+                        "type": "string",
                         "description": "maintenance_status",
                         "name": "maintenance_status",
                         "in": "path",

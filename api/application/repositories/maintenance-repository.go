@@ -23,7 +23,8 @@ type MaintenanceRepository interface {
 	GetMaintenancesByStatus(status enums.MaintenanceStatus) ([]*domain.Maintenance, error)
 	//
 	GetLatestMaintenanceByCar(carID string) (*domain.Maintenance, error)
-
+	// GetMaintenancesByDateRange retorna todas as manutenções dentro de um intervalo de datas
+	GetMaintenancesByDateRange(startDate, endDate string) ([]*domain.Maintenance, error)
 	/*
 				// GetMaintenancesByType retorna todas as manutenções de um determinado tipo
 				GetMaintenancesByType(maintenanceType string) ([]*domain.Maintenance, error)

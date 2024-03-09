@@ -13,7 +13,7 @@ type PostReviewUseCase struct {
 	reviewRepository repositories.ReviewsRepository
 }
 
-func usecasesNewPostReviewUseCase(reviewRepository repositories.ReviewsRepository) *PostReviewUseCase {
+func NewPostReviewUseCase(reviewRepository repositories.ReviewsRepository) *PostReviewUseCase {
 	return &PostReviewUseCase{
 		reviewRepository: reviewRepository,
 	}

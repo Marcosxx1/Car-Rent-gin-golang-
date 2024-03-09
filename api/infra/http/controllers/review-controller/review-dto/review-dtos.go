@@ -6,6 +6,8 @@ import "github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 type ReviewInputDTO struct {
 	Rating  *int   `json:"rating"`
 	Content string `json:"content"`
+	UserId  string `json:"user_id"`
+	CarId   string `json:"car_id"`
 }
 
 type ReviewOutputDTO struct {

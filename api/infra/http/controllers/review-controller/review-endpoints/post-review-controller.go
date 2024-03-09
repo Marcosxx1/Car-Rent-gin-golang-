@@ -1,4 +1,4 @@
-package carendpoints
+package reviewendpoints
 
 import (
 	"net/http"
@@ -22,7 +22,7 @@ import (
 // @Failure             422             {array}     validation_errors.HTTPErrorReview
 // @Router              /api/v1/reviews/create [post]
 func PostReviewsController(context *gin.Context, reviewRepository repositories.ReviewsRepository) {
-	userID := "" // Preciso adicionar o id do usuário que virá do token
+	userID := context.GetString("user_id")
 
 	var request *reviewdto.ReviewInputDTO
 	if err := context.ShouldBindJSON(&request); err != nil {
@@ -30,7 +30,7 @@ func PostReviewsController(context *gin.Context, reviewRepository repositories.R
 		return
 	}
 
-	carID := /* request */ // preciso adicionar o car id ao dto
+	carID := request.CarId
 
 	postReviewUseCase := usecases.NewPostReviewUseCase(reviewRepository)
 

@@ -7,6 +7,7 @@ import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	reviewdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/review-controller/review-dto"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 )
 
 type PostReviewUseCase struct {
@@ -51,6 +52,12 @@ func validateReviewInput(wg *sync.WaitGroup, errorChan chan<- error, validationE
 
 	if inputDTO.Rating == nil || *inputDTO.Rating < 1 || *inputDTO.Rating > 5 {
 		errorChan <- fmt.Errorf("invalid rating")
+		validationErrorSignal <- true
+		return
+	}
+
+	if err := validation_errors.ValidateStruct(inputDTO); err != nil {
+		errorChan <- err
 		validationErrorSignal <- true
 		return
 	}

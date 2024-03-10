@@ -24,4 +24,8 @@ func SetupUserRoutes(router *gin.Engine) {
 	router.PATCH("/api/v1/user/:id/change-password", func(context *gin.Context) {
 		userendpoints.ChangePasswordController(context, &userRepository)
 	})
+
+	router.POST("/api/v1/login", func(context *gin.Context) {
+		userendpoints.LoginHandlerController(context, &userRepository)
+	})
 }

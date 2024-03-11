@@ -15,5 +15,8 @@ func SetupReviewRoutes(router *gin.Engine) {
 		authGroup.POST("/review/create", func(context *gin.Context) {
 			reviewendpoints.PostReviewsController(context, &reviewRepository)
 		})
+		authGroup.GET("/review/list", func(context *gin.Context) {
+			reviewendpoints.GetAllReviewsController(context, &reviewRepository)
+		})
 	}
 }

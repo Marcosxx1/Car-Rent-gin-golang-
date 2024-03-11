@@ -1,6 +1,8 @@
 package reviewdto
 
-import "github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
+import (
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
+)
 
 // ReviewInputDTO represents the data required for creating a new review.
 type ReviewInputDTO struct {
@@ -26,6 +28,16 @@ func ConvertReviewToOutput(review *domain.Reviews) *ReviewOutputDTO {
 		CarId:   review.CarId,
 		Rating:  review.Rating,
 		Content: review.Content,
-		// Map other fields as needed
 	}
+}
+
+// Will convert multiple reviews to output
+func ConvertMultipleReviewsToOutPut(domainReviews []*domain.Reviews) []*ReviewOutputDTO {
+	reviews := make([]*ReviewOutputDTO, len(domainReviews))
+
+	for index, rev := range domainReviews {
+		reviews[index] = ConvertReviewToOutput(rev)
+	}
+
+	return reviews
 }

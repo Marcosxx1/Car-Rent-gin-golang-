@@ -1,6 +1,9 @@
 package repositories
 
-import "github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
+import (
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain/enums"
+)
 
 type MaintenanceRepository interface {
 	// CreateMaintenance adiciona uma nova manutenção ao repositório
@@ -17,10 +20,11 @@ type MaintenanceRepository interface {
 	// GetScheduledMaintenances retorna todas as manutenções programadas
 	GetScheduledMaintenances() ([]*domain.Maintenance, error)
 	// GetMaintenanceByStatus retorna todas as manutenções com um determinado status
-	GetMaintenancesByStatus(status bool) ([]*domain.Maintenance, error)
+	GetMaintenancesByStatus(status enums.MaintenanceStatus) ([]*domain.Maintenance, error)
 	//
 	GetLatestMaintenanceByCar(carID string) (*domain.Maintenance, error)
-
+	// GetMaintenancesByDateRange retorna todas as manutenções dentro de um intervalo de datas
+	GetMaintenancesByDateRange(startDate, endDate string) ([]*domain.Maintenance, error)
 	/*
 				// GetMaintenancesByType retorna todas as manutenções de um determinado tipo
 				GetMaintenancesByType(maintenanceType string) ([]*domain.Maintenance, error)

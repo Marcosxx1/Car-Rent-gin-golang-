@@ -3,6 +3,7 @@ package domain
 import (
 	"time"
 
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain/enums"
 	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/maintenance-dtos.go"
 	"github.com/rs/xid"
 	"gorm.io/gorm"
@@ -10,22 +11,22 @@ import (
 
 type Maintenance struct {
 	gorm.Model
-	ID                        string    `json:"id"`
-	CarID                     string    `json:"car_id"`
-	MaintenanceType           string    `json:"maintenance_type" binding:"required"`
-	OdometerReading           int       `json:"odometer_reading" binding:"required"`
-	LastMaintenanceDate       time.Time `json:"last_maintenance_date" binding:"required" validate:"gte=0"`
-	ScheduledMaintenance      bool      `json:"scheduled_maintenance" binding:"required"`
-	MaintenanceStatus         string    `json:"maintenance_status" binding:"required"`
-	MaintenanceDuration       string    `json:"maintenance_duration" binding:"required"`
-	Description               string    `json:"description" binding:"required"`
-	MaintenanceNotes          string    `json:"maintenance_notes" binding:"required"`
-	LaborCost                 int       `json:"labor_cost" binding:"required" validate:"gte=0"`
-	PartsCost                 int       `json:"parts_cost" binding:"required" validate:"gte=0"`
-	NextMaintenanceDueDate    time.Time `json:"next_maintenance_due_date" binding:"required"`
-	MaintenanceCompletionDate time.Time `json:"maintenance_completion_date" binding:"required"`
-	Car                       []*Car    `gorm:"many2many:car_maintenances"`
-	Parts                     []Part    `gorm:"foreignkey:MaintenanceID"`
+	ID                        string                  `json:"id"`
+	CarID                     string                  `json:"car_id"`
+	MaintenanceType           string                  `json:"maintenance_type" binding:"required"`
+	OdometerReading           int                     `json:"odometer_reading" binding:"required"`
+	LastMaintenanceDate       time.Time               `json:"last_maintenance_date" binding:"required" validate:"gte=0"`
+	ScheduledMaintenance      bool                    `json:"scheduled_maintenance" binding:"required"`
+	MaintenanceStatus         enums.MaintenanceStatus `json:"maintenance_status" binding:"required"`
+	MaintenanceDuration       string                  `json:"maintenance_duration" binding:"required"`
+	Description               string                  `json:"description" binding:"required"`
+	MaintenanceNotes          string                  `json:"maintenance_notes" binding:"required"`
+	LaborCost                 int                     `json:"labor_cost" binding:"required" validate:"gte=0"`
+	PartsCost                 int                     `json:"parts_cost" binding:"required" validate:"gte=0"`
+	NextMaintenanceDueDate    time.Time               `json:"next_maintenance_due_date" binding:"required"`
+	MaintenanceCompletionDate time.Time               `json:"maintenance_completion_date" binding:"required"`
+	Car                       []*Car                  `gorm:"many2many:car_maintenances"`
+	Parts                     []Part                  `gorm:"foreignkey:MaintenanceID"`
 }
 
 type Part struct {

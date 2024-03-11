@@ -3,8 +3,10 @@ package database
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain/enums"
 	dbconfig "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database/postgres/db-config"
 	"gorm.io/gorm"
 )
@@ -167,10 +169,13 @@ func (r *PGMaintenanceRepository) GetScheduledMaintenances() ([]*domain.Maintena
 // - @param status The maintenance status to filter by.
 //
 // - @return ([]*domain.Maintenance, error) A slice of pointers to retrieved maintenance records and any error encountered.
-func (r *PGMaintenanceRepository) GetMaintenancesByStatus(status bool) ([]*domain.Maintenance, error) {
+func (r *PGMaintenanceRepository) GetMaintenancesByStatus(status enums.MaintenanceStatus) ([]*domain.Maintenance, error) {
 	var maintenances []*domain.Maintenance
 
-	err := dbconfig.Postgres.Where("maintenance_status = ?", status).Preload("Parts").Find(&maintenances).Error
+	// Enable Gorm logging
+	db := dbconfig.Postgres.Debug()
+
+	err := db.Where("maintenance_status = ?", status).Preload("Parts").Find(&maintenances).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return []*domain.Maintenance{}, nil
@@ -200,4 +205,42 @@ func (r *PGMaintenanceRepository) GetLatestMaintenanceByCar(carID string) (*doma
 	}
 
 	return &latestMaintenance, nil
+}
+
+// GetMaintenancesByDateRange retrieves all maintenance records within a specified date range.
+// Eagerly loads associated parts for each record.
+//
+// Parameters:
+//   - startDate The start date of the range in the format "2006-01-02".
+//   - endDate The end date of the range in the format "2006-01-02".
+//
+// Returns:
+//   - ([]*domain.Maintenance, error) A slice of pointers to retrieved maintenance records and any error encountered.
+func (r *PGMaintenanceRepository) GetMaintenancesByDateRange(startDate, endDate string) ([]*domain.Maintenance, error) {
+	var maintenances []*domain.Maintenance
+
+	startDateTime, err := time.Parse("2006-01-02", startDate)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse start date: %w", err)
+	}
+
+	endDateTime, err := time.Parse("2006-01-02", endDate)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse end date: %w", err)
+	}
+
+	err = dbconfig.Postgres.
+		Where("maintenance_completion_date BETWEEN ? AND ?", startDateTime, endDateTime).
+		Preload("Parts").
+		Find(&maintenances).
+		Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return []*domain.Maintenance{}, nil
+		}
+		return nil, err
+	}
+
+	return maintenances, nil
 }

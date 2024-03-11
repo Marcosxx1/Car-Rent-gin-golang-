@@ -45,6 +45,7 @@ func (useCase *GetAllCarsUseCase) Execute(page, pageSize int) ([]*dtos.CarOutput
 			LicensePlate:  car.LicensePlate,
 			FineAmount:    car.FineAmount,
 			Brand:         car.Brand,
+			CategoryID:    car.CategoryID,
 			Specification: repoutils.ConvertSpecificationToDTO(specifications),
 		}
 

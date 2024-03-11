@@ -14,8 +14,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/gorm"
-) 
-  
+)
 
 func main() {
 	gin.SetMode(gin.ReleaseMode)
@@ -26,7 +25,7 @@ func main() {
 
 	db, err := dbconfig.Connection()
 	if err != nil {
-		log.Fatal("Error connecting to database:", err) 
+		log.Fatal("Error connecting to database:", err)
 	}
 
 	if err := setupServer(db); err != nil {
@@ -49,6 +48,7 @@ func setupServer(db *gorm.DB) error {
 	routes.SetupSpecificationRoutes(router)
 	routes.SetupUserRoutes(router)
 	routes.SetupMaintenanceRoutes(router)
+	routes.SetupReviewRoutes(router)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -56,6 +56,5 @@ func setupServer(db *gorm.DB) error {
 	}
 
 	log.Println("Server running at port:", port)
-	return router.Run(":" + port) 
-}  
- 
+	return router.Run(":" + port)
+}

@@ -37,3 +37,17 @@ func (repo *PGReviewRepository) GetReviewByID(reviewID string) (*domain.Reviews,
 
 	return &review, nil
 }
+
+func (repo *PGReviewRepository) GetAllReviews() ([]*domain.Reviews, error) {
+	var reviews []*domain.Reviews
+
+	err := dbconfig.Postgres.Find(&reviews).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return []*domain.Reviews{}, nil
+		}
+		return nil, err
+	}
+
+	return reviews, nil
+}

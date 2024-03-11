@@ -8,6 +8,7 @@ import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	reviewdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/review-controller/review-dto"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
+	"github.com/rs/xid"
 )
 
 type PostReviewUseCase struct {
@@ -73,6 +74,7 @@ func (useCase *PostReviewUseCase) performReviewCreation(wg *sync.WaitGroup, resu
 	}
 
 	newReview := &domain.Reviews{
+		ID:      xid.New().String(),
 		UserId:  userID,
 		CarId:   carID,
 		Rating:  inputDTO.Rating,

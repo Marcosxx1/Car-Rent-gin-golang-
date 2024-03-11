@@ -7,16 +7,16 @@ type ReviewsRepository interface {
 	CreateReview(review *domain.Reviews) (*domain.Reviews, error)
 	// GetReviewByID retrieves a review from the repository based on its ID
 	GetReviewByID(reviewID string) (*domain.Reviews, error)
+	// GetAllReviews retrieves all reviews from the repository
+	GetAllReviews() ([]*domain.Reviews, error)
+	/*
 
-	/*     // GetReviewByID retrieves a review from the repository based on its ID
-	       GetReviewByID(reviewID string) (*domain.Reviews, error)
+	   // UpdateReview updates an existing review in the repository
+	   UpdateReview(review *domain.Reviews) error
 
-	       // UpdateReview updates an existing review in the repository
-	       UpdateReview(review *domain.Reviews) error
+	   // DeleteReview removes a review from the repository based on its ID
+	   DeleteReview(reviewID string) error
 
-	       // DeleteReview removes a review from the repository based on its ID
-	       DeleteReview(reviewID string) error
-
-	       // GetAllReviews retrieves all reviews from the repository
-	       GetAllReviews() ([]*domain.Reviews, error) */
+	   // GetAllReviews retrieves all reviews from the repository
+	   GetAllReviews() ([]*domain.Reviews, error) */
 }

@@ -9,6 +9,8 @@ type ReviewsRepository interface {
 	GetReviewByID(reviewID string) (*domain.Reviews, error)
 	// GetAllReviews retrieves all reviews from the repository
 	GetAllReviews() ([]*domain.Reviews, error)
+	// DeleteReview removes a review from the repository based on its ID
+	DeleteReview(reviewID string) error
 	/*
 
 	   // UpdateReview updates an existing review in the repository

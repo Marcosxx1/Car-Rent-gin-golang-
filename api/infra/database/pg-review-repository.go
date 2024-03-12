@@ -51,3 +51,17 @@ func (repo *PGReviewRepository) GetAllReviews() ([]*domain.Reviews, error) {
 
 	return reviews, nil
 }
+
+func (repo *PGReviewRepository) DeleteReview(reviewID string) error {
+	result := dbconfig.Postgres.Where("id = ?", reviewID).Delete(&domain.Reviews{})
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return errors.New("maintenance not found")
+	}
+
+	return nil
+}

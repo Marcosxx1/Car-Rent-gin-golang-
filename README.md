@@ -33,7 +33,6 @@ As well in with the other projects this architecture enables enhanced modularity
 ## Table of Contents
 
 - [Installation](#installation)
-- [Usage](#usage)
 - [API Endpoints](#api-endpoints)
   - [Authentication(WIP)](#authentication)
   - [Category](#category)
@@ -51,14 +50,35 @@ As well in with the other projects this architecture enables enhanced modularity
 - [Business Rules (BR)](#business-rules-br)
 
 ## Installation
-### WIP
 
-## Usage locally
-### WIP
+### Prerequisites
+- Go (version 1.2.X)
+- PostgreSQL
 
-## Usage with docker
-### WIP
+### Clone the Repository
+```bash
+git clone https://github.com/Marcosxx1/Car-Rent-gin-golang-
+cd Car-Rent-gin-golang-
+```
+```bash
+cd Car-Rent-gin-golang-
+```
+```go
+go build
+```
+This project uses air for live-reloading, after building, in the console just type air
+this message should appear:  
+```bash
+Server running at port: 8080
+```
 
+## Swagger
+After server initialization Swagger will be avaliable at 
+```bash
+http://localhost:8080/docs/index.html#/
+```
+A quick look:
+![alt text](image.png)
 ## API Endpoints
 
 The application offers various API endpoints catering to different functionalities:
@@ -212,17 +232,23 @@ The application offers various API endpoints catering to different functionaliti
 
 ### Reviews
 
-### Create Review (WIP)
+### Create Review
 
-- **Endpoint:** `POST /api/v1/reviews/create`
+- **Endpoint:** `POST /api/v1/review/create`
 - **Description:** Creates a new review.
-- **Handler Function:** `reviews_endpoints.CreateReviewController`
+- **Handler Function:** `reviewendpoints.PostReviewsController`
 
 ### Get Review by ID (WIP)
 
 - **Endpoint:** `GET /api/v1/reviews/:id`
 - **Description:** Retrieves details of a specific review by ID.
 - **Handler Function:** `reviews_endpoints.GetReviewByIdController`
+
+### Get All Reviews
+
+- **Endpoint:** `GET /api/v1/review/list`
+- **Description:** Retrieves all reviews availiable.
+- **Handler Function:** `reviewendpoints.GetAllReviewsController`
 
 ### Update Review (WIP)
 
@@ -414,7 +440,8 @@ Car-Rent-gin-golang-/
 ### Reviews
 #### Create Review:
 
-- Ability to create a new review. :o:
+- Ability to create a new review. :white_check_mark:
+- Ability to retrieve all avaliable reviews :white_check_mark:
 - Review details should include user ID, car ID, rating, and comment. :o:
 - Ability to retrieve details of a specific review by ID. :o:
 - Ability to update information for a specific review. :o:
@@ -457,10 +484,3 @@ Car-Rent-gin-golang-/
 Contributions are welcome! Feel free to open issues or submit pull requests for improvements or bug fixes.
 
 The Car Rental App's architecture provides clarity, modularity, and scalability. This documentation offers insights into installation, usage, functionalities, and requirements, fostering a better understanding of the application's ecosystem.
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
-
-
-####side note: GORM doesn't suport []string (got error unsupported data type: &[])... to add later on the readme
-####side note: $ swag init --parseDependency --parseInternal due to package problems

@@ -4,12 +4,18 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	dbconfig "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database/postgres/db-config"
 	"gorm.io/gorm"
 )
 
-type PGReviewRepository struct{}
+type PGReviewRepository struct {
+}
+
+func NewPGReviewRepository() repositories.ReviewsRepository {
+	return &PGReviewRepository{}
+}
 
 func (repo *PGReviewRepository) CreateReview(review *domain.Reviews) (*domain.Reviews, error) {
 	result := dbconfig.Postgres.Create(&review)

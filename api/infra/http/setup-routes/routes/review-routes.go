@@ -1,22 +1,15 @@
 package routes
 
 import (
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database"
-	reviewendpoints "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/review-controller/review-endpoints"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/middlewares"
+	factory "github.com/Marcosxx1/Car-Rent-gin-golang-/api/main/factories/controllers"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupReviewRoutes(router *gin.Engine) {
-	reviewRepository := database.PGReviewRepository{}
-
-	authGroup := router.Group("/api/v1").Use(middlewares.JWTMiddleware())
-	{
-		authGroup.POST("/review/create", func(context *gin.Context) {
-			reviewendpoints.PostReviewsController(context, &reviewRepository)
-		})
-		authGroup.GET("/review/list", func(context *gin.Context) {
-			reviewendpoints.GetAllReviewsController(context, &reviewRepository)
-		})
-	}
+    authGroup := router.Group("/api/v1").Use(middlewares.JWTMiddleware())
+    {
+        authGroup.POST("/review/create", factory.PostReviewsFactoryController)
+        authGroup.GET("/review/list", factory.GetAllReviewsFactoryController)
+    }
 }

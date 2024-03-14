@@ -7,9 +7,10 @@ import (
 )
 
 func SetupReviewRoutes(router *gin.Engine) {
-    authGroup := router.Group("/api/v1").Use(middlewares.JWTMiddleware())
-    {
-        authGroup.POST("/review/create", factory.PostReviewsFactoryController)
-        authGroup.GET("/review/list", factory.GetAllReviewsFactoryController)
-    }
+	authGroup := router.Group("/api/v1").Use(middlewares.JWTMiddleware())
+	{
+		authGroup.POST("/review/create", factory.PostReviewsFactoryController)
+		authGroup.GET("/review/list", factory.GetAllReviewsFactoryController)
+		authGroup.PUT("/review/update", factory.UpdateReviewFactoryController)
+	}
 }

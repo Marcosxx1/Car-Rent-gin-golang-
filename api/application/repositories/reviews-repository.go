@@ -11,6 +11,8 @@ type ReviewsRepository interface {
 	GetAllReviews() ([]*domain.Reviews, error)
 	// DeleteReview removes a review from the repository based on its ID
 	DeleteReview(reviewID string) error
+	// UpdateReview updates an existing review in the repository
+	UpdateReview(id string, review *domain.Reviews) error
 	/*
 
 	   // UpdateReview updates an existing review in the repository

@@ -71,3 +71,16 @@ func (repo *PGReviewRepository) DeleteReview(reviewID string) error {
 
 	return nil
 }
+
+func (repo *PGReviewRepository) UpdateReview(id string, review *domain.Reviews) error {
+	result := dbconfig.Postgres.Model(&domain.Reviews{}).Where("id = ?", id).Updates(review)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return errors.New("no rows were affected, review not found or data unchanged")
+	}
+
+	return nil
+}

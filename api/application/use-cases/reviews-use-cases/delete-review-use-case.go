@@ -20,7 +20,7 @@ func (useCase *DeleteReviewUseCase) Execute(reviewID string) error {
 
 	err := useCase.reviewRepository.DeleteReview(reviewID)
 	if err != nil {
-		fmt.Errorf("failed delete record: %w", err) // lembrar de adicionar melhor tratamento de erros
+		return fmt.Errorf("failed delete record: %w", err) // lembrar de adicionar melhor tratamento de erros
 	}
 
 	return nil

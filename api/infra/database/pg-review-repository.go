@@ -4,12 +4,18 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	dbconfig "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database/postgres/db-config"
 	"gorm.io/gorm"
 )
 
-type PGReviewRepository struct{}
+type PGReviewRepository struct {
+}
+
+func NewPGReviewRepository() repositories.ReviewsRepository {
+	return &PGReviewRepository{}
+}
 
 func (repo *PGReviewRepository) CreateReview(review *domain.Reviews) (*domain.Reviews, error) {
 	result := dbconfig.Postgres.Create(&review)
@@ -50,4 +56,31 @@ func (repo *PGReviewRepository) GetAllReviews() ([]*domain.Reviews, error) {
 	}
 
 	return reviews, nil
+}
+
+func (repo *PGReviewRepository) DeleteReview(reviewID string) error {
+	result := dbconfig.Postgres.Where("id = ?", reviewID).Delete(&domain.Reviews{})
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return errors.New("maintenance not found")
+	}
+
+	return nil
+}
+
+func (repo *PGReviewRepository) UpdateReview(id string, review *domain.Reviews) error {
+	result := dbconfig.Postgres.Model(&domain.Reviews{}).Where("id = ?", id).Updates(review)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return errors.New("no rows were affected, review not found or data unchanged")
+	}
+
+	return nil
 }

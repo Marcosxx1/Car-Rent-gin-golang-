@@ -42,15 +42,16 @@ It is when I started and you can notice that the structure and implementation is
 api\infra\http\controllers\maintenance-controller\maintenance-endpoints\post-maintenance-controller.go
 ```
 Maintenance implementaion uses dependency injection.
-But lets take a look from the begining of the flow:
-- main > setup of maintenance routes > Here we can notice that it is is all over the place with the routes having to deal with the concrete implementation of the repository, and pass it to the controller
+Let's take a look from the beginning of the flow:
 
-Now the better implementation that will be followed from now on, reviews as example:
-- main > setup > setupReviewRoutes > only routes that call factories > factory build and call our controller. I think this way will be better for code clarity, instantiating all that is needed on the contrller can become very easy to get lost and for better code clarity
+- main > setup of maintenance routes > Here we can notice that it is all over the place, with the routes having to deal with the concrete implementation of the repository and passing it to the controller.
+
+The improved implementation, to be followed from now on, will be like the one from reviews:
+
+- main > setup > setupReviewRoutes > only routes that call factories > factories build and call our controller. I believe this approach will enhance code clarity. Instantiating everything needed within the controller can lead to confusion and hinder code clarity.
 
 Since this repository serves as a platform for learning Golang, I'll leave the existing implementation as it is and refrain from refactoring it, as I consider it to be a valuable learning experience.
 
-main > setup reviews 
 ## Table of Contents
 
 - [Installation](#installation)

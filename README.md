@@ -75,6 +75,7 @@ main > setup reviews
 ### Prerequisites
 - Go (version 1.2.X)
 - PostgreSQL
+- Insomnia, Postman, or any similar tool for making HTTP requests
 
 ### Clone the Repository
 ```bash
@@ -105,8 +106,18 @@ A quick look:
 The application offers various API endpoints catering to different functionalities:
 
 ### Authentication
+With the user created:
 
-- `POST /sessions`: WIP.
+- `POST /api/v1/login`
+```json 
+{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+
+```
+When accessing this route, if successful a token will be generated that will be needed in some of the routes
+
 
 ### Category
 

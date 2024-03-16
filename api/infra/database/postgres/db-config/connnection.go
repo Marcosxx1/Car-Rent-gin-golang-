@@ -34,6 +34,7 @@ func Connection() (*gorm.DB, error) {
 	db.AutoMigrate(&domain.Part{})
 	db.AutoMigrate(&domain.CarMaintenance{})
 	db.AutoMigrate(&domain.Reviews{})
+	db.AutoMigrate(&domain.Order{})
 
 	Postgres = db
 	return db, nil

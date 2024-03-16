@@ -3,7 +3,6 @@ package reviewendpoints
 import (
 	"net/http"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/reviews-use-cases"
 	reviewdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/review-controller/review-dto"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
@@ -21,7 +20,7 @@ import (
 // @Success             201             {object}    dtos.ReviewOutputDTO "Successfully created review"
 // @Failure             422             {array}     validation_errors.HTTPErrorReview
 // @Router              /api/v1/reviews/create [post]
-func PostReviewsController(context *gin.Context, reviewRepository repositories.ReviewsRepository) {
+func PostReviewsController(context *gin.Context, postReviewUseCase *usecases.PostReviewUseCase) {
 	userID := context.GetString("user_id")
 
 	var request *reviewdto.ReviewInputDTO
@@ -31,8 +30,6 @@ func PostReviewsController(context *gin.Context, reviewRepository repositories.R
 	}
 
 	carID := request.CarId
-
-	postReviewUseCase := usecases.NewPostReviewUseCase(reviewRepository)
 
 	createdReview, err := postReviewUseCase.Execute(userID, carID, request)
 	if err != nil {

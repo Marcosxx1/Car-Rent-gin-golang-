@@ -30,6 +30,27 @@ For this project I chose to follow Clean Architecture, which is a software archi
 
 As well in with the other projects this architecture enables enhanced modularity, testability, and maintainability.
 
+##
+It is also worth noting that the implementation for each repository may differ from eachother
+For example:
+```bash 
+api\infra\http\controllers\user-controller\user-endpoints\post-user-controller.go
+```
+Is one of my first implementations on the repository.
+It is when I started and you can notice that the structure and implementation is quite different from 
+```bash 
+api\infra\http\controllers\maintenance-controller\maintenance-endpoints\post-maintenance-controller.go
+```
+Maintenance implementaion uses dependency injection.
+But lets take a look from the begining of the flow:
+- main > setup of maintenance routes > Here we can notice that it is is all over the place with the routes having to deal with the concrete implementation of the repository, and pass it to the controller
+
+Now the better implementation that will be followed from now on, reviews as example:
+- main > setup > setupReviewRoutes > only routes that call factories > factory build and call our controller. I think this way will be better for code clarity, instantiating all that is needed on the contrller can become very easy to get lost and for better code clarity
+
+Since this repository serves as a platform for learning Golang, I'll leave the existing implementation as it is and refrain from refactoring it, as I consider it to be a valuable learning experience.
+
+main > setup reviews 
 ## Table of Contents
 
 - [Installation](#installation)
@@ -54,6 +75,7 @@ As well in with the other projects this architecture enables enhanced modularity
 ### Prerequisites
 - Go (version 1.2.X)
 - PostgreSQL
+- Insomnia, Postman, or any similar tool for making HTTP requests
 
 ### Clone the Repository
 ```bash
@@ -84,8 +106,18 @@ A quick look:
 The application offers various API endpoints catering to different functionalities:
 
 ### Authentication
+With the user created:
 
-- `POST /sessions`: WIP.
+- `POST /api/v1/login`
+```json 
+{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+
+```
+When accessing this route, if successful a token will be generated that will be needed in some of the routes
+
 
 ### Category
 

@@ -1,4 +1,4 @@
-package reviewendpoints
+package reviewcontroller
 
 import (
 	"net/http"

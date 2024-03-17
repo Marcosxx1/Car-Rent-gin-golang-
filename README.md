@@ -269,7 +269,7 @@ When accessing this route, if successful a token will be generated that will be 
 
 - **Endpoint:** `POST /api/v1/review/create`
 - **Description:** Creates a new review.
-- **Handler Function:** `reviewendpoints.PostReviewsController`
+- **Handler Function:** `reviewcontroller.PostReviewsController`
 
 ### Get Review by ID (WIP)
 
@@ -281,7 +281,7 @@ When accessing this route, if successful a token will be generated that will be 
 
 - **Endpoint:** `GET /api/v1/review/list`
 - **Description:** Retrieves all reviews availiable.
-- **Handler Function:** `reviewendpoints.GetAllReviewsController`
+- **Handler Function:** `reviewcontroller.GetAllReviewsController`
 
 ### Update Review (WIP)
 

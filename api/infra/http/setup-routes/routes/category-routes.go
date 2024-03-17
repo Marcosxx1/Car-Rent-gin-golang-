@@ -1,21 +1,13 @@
 package routes
 
 import (
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database"
-	category_endpoints "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/category-controller/category-endpoints"
+	categoryfactory "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/factories/category"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupCategoryRoutes(router *gin.Engine) {
 
-	categoryRepository := database.PGCategory{}
-
-	router.POST("/api/v1/category/create", func(context *gin.Context) {
-		category_endpoints.PostCategoryController(context, &categoryRepository)
-	})
-
-	router.GET("/api/v1/category/list", func(context *gin.Context) {
-		category_endpoints.ListCategoriesController(context, &categoryRepository)
-	})
+	router.POST("/category/create", categoryfactory.PostCategoryControllerFactory)
+	router.GET("/category/list", categoryfactory.ListCategoriesControllerFactory)
 
 }

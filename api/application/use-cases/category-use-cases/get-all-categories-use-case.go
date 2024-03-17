@@ -1,16 +1,24 @@
-package usecases
+package categoryusecases
 
 import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	categorydtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/category-controller/category-dtos"
-	"github.com/gin-gonic/gin"
 )
 
-func GetAllCategoriesUseCase(context *gin.Context,
-	categoryRepository repositories.CategoryRepository,
-	/* 	limit int, offset int */) ([]*categorydtos.CategoryOutputDTO, error) {
+type GetAllCategoriesUseCase struct {
+	categoryRepository repositories.CategoryRepository
+}
 
-	allCategories, err := categoryRepository.GetAll( /* limit, offset */ )
+func NewGetAllCategoriesUseCase(
+	categoryRepository repositories.CategoryRepository) *GetAllCategoriesUseCase {
+	return &GetAllCategoriesUseCase{
+		categoryRepository: categoryRepository,
+	}
+}
+
+func (useCase *GetAllCategoriesUseCase) Execute() ([]*categorydtos.CategoryOutputDTO, error) {
+
+	allCategories, err := useCase.categoryRepository.GetAll()
 	if err != nil {
 		return nil, err
 	}

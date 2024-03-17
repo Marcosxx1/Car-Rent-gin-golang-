@@ -1,4 +1,4 @@
-package usecases_test
+package categoryusecases
 
 import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"

@@ -3,6 +3,7 @@ package database
 import (
 	"errors"
 
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	dbconfig "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database/postgres/db-config"
 	"gorm.io/gorm"
@@ -10,18 +11,23 @@ import (
 
 type PGCategory struct{}
 
+func NewPGCategoryRepository() repositories.CategoryRepository {
+	return &PGCategory{}
+}
+
 // PostCategory creates a new category record in the database.
 // It takes a domain.Category as a parameter, creates a new record in the database,
 // and returns an error.
 //
 // Example:
-//   newCategory := domain.Category{
-//       // set category properties
-//   }
-//   err := categoryRepository.PostCategory(newCategory)
-//   if err != nil {
-//       // handle error
-//   }
+//
+//	newCategory := domain.Category{
+//	    // set category properties
+//	}
+//	err := categoryRepository.PostCategory(newCategory)
+//	if err != nil {
+//	    // handle error
+//	}
 //
 // Parameters:
 //   - category: The category to be created.
@@ -37,16 +43,17 @@ func (repo *PGCategory) PostCategory(category *domain.Category) error {
 // and returns a pointer to the category or nil if the category is not found. It also returns an error.
 //
 // Example:
-//   categoryName := "example_category"
-//   foundCategory, err := categoryRepository.FindCategoryByName(categoryName)
-//   if err != nil {
-//       // handle error
-//   }
-//   if foundCategory != nil {
-//       fmt.Println("Found Category:", *foundCategory)
-//   } else {
-//       fmt.Println("Category not found.")
-//   }
+//
+//	categoryName := "example_category"
+//	foundCategory, err := categoryRepository.FindCategoryByName(categoryName)
+//	if err != nil {
+//	    // handle error
+//	}
+//	if foundCategory != nil {
+//	    fmt.Println("Found Category:", *foundCategory)
+//	} else {
+//	    fmt.Println("Category not found.")
+//	}
 //
 // Parameters:
 //   - name: The name of the category to be retrieved.
@@ -72,13 +79,14 @@ func (repo *PGCategory) FindCategoryByName(name string) (*domain.Category, error
 // It returns a slice of pointers to domain.Category and an error.
 //
 // Example:
-//   allCategories, err := categoryRepository.GetAll()
-//   if err != nil {
-//       // handle error
-//   }
-//   for _, cat := range allCategories {
-//       fmt.Println("Category:", *cat)
-//   }
+//
+//	allCategories, err := categoryRepository.GetAll()
+//	if err != nil {
+//	    // handle error
+//	}
+//	for _, cat := range allCategories {
+//	    fmt.Println("Category:", *cat)
+//	}
 //
 // Returns:
 //   - []*domain.Category: A slice of pointers to all categories in the database.

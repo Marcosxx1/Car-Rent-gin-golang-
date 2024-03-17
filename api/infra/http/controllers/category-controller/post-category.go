@@ -1,9 +1,8 @@
-package categoryendpoints
+package categorycontroller
 
 import (
 	"net/http"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/category-use-cases"
 	categorydtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/category-controller/category-dtos"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
@@ -20,7 +19,7 @@ import (
 // @Param       request    body    categorydtos.CategoryInputDTO true "Category information to be created"
 // @Success	    201   		{object} categorydtos.CategoryOutputDTO "Successfully created category"
 // @Router			/api/v1/category/create [post]
-func PostCategoryController(context *gin.Context, categoryRepository repositories.CategoryRepository) {
+func PostCategoryController(context *gin.Context, categoryUseCase *usecases.PostCategoryUseCase) {
 
 	var request categorydtos.CategoryInputDTO
 
@@ -29,12 +28,7 @@ func PostCategoryController(context *gin.Context, categoryRepository repositorie
 		return
 	}
 
-	category := categorydtos.CategoryInputDTO{
-		Name:        request.Name,
-		Description: request.Description,
-	}
-
-	createdCategory, err := usecases.PostCategoryUseCase(category, categoryRepository)
+	createdCategory, err := categoryUseCase.Execute(&request)
 	if err != nil {
 		validation_errors.NewError(context, http.StatusBadRequest, err)
 		return

@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	repoutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/repo-utils"
+	utils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/utils"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
 )
 
@@ -46,7 +46,7 @@ func (useCase *GetAllCarsUseCase) Execute(page, pageSize int) ([]*dtos.CarOutput
 			FineAmount:    car.FineAmount,
 			Brand:         car.Brand,
 			CategoryID:    car.CategoryID,
-			Specification: repoutils.ConvertSpecificationToDTO(specifications),
+			Specification: utils.ConvertSpecificationToDTO(specifications),
 		}
 
 		outputDTO = append(outputDTO, dto)

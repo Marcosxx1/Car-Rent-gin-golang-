@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain/enums"
 	dbconfig "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database/postgres/db-config"
@@ -12,6 +13,10 @@ import (
 )
 
 type PGMaintenanceRepository struct{}
+
+func NewPgMaintenanceRepository() repositories.MaintenanceRepository {
+	return &PGMaintenanceRepository{}
+}
 
 // /**
 //   - Creates a new maintenance record in the database.

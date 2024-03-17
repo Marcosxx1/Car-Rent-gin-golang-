@@ -1,4 +1,4 @@
-package repoutils
+package utils
 
 import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"

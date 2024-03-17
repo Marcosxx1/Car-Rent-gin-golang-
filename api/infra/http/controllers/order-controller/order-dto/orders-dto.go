@@ -1,4 +1,4 @@
-package dto
+package orderdto
 
 import (
 	"time"
@@ -22,9 +22,16 @@ const (
 	OrderStatusCancelled OrderStatus = "cancelled"
 )
 
-type OrderInputDTO struct {
-	UserID          string      `json:"user_id" validate:"required,notnull"`
-	CarID           string      `json:"car_id" validate:"required,notnull"`
+type OrderInputCompleteDTO struct {
+	UserID          string
+	CarID           string
+	RentalStartDate time.Time
+	RentalEndDate   time.Time
+	TotalCost       float64
+	OrderStatus     OrderStatus
+}
+
+type OrderInputPartialDTO struct {
 	RentalStartDate time.Time   `json:"rental_start_date" validate:"required"`
 	RentalEndDate   time.Time   `json:"rental_end_date" validate:"required,gtfield=RentalStartDate"`
 	TotalCost       float64     `json:"total_cost" validate:"required,gt=0,notnull"`
@@ -41,6 +48,6 @@ type OrderOutputDTO struct {
 	OrderStatus     bool      `json:"order_status"`
 }
 
-func (o *OrderInputDTO) Validate() error {
+func (o *OrderInputPartialDTO) Validate() error {
 	return validate.Struct(o)
 }

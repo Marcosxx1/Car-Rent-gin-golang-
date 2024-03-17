@@ -1,7 +1,7 @@
 package dtos
 
 import (
-	repoutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/repo-utils"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	specificationdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/specification-controller/specification-dtos"
 )
@@ -45,8 +45,8 @@ type CarOutputDTO struct {
 }
 
 func ConvertToOutputDTO(carID string, inputDTO *CarInputDTO) *CarOutputDTO {
-	specificaDomain := repoutils.ConvertSpecificationToDomainCreate(inputDTO.Specification, carID)
-	specificationOutPut := repoutils.ConvertSpecificationToDTO(specificaDomain)
+	specificaDomain := utils.ConvertSpecificationToDomainCreate(inputDTO.Specification, carID)
+	specificationOutPut := utils.ConvertSpecificationToDTO(specificaDomain)
 	return &CarOutputDTO{
 		ID:            carID,
 		Name:          inputDTO.Name,
@@ -73,6 +73,6 @@ func ConvertDomainToOutPut(carID string, domainCarToBeConvertedToOutPut *domain.
 		FineAmount:    domainCarToBeConvertedToOutPut.FineAmount,
 		Brand:         domainCarToBeConvertedToOutPut.Brand,
 		CategoryID:    domainCarToBeConvertedToOutPut.CategoryID,
-		Specification: repoutils.ConvertSpecificationToDTO(specificationUpdated),
+		Specification: utils.ConvertSpecificationToDTO(specificationUpdated),
 	}
 }

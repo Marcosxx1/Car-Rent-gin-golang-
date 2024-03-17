@@ -330,7 +330,7 @@ Car-Rent-gin-golang-/
 ┃ ┃ ┃ ┃ ┗ post-category-use-case_test.go
 ┃ ┃   ┣ maintenance-use-cases/
 ┃ ┃ ┃ ┃ ┗ post-maintenance-use-case.go
-┃ ┃   ┣ repo-utils/
+┃ ┃   ┣ utils/
 ┃ ┃ ┃ ┃ ┗ convert-specification-to-dto.go
 ┃ ┃   ┣ specification-use-cases/
 ┃ ┃ ┃ ┃ ┣ post-specification-use-case-test.go

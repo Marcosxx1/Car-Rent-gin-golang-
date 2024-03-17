@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	r "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	repoutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/repo-utils"
+	utils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/utils"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
 )
 
@@ -51,7 +51,7 @@ func (useCase *GetCarByIdUseCase) Execute(id string) (*dtos.CarOutputDTO, error)
 		LicensePlate:  existCar.LicensePlate,
 		FineAmount:    existCar.FineAmount,
 		Brand:         existCar.Brand,
-		Specification: repoutils.ConvertSpecificationToDTO(existSpecification),
+		Specification: utils.ConvertSpecificationToDTO(existSpecification),
 	}
 
 	return carToBeReturned, nil

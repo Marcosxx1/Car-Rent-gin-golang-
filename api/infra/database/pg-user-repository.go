@@ -4,12 +4,17 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	dbconfig "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database/postgres/db-config"
 	"gorm.io/gorm"
 )
 
 type PGUserRepository struct{}
+
+func NewPGUserRepository() repositories.UserRepository {
+	return &PGUserRepository{}
+}
 
 func (repo *PGUserRepository) PostUser(userData *domain.User) error {
 	return dbconfig.Postgres.Create(&userData).Error

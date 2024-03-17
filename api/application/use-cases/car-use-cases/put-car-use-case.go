@@ -6,7 +6,7 @@ import (
 
 	r "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	carutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases/car-use-case-tests/car-utils"
-	repoutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/repo-utils"
+	utils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
 )
@@ -35,7 +35,7 @@ func (useCase *PutCarUseCase) Execute(carID string, inputDTO *dtos.CarInputDTO) 
 	var wg sync.WaitGroup
 
 	wg.Add(2)
- 	go carutils.PerformValidationForUpdate(&wg, errorChan, validationErrorSignal, inputDTO, useCase.carRepository)
+	go carutils.PerformValidationForUpdate(&wg, errorChan, validationErrorSignal, inputDTO, useCase.carRepository)
 	go useCase.performCarUpdate(&wg, resultChan, errorChan, validationErrorSignal, carID, inputDTO)
 
 	wg.Add(1)
@@ -54,8 +54,6 @@ func (useCase *PutCarUseCase) Execute(carID string, inputDTO *dtos.CarInputDTO) 
 	}
 }
 
- 
-
 func (useCase *PutCarUseCase) performCarUpdate(wg *sync.WaitGroup, resultChan chan<- *dtos.CarOutputDTO, errorChan chan<- error, validationErrorSignal <-chan bool, carID string, inputDTO *dtos.CarInputDTO) {
 	defer wg.Done()
 
@@ -66,7 +64,7 @@ func (useCase *PutCarUseCase) performCarUpdate(wg *sync.WaitGroup, resultChan ch
 	var domainSpecification []*domain.Specification
 
 	if len(inputDTO.Specification) > 0 {
-		domainSpecification = repoutils.ConvertInputSpecificationToDomainUpdate(inputDTO.Specification)
+		domainSpecification = utils.ConvertInputSpecificationToDomainUpdate(inputDTO.Specification)
 	}
 
 	carToBeUpdated := &domain.Car{

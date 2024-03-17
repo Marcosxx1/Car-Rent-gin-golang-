@@ -9,6 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Delete a review
+// @Description Delete a review with the provided ID
+// @ID delete-review
+// @Tags Review
+// @Produces json
+// @Param id path string true "Review ID to be delete"
+// @Success 200
+// @Failure 400 {object} validation_errors.HTTPErrorCar "Error details"
+// @Router				/api/v1/review/{review_id} [delete]
 func DeleteReviewController(context *gin.Context, deleteReviewUseCase *usecase.DeleteReviewUseCase) {
 	reviewID := context.Param("review_id")
 

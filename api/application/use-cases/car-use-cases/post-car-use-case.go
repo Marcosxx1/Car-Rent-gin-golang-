@@ -6,7 +6,7 @@ import (
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	carutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases/car-use-case-tests/car-utils"
-	repoutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/repo-utils"
+	utils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
 	"github.com/rs/xid"
@@ -65,7 +65,7 @@ func (useCase *PostCarUseCase) performCarCreation(wg *sync.WaitGroup, resultChan
 
 	var specifications []*domain.Specification
 	go func() {
-		specifications = repoutils.ConvertSpecificationToDomainCreate(inputDTO.Specification, carID)
+		specifications = utils.ConvertSpecificationToDomainCreate(inputDTO.Specification, carID)
 	}()
 
 	newCar := &domain.Car{

@@ -1,0 +1,10 @@
+package routes
+
+import (
+	factory "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/factories/orders"
+	"github.com/gin-gonic/gin"
+)
+
+func SetupOrderRoutes(router *gin.Engine, authGroup *gin.RouterGroup) {
+	authGroup.POST("/order", factory.PostOrderFactoryController)
+}

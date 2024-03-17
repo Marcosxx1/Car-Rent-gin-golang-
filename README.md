@@ -30,33 +30,12 @@ For this project I chose to follow Clean Architecture, which is a software archi
 
 As well in with the other projects this architecture enables enhanced modularity, testability, and maintainability.
 
-##
-It is also worth noting that the implementation for each repository may differ from eachother
-For example:
-```bash 
-api\infra\http\controllers\user-controller\user-endpoints\post-user-controller.go
-```
-Is one of my first implementations on the repository.
-It is when I started and you can notice that the structure and implementation is quite different from 
-```bash 
-api\infra\http\controllers\maintenance-controller\maintenance-endpoints\post-maintenance-controller.go
-```
-Maintenance implementaion uses dependency injection.
-Let's take a look from the beginning of the flow:
-
-- main > setup of maintenance routes > Here we can notice that it is all over the place, with the routes having to deal with the concrete implementation of the repository and passing it to the controller.
-
-The improved implementation, to be followed from now on, will be like the one from reviews:
-
-- main > setup > setupReviewRoutes > only routes that call factories > factories build and call our controller. I believe this approach will enhance code clarity. Instantiating everything needed within the controller can lead to confusion and hinder code clarity.
-
-Since this repository serves as a platform for learning Golang, I'll leave the existing implementation as it is and refrain from refactoring it, as I consider it to be a valuable learning experience.
 
 ## Table of Contents
 
 - [Installation](#installation)
 - [API Endpoints](#api-endpoints)
-  - [Authentication(WIP)](#authentication)
+  - [Authentication](#authentication)
   - [Category](#category)
   - [Car](#car)
   - [Specification](#specification)

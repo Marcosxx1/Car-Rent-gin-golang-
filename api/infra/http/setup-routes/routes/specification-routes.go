@@ -1,15 +1,10 @@
 package routes
 
 import (
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database"
-	specificationendpoints "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/specification-controller/specification-endpoints"
+	specfactory "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/factories/specification"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupSpecificationRoutes(router *gin.Engine) {
-	specificationRepository := database.PGSpecification{}
-
-	router.POST("/api/v1/specification/create", func(context *gin.Context) {
-		specificationendpoints.PostSpecificationController(context, &specificationRepository)
-	})
+	router.POST("/specification/create", specfactory.PostSpecificationControllerFactory)
 }

@@ -4,14 +4,25 @@ import (
 	"errors"
 	"fmt"
 
-	repo "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/specification-controller/specification-dtos"
 	"github.com/rs/xid"
 )
 
-func PostSpecificationUseCase(registerSpecification *dtos.SpecificationInputDto, specficationRepository repo.SpecificationRepository) (*dtos.SpecificationOutputDto, error) {
-	existingSpecification, err := specficationRepository.FindSpecificationByName(registerSpecification.Name)
+type PostSpecificationUseCase struct {
+	specificationRepository repositories.SpecificationRepository
+}
+
+func NewPostSpecificationUseCase(specificationRepository repositories.SpecificationRepository) *PostSpecificationUseCase {
+	return &PostSpecificationUseCase{
+		specificationRepository: specificationRepository,
+	}
+}
+
+func (useCase *PostSpecificationUseCase) Execute(registerSpecification *dtos.SpecificationInputDto) (*dtos.SpecificationOutputDto, error) {
+
+	existingSpecification, err := useCase.specificationRepository.FindSpecificationByName(registerSpecification.Name)
 	if err != nil {
 		return nil, fmt.Errorf("error querying specification: %w", err)
 	}
@@ -26,7 +37,7 @@ func PostSpecificationUseCase(registerSpecification *dtos.SpecificationInputDto,
 		CarID:       registerSpecification.CarID,
 	}
 
-	if err := specficationRepository.PostSpecification(newSpecification); err != nil {
+	if err := useCase.specificationRepository.PostSpecification(newSpecification); err != nil {
 		return nil, fmt.Errorf("failed to create specification: %w", err)
 	}
 

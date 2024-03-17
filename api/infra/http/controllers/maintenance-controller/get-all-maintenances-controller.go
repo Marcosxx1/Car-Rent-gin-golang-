@@ -1,4 +1,4 @@
-package maintenanceendpoints
+package maintenancecontroller
 
 import (
 	"errors"

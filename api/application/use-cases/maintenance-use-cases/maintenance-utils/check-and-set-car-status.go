@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/maintenance-dtos.go"
+	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
 )
 
 func CheckAndSetStatus(wg *sync.WaitGroup, errorChan chan<- error, validationErrorSignal chan<- bool, resultChan chan<- *m.MaintenanceOutputDTO, carID string, carRepository repositories.CarRepository) {

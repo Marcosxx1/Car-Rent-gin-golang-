@@ -1,11 +1,11 @@
-package maintenanceendpoints
+package maintenancecontroller
 
 import (
 	"fmt"
 	"net/http"
 
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases"
-	endpointutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/maintenance-endpoints/endpoint-utils"
+	endpointutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/endpoint-utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
 )

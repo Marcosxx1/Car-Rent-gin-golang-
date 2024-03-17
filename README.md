@@ -179,25 +179,25 @@ When accessing this route, if successful a token will be generated that will be 
 
 - **Endpoint:** `POST /api/v1/cars/:carID/maintenance/create`
 - **Description:** Registers maintenance for a specific car.
-- **Handler Function:** `maintenanceendpoints.RegisterMaintenanceController`
+- **Handler Function:** `maintenancecontroller.RegisterMaintenanceController`
 
 ### Get Maintenance by ID
 
 - **Endpoint:** `GET /api/v1/maintenance/:id`
 - **Description:** Retrieves details of specific maintenance by ID.
-- **Handler Function:** `maintenanceendpoints.GetMaintenanceByIdController`
+- **Handler Function:** `maintenancecontroller.GetMaintenanceByIdController`
 
 ### Update Maintenance
 
 - **Endpoint:** `PATCH /api/v1/maintenance/:id`
 - **Description:** Updates information for specific maintenance.
-- **Handler Function:** `maintenanceendpoints.UpdateMaintenanceController`
+- **Handler Function:** `maintenancecontroller.UpdateMaintenanceController`
 
 ### Delete Maintenance
 
 - **Endpoint:** `DELETE /api/v1/maintenance/:id`
 - **Description:** Deletes specific maintenance.
-- **Handler Function:** `maintenanceendpoints.DeleteMaintenanceController`
+- **Handler Function:** `maintenancecontroller.DeleteMaintenanceController`
 
 
 ### User

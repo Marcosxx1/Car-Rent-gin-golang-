@@ -1,17 +1,17 @@
 package maintenancefactory
 
 import (
-	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases"
+	maintenanceusecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database"
-	maintenanceendpoints "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/maintenance-endpoints"
+	maintenancecontroller "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller"
 	"github.com/gin-gonic/gin"
 )
 
 func GetLatestMaintenanceByCarIDFactoryController(context *gin.Context) {
 	maintenanceRepository := database.NewPgMaintenanceRepository()
 
-	getLatestMaintenanceByCarUseCase := usecases.NewGetLatestMaintenanceByCarIDUseCase(maintenanceRepository)
+	getLatestMaintenanceByCarUseCase := maintenanceusecases.NewGetLatestMaintenanceByCarIDUseCase(maintenanceRepository)
 
-	maintenanceendpoints.GetLatestMaintenanceByCarIDController(context, getLatestMaintenanceByCarUseCase)
+	maintenancecontroller.GetLatestMaintenanceByCarIDController(context, getLatestMaintenanceByCarUseCase)
 
 }

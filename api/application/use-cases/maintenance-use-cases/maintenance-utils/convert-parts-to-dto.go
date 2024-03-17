@@ -2,7 +2,7 @@ package maintenanceutils
 
 import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/maintenance-dtos.go"
+	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
 	"github.com/rs/xid"
 )
 

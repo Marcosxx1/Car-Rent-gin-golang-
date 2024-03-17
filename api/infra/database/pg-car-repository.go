@@ -3,12 +3,17 @@ package database
 import (
 	"errors"
 
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	dbconfig "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database/postgres/db-config"
 	"gorm.io/gorm"
 )
 
 type PGCarRepository struct{}
+
+func NewPGCarRepository() repositories.CarRepository {
+	return &PGCarRepository{}
+}
 
 // FindAvailableCars retrieves available cars from the database based on criteria.
 // It returns the brand, category ID, name, and a slice of pointers to available cars.

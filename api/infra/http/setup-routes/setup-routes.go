@@ -15,11 +15,11 @@ func Setup(router *gin.Engine) {
 	// *gin.RouterGroup
 	authGroupPtr := authGroup.(*gin.RouterGroup)
 
-	routes.SetupCategoryRoutes(router /* authGroup */)
-	routes.SetupCarRoutes(router /* authGroup */)
-	routes.SetupSpecificationRoutes(router /* authGroup */)
-	routes.SetupUserRoutes(router /* authGroup */)
-	routes.SetupMaintenanceRoutes(router /* authGroup */)
+	routes.SetupCategoryRoutes(router /* authGroupPtr */)
+	routes.SetupCarRoutes(router /* authGroupPtr */)
+	routes.SetupSpecificationRoutes(router /* authGroupPtr */)
+	routes.SetupUserRoutes(router /* authGroupPtr */)
+	routes.SetupMaintenanceRoutes(router, authGroupPtr)
 	routes.SetupReviewRoutes(router, authGroupPtr)
 	routes.SetupOrderRoutes(router, authGroupPtr)
 }

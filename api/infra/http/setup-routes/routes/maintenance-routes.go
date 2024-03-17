@@ -1,45 +1,19 @@
 package routes
 
 import (
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database"
-	maintenanceendpoints "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/maintenance-endpoints"
+	maintenancefactory "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/factories/maintenance"
 	"github.com/gin-gonic/gin"
 )
 
-func SetupMaintenanceRoutes(router *gin.Engine) {
-	carRepository := database.PGCarRepository{}
-	maintenanceRepository := database.PGMaintenanceRepository{}
+func SetupMaintenanceRoutes(router *gin.Engine, authGroup *gin.RouterGroup) {
 
-	router.POST("/api/v1/maintenance/:carID/maintenance/create", func(context *gin.Context) {
-		maintenanceendpoints.RegisterMaintenanceController(context, &carRepository, &maintenanceRepository)
-	})
-
-	router.PATCH("/api/v1/maintenance/:maintenanceID", func(context *gin.Context) {
-		maintenanceendpoints.PatchMaintenanceController(context, &carRepository, &maintenanceRepository)
-	})
-
-	router.DELETE("/api/v1/maintenance/:maintenanceID", func(context *gin.Context) {
-		maintenanceendpoints.DeleteMaintenanceController(context, &carRepository, &maintenanceRepository)
-	})
-	router.GET("/api/v1/maintenance/maintenances", func(context *gin.Context) {
-		maintenanceendpoints.ListMaintenanceController(context, &maintenanceRepository)
-	})
-
-	router.GET("/api/v1/maintenance/:carID/maintenances", func(context *gin.Context) {
-		maintenanceendpoints.GetMaintenancesByCarIDController(context, &maintenanceRepository)
-	})
-
-	router.GET("/api/v1/maintenance/latest/:carID", func(context *gin.Context) {
-		maintenanceendpoints.GetLatestMaintenanceByCarController(context, &maintenanceRepository)
-	})
-
-	router.GET("/api/v1/maintenance/scheduled", func(context *gin.Context) {
-		maintenanceendpoints.GetScheduledMaintenancesController(context, &maintenanceRepository)
-	})
-	router.GET("/api/v1/maintenance/by/:maintenance_status", func(context *gin.Context) {
-		maintenanceendpoints.GetMaintenanceByStatusController(context, &maintenanceRepository)
-	})
-	router.GET("/api/v1/maintenance/maintenance/by-date-range", func(context *gin.Context) {
-		maintenanceendpoints.GetMaintenancesByDateRangeController(context, &maintenanceRepository)
-	})
+	router.POST("/maintenance/:carID/maintenance/create", maintenancefactory.PostMaintenanceFactoryController)
+	router.PATCH("/maintenance/:maintenanceID", maintenancefactory.PatchMaintenanceFactoryController)
+	router.DELETE("/maintenance/:maintenanceID", maintenancefactory.DeleteMaintenanceFactoryController)
+	router.GET("/maintenance/maintenances", maintenancefactory.ListMaintenanceFactoryController)
+	router.GET("/maintenance/:carID/maintenances", maintenancefactory.GetMaintenancesByCarIDFactoryController)
+	router.GET("/maintenance/latest/:carID", maintenancefactory.GetLatestMaintenanceByCarIDFactoryController)
+	router.GET("/maintenance/scheduled", maintenancefactory.GetScheduledMaintenancesFactoryController)
+	router.GET("/maintenance/by/:maintenance_status", maintenancefactory.GetMaintenanceByStatusFactoryController)
+	router.GET("/maintenance/maintenance/by-date-range", maintenancefactory.GetMaintenancesByDateRangeFactoryController)
 }

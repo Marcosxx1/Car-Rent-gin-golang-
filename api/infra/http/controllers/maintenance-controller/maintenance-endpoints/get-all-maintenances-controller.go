@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
@@ -23,7 +22,7 @@ import (
 // @Success             200          {array}    maintenancedtos.MaintenanceOutputDTO "List of maintenance records"
 // @Failure             404          {object}   validation_errors.HTTPErrorCar
 // @Router              /api/v1/maintenance/maintenances [get]
-func ListMaintenanceController(context *gin.Context, maintenanceRepository repositories.MaintenanceRepository) {
+func ListMaintenanceController(context *gin.Context, listMaintenanceUseCase *usecases.ListMaintenanceUseCase) {
 
 	pageStr := context.Query("page")
 	pageSizeStr := context.Query("pageSize")
@@ -39,8 +38,6 @@ func ListMaintenanceController(context *gin.Context, maintenanceRepository repos
 		validation_errors.NewError(context, http.StatusBadRequest, errors.New("invalid 'pageSize' value"))
 		return
 	}
-
-	listMaintenanceUseCase := usecases.NewListMaintenanceUseCase(maintenanceRepository)
 
 	maintenanceList, err := listMaintenanceUseCase.Execute(page, pageSize)
 	if err != nil {

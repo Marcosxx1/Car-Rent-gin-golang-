@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases"
 	endpointutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/maintenance-endpoints/endpoint-utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
@@ -22,7 +21,7 @@ import (
 // @Success             200         {array} maintenancedtos.MaintenanceOutputDTO "Successfully retrieved maintenances"
 // @Failure             422         {array} validation_errors.HTTPError "Validation errors"
 // @Router              /api/v1/maintenance/by/{maintenance_status} [get]
-func GetMaintenanceByStatusController(context *gin.Context, maintenanceRepository repositories.MaintenanceRepository) {
+func GetMaintenanceByStatusController(context *gin.Context, getMaintenanceByStatusUseCase *usecases.GetMaintenanceByStatusUseCase) {
 	fmt.Println("maintenance_status coming from Param", context.Param("maintenance_status"))
 
 	// Get the maintenance_status from the path parameters
@@ -35,8 +34,6 @@ func GetMaintenanceByStatusController(context *gin.Context, maintenanceRepositor
 		return
 	}
 
-	getMaintenanceByStatusUseCase := usecases.NewGetMaintenanceByStatusUseCase(maintenanceRepository)
-	fmt.Println("GetMaintenanceByStatusController: ", maintenanceStatus)
 	maintenances, err := getMaintenanceByStatusUseCase.Execute(maintenanceStatus)
 	if err != nil {
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)

@@ -3,7 +3,6 @@ package maintenanceendpoints
 import (
 	"net/http"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	maintenanceusecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases"
 	maintenancedtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/maintenance-dtos.go"
 	"github.com/gin-gonic/gin"
@@ -20,7 +19,7 @@ import (
 // @Param				request				body 		maintenancedtos.MaintenanceInputDTO	true "Maintenance information to be updated"
 // @Success	    		200   				{object} 	maintenancedtos.MaintenanceOutputDTO "Successfully updated maintenance"
 // @Router				/api/v1/maintenance/{maintenanceID} [patch]
-func PatchMaintenanceController(context *gin.Context, carRepository repositories.CarRepository, maintenanceRepository repositories.MaintenanceRepository) {
+func PatchMaintenanceController(context *gin.Context, patchMaintenanceUseCase *maintenanceusecases.PatchMaintenanceUseCase) {
 	var request maintenancedtos.MaintenanceInputDTO
 	if err := context.ShouldBindJSON(&request); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -28,8 +27,6 @@ func PatchMaintenanceController(context *gin.Context, carRepository repositories
 	}
 
 	maintenanceID := context.Param("maintenanceID")
-
-	patchMaintenanceUseCase := maintenanceusecases.NewPatchMaintenanceUseCase(carRepository, maintenanceRepository)
 
 	updatedMaintenance, err := patchMaintenanceUseCase.Execute(maintenanceID, request)
 	if err != nil {

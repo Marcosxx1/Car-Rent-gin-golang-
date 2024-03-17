@@ -3,7 +3,6 @@ package maintenanceendpoints
 import (
 	"net/http"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
@@ -20,10 +19,8 @@ import (
 // @Success             200         {array} maintenancedtos.MaintenanceOutputDTO "Successfully retrieved maintenances"
 // @Failure             422         {array} validation_errors.HTTPError "Validation errors"
 // @Router              /api/v1/maintenance/latest/{carID} [get]
-func GetLatestMaintenanceByCarController(context *gin.Context, maintenanceRepository repositories.MaintenanceRepository) {
+func GetLatestMaintenanceByCarIDController(context *gin.Context, getLatestMaintenanceByCarUseCase *usecases.GetLatestMaintenanceByCar) {
 	carID := context.Param("carID")
-
-	getLatestMaintenanceByCarUseCase := usecases.NewGetLatestMaintenanceByCarUseCase(maintenanceRepository)
 
 	maintenances, err := getLatestMaintenanceByCarUseCase.Execute(carID)
 	if err != nil {

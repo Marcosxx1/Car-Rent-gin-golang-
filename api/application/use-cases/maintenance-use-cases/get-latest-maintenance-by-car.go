@@ -14,7 +14,7 @@ type GetLatestMaintenanceByCar struct {
 	maintenanceRepository repositories.MaintenanceRepository
 }
 
-func NewGetLatestMaintenanceByCarUseCase(maintenanceRepository repositories.MaintenanceRepository) *GetLatestMaintenanceByCar {
+func NewGetLatestMaintenanceByCarIDUseCase(maintenanceRepository repositories.MaintenanceRepository) *GetLatestMaintenanceByCar {
 	return &GetLatestMaintenanceByCar{
 		maintenanceRepository: maintenanceRepository,
 	}

@@ -3,7 +3,6 @@ package maintenanceendpoints
 import (
 	"net/http"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases"
 	"github.com/gin-gonic/gin"
 )
@@ -19,8 +18,8 @@ import (
 // @Failure 404 {string} string "Not Found"
 // @Failure 500 {string} string "Internal Server Error"
 // @Router /api/v1/maintenance/scheduled [get]
-func GetScheduledMaintenancesController(context *gin.Context, maintenanceRepository repositories.MaintenanceRepository) {
-	useCase := usecases.NewGetScheduledMaintenancesUseCase(maintenanceRepository)
+func GetScheduledMaintenancesController(context *gin.Context, useCase *usecases.GetScheduledMaintenancesUseCase) {
+
 	scheduledMaintenances, err := useCase.Execute()
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

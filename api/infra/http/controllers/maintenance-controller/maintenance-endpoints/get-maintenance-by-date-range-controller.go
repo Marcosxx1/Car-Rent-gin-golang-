@@ -4,7 +4,6 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
@@ -22,7 +21,7 @@ import (
 // @Success	    		200   				{array} 	maintenancedtos.MaintenanceOutputDTO "Successfully retrieved maintenance records"
 // @Failure				422					{array}		validation_errors.HTTPErrorCar
 // @Router				/api/v1/maintenance/maintenance/by-date-range [get]
-func GetMaintenancesByDateRangeController(context *gin.Context, maintenanceRepository repositories.MaintenanceRepository) {
+func GetMaintenancesByDateRangeController(context *gin.Context, getMaintenancesByDateRangeUseCase *usecases.GetMaintenancesByDateRangeUseCase) {
 	startDate := context.Query("startDate")
 	endDate := context.Query("endDate")
 
@@ -30,8 +29,6 @@ func GetMaintenancesByDateRangeController(context *gin.Context, maintenanceRepos
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, errors.New("start date and end date are required"))
 		return
 	}
-
-	getMaintenancesByDateRangeUseCase := usecases.NewGetMaintenancesByDateRangeUseCase(maintenanceRepository)
 
 	maintenances, err := getMaintenancesByDateRangeUseCase.Execute(startDate, endDate)
 	if err != nil {

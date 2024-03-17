@@ -7,7 +7,7 @@ Welcome to the Car Rental API repository! 🚗 This project represents my ongoin
 
 - **Second Iteration:** Building upon the initial experience, I ventured into [another repository](https://github.com/Marcosxx1/Car-Rent-express-node-typescript-/blob/main/README.md) where I implemented the project using Node.js and TypeScript, following the hexagonal architecture.
 
-- **Current Iteration:** Now, we embark on a new adventure with Golang. Despite the similarities with the previous repositories, this (WIP) version aims to be more robust and feature-rich. Leveraging Golang's capabilities for microservices, concurrency, and parallelism, this iteration promises an enhanced and efficient implementation.
+- **Current Iteration:** Now, we embark on a new adventure with Golang. Despite the similarities with the previous repositories, this (WIP) version aims to be more robust and feature-rich. Leveraging Golang's capabilities for microservices, concurrency, and parallelism, this iteration promises an enhanced and efficient implementation. And is worth noting that this implementation uses middleware data sanitization to prevent CRLF and SQL injections
 
 ## Technology Stack
 - **Language:** Golang
@@ -506,7 +506,7 @@ Car-Rent-gin-golang-/
 - Ability to register a new car. :white_check_mark:
 - Car registration requires attributes like make, model, and year. :white_check_mark:
 - Cars are registered with an availability status by default. :white_check_mark:
-- Car registration limited to administrators. :o:
+- Car registration limited to administrators. :white_check_mark:
 
 ### Car Listing
 - Ability to list all available cars. :white_check_mark:
@@ -528,7 +528,7 @@ Car-Rent-gin-golang-/
 - It should be possible to list all cars along with their images. :o:
 
 ### Car Order
-- It should be possible to register a car Order. :o:
+- It should be possible to register a car Order. :white_check_mark:
 - Car Order details should include start date, end date, user ID, etc. :o:
 - Orders must be for a minimum of 24 hours. :o:
 - Users should not be able to register a new Order if they already have one. :o:
@@ -548,10 +548,10 @@ Car-Rent-gin-golang-/
 
 - Ability to create a new review. :white_check_mark:
 - Ability to retrieve all avaliable reviews :white_check_mark:
-- Review details should include user ID, car ID, rating, and comment. :o:
-- Ability to retrieve details of a specific review by ID. :o:
-- Ability to update information for a specific review. :o:
-- Ability to delete a specific review. :o:
+- Review details should include user ID, car ID, rating, and comment. :white_check_mark:
+- Ability to retrieve details of a specific review by ID. :white_check_mark:
+- Ability to update information for a specific review. :white_check_mark:
+- Ability to delete a specific review. :white_check_mark:
 
 ## Non-Functional Requirements (NFR)
 

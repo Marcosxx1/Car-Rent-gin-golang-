@@ -1,20 +1,29 @@
-package userusecases
+package authusecase
 
 import (
 	"fmt"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	hashpassword "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/user-controller/hash-password"
+	hashpassword "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/auth-controller/hash-password"
 	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/user-controller/user-dtos"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/rs/xid"
 )
 
-func PostUserUseCase(registerRequest userdtos.UserInputDTO,
-	userRepository repositories.UserRepository) (*userdtos.UserOutPutDTO, error) {
+type PostUserUseCase struct {
+	userRepository repositories.UserRepository
+}
 
-	existUser, err := userRepository.FindByEmail(registerRequest.Email)
+func NewPostUserUseCase(userRepository repositories.UserRepository) *PostUserUseCase {
+	return &PostUserUseCase{
+		userRepository: userRepository,
+	}
+}
+
+func (useCase *PostUserUseCase) Execute(registerRequest userdtos.UserInputDTO) (*userdtos.UserOutPutDTO, error) {
+
+	existUser, err := useCase.userRepository.FindByEmail(registerRequest.Email)
 
 	if existUser != nil {
 		return nil, fmt.Errorf("user with email %s already exists", registerRequest.Email)
@@ -43,7 +52,7 @@ func PostUserUseCase(registerRequest userdtos.UserInputDTO,
 		return nil, err
 	}
 
-	if err := userRepository.PostUser(newUser); err != nil {
+	if err := useCase.userRepository.PostUser(newUser); err != nil {
 		return nil, fmt.Errorf("failed to singin user: %w", err)
 	}
 

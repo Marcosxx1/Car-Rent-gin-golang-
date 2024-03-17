@@ -14,7 +14,7 @@ func Setup(router *gin.Engine) {
 	// show us an error because authGroup is type of gin.IRoutes and our routes are expecting
 	// *gin.RouterGroup
 	authGroupRoutes := authGroup.(*gin.RouterGroup)
-
+	routes.AuthRoutes(router)
 	routes.SetupCategoryRoutes(router /* authGroupRoutes */)
 	routes.SetupCarRoutes(router, authGroupRoutes)
 	routes.SetupSpecificationRoutes(router /* authGroupRoutes */)

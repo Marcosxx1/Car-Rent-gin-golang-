@@ -1,10 +1,9 @@
 package middlewares
 
 import (
-	"fmt"
 	"strings"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/middlewares/auth"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/auth-controller/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -25,7 +24,7 @@ func JWTMiddleware() gin.HandlerFunc {
 		}
 
 		tokenString := tokenParts[1]
-		fmt.Println("tokenString : ", tokenString)
+		/* fmt.Println("tokenString : ", tokenString) */
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			return auth.MySecretKey, nil
 		})
@@ -47,7 +46,6 @@ func JWTMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Set user_id in the context for later use
 		c.Set("user_id", userID)
 		c.Next()
 	}

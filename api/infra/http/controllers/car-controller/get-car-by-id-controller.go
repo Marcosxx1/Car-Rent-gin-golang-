@@ -1,9 +1,8 @@
-package carendpoints
+package carcontroller
 
 import (
 	"net/http"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
@@ -20,11 +19,9 @@ import (
 // @Success	    	201   			{object} 	dtos.CarOutputDTO "car"
 // @Failure			422				{array}		validation_errors.HTTPError
 // @Router			/api/v1/cars/{id} [get]
-func FindCarByIdController(context *gin.Context, carRepository repositories.CarRepository, specificationRepository repositories.SpecificationRepository) {
+func FindCarByIdController(context *gin.Context, findByIdUseCase *usecases.GetCarByIdUseCase) {
 
 	id := context.Param("id")
-
-	findByIdUseCase := *usecases.NewFindCarByIdUseCase(carRepository, specificationRepository)
 
 	car, err := findByIdUseCase.Execute(id)
 	if err != nil {

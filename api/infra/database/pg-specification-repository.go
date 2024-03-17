@@ -3,6 +3,7 @@ package database
 import (
 	"errors"
 
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	dbconfig "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database/postgres/db-config"
 	"gorm.io/gorm"
@@ -10,52 +11,55 @@ import (
 
 type PGSpecification struct{}
 
+func NewPGSpecificationRepository() repositories.SpecificationRepository {
+	return &PGSpecification{}
+}
+
 func (repo *PGSpecification) UpdateSpecification(carID string, specifications []*domain.Specification) ([]*domain.Specification, error) {
 	db := dbconfig.Postgres
 
 	tx := db.Begin()
 
 	if tx.Error != nil {
-			return nil, tx.Error
+		return nil, tx.Error
 	}
 
 	for _, spec := range specifications {
-			if err := tx.Model(&domain.Specification{}).
-					Where("car_id = ?", carID).
-					Updates(spec).Error; err != nil {
-					tx.Rollback()
-					return nil, err
-			}
+		if err := tx.Model(&domain.Specification{}).
+			Where("car_id = ?", carID).
+			Updates(spec).Error; err != nil {
+			tx.Rollback()
+			return nil, err
+		}
 	}
 
 	if err := tx.Commit().Error; err != nil {
-			tx.Rollback()
-			return nil, err
+		tx.Rollback()
+		return nil, err
 	}
 
 	var updatedSpecs []*domain.Specification
 	if err := db.Where("car_id = ?", carID).Find(&updatedSpecs).Error; err != nil {
-			return nil, err
+		return nil, err
 	}
 
 	return updatedSpecs, nil
 }
-
-
 
 // FindAllSpecificationsById retrieves all specifications for a given car_id from the database.
 // It takes a string (car_id) as a parameter, queries the database for specifications with that car_id,
 // and returns a slice of pointers to the specifications or an error.
 //
 // Example:
-//   carID := "example_car_id"
-//   specifications, err := specificationRepository.FindAllSpecificationsById(carID)
-//   if err != nil {
-//       // handle error
-//   }
-//   for _, spec := range specifications {
-//       fmt.Println("Specification:", *spec)
-//   }
+//
+//	carID := "example_car_id"
+//	specifications, err := specificationRepository.FindAllSpecificationsById(carID)
+//	if err != nil {
+//	    // handle error
+//	}
+//	for _, spec := range specifications {
+//	    fmt.Println("Specification:", *spec)
+//	}
 //
 // Parameters:
 //   - carID: The ID of the car for which specifications are to be retrieved.
@@ -75,22 +79,22 @@ func (repo *PGSpecification) FindAllSpecificationsByCarId(carID string) ([]*doma
 	return specifications, nil
 }
 
-
 // FindSpecificationByName retrieves a specification from the database by its name.
 // It takes a string (name) as a parameter, queries the database for a specification with that name,
 // and returns a pointer to the specification or nil if the specification is not found. It also returns an error.
 //
 // Example:
-//   specificationName := "example_specification"
-//   foundSpecification, err := specificationRepository.FindSpecificationByName(specificationName)
-//   if err != nil {
-//       // handle error
-//   }
-//   if foundSpecification != nil {
-//       fmt.Println("Found Specification:", *foundSpecification)
-//   } else {
-//       fmt.Println("Specification not found.")
-//   }
+//
+//	specificationName := "example_specification"
+//	foundSpecification, err := specificationRepository.FindSpecificationByName(specificationName)
+//	if err != nil {
+//	    // handle error
+//	}
+//	if foundSpecification != nil {
+//	    fmt.Println("Found Specification:", *foundSpecification)
+//	} else {
+//	    fmt.Println("Specification not found.")
+//	}
 //
 // Parameters:
 //   - name: The name of the specification to be retrieved.
@@ -109,19 +113,18 @@ func (repo *PGSpecification) FindSpecificationByName(name string) (*domain.Speci
 	return &specification, nil
 }
 
-
-
 // GetAll retrieves all specifications from the database.
 // It returns a slice of pointers to domain.Specification and an error.
 //
 // Example:
-//   allSpecifications, err := specificationRepository.GetAll()
-//   if err != nil {
-//       // handle error
-//   }
-//   for _, spec := range allSpecifications {
-//       fmt.Println("Specification:", *spec)
-//   }
+//
+//	allSpecifications, err := specificationRepository.GetAll()
+//	if err != nil {
+//	    // handle error
+//	}
+//	for _, spec := range allSpecifications {
+//	    fmt.Println("Specification:", *spec)
+//	}
 //
 // Returns:
 //   - []*domain.Specification: A slice of pointers to all specifications in the database.
@@ -141,13 +144,14 @@ func (repo *PGSpecification) GetAll() ([]*domain.Specification, error) {
 // and returns an error.
 //
 // Example:
-//   newSpecification := domain.Specification{
-//       // set specification properties
-//   }
-//   err := specificationRepository.PostSpecification(newSpecification)
-//   if err != nil {
-//       // handle error
-//   }
+//
+//	newSpecification := domain.Specification{
+//	    // set specification properties
+//	}
+//	err := specificationRepository.PostSpecification(newSpecification)
+//	if err != nil {
+//	    // handle error
+//	}
 //
 // Parameters:
 //   - specification: The specification to be created.

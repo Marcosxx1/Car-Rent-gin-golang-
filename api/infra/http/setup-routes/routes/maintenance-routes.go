@@ -5,15 +5,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupMaintenanceRoutes(router *gin.Engine, authGroup *gin.RouterGroup) {
+func SetupMaintenanceRoutes(authGroup *gin.RouterGroup) {
 
-	router.POST("/maintenance/:carID/maintenance/create", maintenancefactory.PostMaintenanceFactoryController)
-	router.PATCH("/maintenance/:maintenanceID", maintenancefactory.PatchMaintenanceFactoryController)
-	router.DELETE("/maintenance/:maintenanceID", maintenancefactory.DeleteMaintenanceFactoryController)
-	router.GET("/maintenance/maintenances", maintenancefactory.ListMaintenanceFactoryController)
-	router.GET("/maintenance/:carID/maintenances", maintenancefactory.GetMaintenancesByCarIDFactoryController)
-	router.GET("/maintenance/latest/:carID", maintenancefactory.GetLatestMaintenanceByCarIDFactoryController)
-	router.GET("/maintenance/scheduled", maintenancefactory.GetScheduledMaintenancesFactoryController)
-	router.GET("/maintenance/by/:maintenance_status", maintenancefactory.GetMaintenanceByStatusFactoryController)
-	router.GET("/maintenance/maintenance/by-date-range", maintenancefactory.GetMaintenancesByDateRangeFactoryController)
+	authGroup.POST("/maintenance/:carID/maintenance/create", maintenancefactory.PostMaintenanceFactoryController)
+	authGroup.PATCH("/maintenance/:maintenanceID", maintenancefactory.PatchMaintenanceFactoryController)
+	authGroup.DELETE("/maintenance/:maintenanceID", maintenancefactory.DeleteMaintenanceFactoryController)
+	authGroup.GET("/maintenance/maintenances", maintenancefactory.ListMaintenanceFactoryController)
+	authGroup.GET("/maintenance/:carID/maintenances", maintenancefactory.GetMaintenancesByCarIDFactoryController)
+	authGroup.GET("/maintenance/latest/:carID", maintenancefactory.GetLatestMaintenanceByCarIDFactoryController)
+	authGroup.GET("/maintenance/scheduled", maintenancefactory.GetScheduledMaintenancesFactoryController)
+	authGroup.GET("/maintenance/by/:maintenance_status", maintenancefactory.GetMaintenanceByStatusFactoryController)
+	authGroup.GET("/maintenance/maintenance/by-date-range", maintenancefactory.GetMaintenancesByDateRangeFactoryController)
 }

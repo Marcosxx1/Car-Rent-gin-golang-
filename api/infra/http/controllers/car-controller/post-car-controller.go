@@ -1,9 +1,8 @@
-package carendpoints
+package carcontroller
 
 import (
 	"net/http"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
@@ -21,15 +20,13 @@ import (
 // @Success	    		201   				{object} 	dtos.CarOutputDTO "Successfully created car"
 // @Failure				422					{array}		validation_errors.HTTPErrorCar
 // @Router				/api/v1/cars/create [post]
-func RegisterCarController(context *gin.Context, carRepository repositories.CarRepository, specificationRepository repositories.SpecificationRepository) {
+func RegisterCarController(context *gin.Context, postCarUseCase *usecases.PostCarUseCase) {
 
 	var request *dtos.CarInputDTO
 	if err := context.ShouldBindJSON(&request); err != nil {
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return
 	}
-
-	postCarUseCase := usecases.NewPostCarUseCase(carRepository, specificationRepository)
 
 	createdCar, err := postCarUseCase.ExecuteConcurrently(request)
 	if err != nil {

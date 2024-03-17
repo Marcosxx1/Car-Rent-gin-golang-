@@ -1,11 +1,10 @@
-package carendpoints
+package carcontroller
 
 import (
 	"errors"
 	"net/http"
 	"strconv"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
@@ -22,7 +21,7 @@ import (
 // @Success 200 {array} dtos.CarOutputDTO "List of cars"
 // @Failure				422					{array}		validation_errors.HTTPError
 // @Router /api/v1/cars [get]
-func GetAllCarsController(context *gin.Context, carRepository repositories.CarRepository, specificationRepository repositories.SpecificationRepository) {
+func GetAllCarsController(context *gin.Context, findAllCarsUseCase *usecases.GetAllCarsUseCase) {
 
 	pageStr := context.Query("page")
 	pageSizeStr := context.Query("pageSize")
@@ -38,8 +37,6 @@ func GetAllCarsController(context *gin.Context, carRepository repositories.CarRe
 		validation_errors.NewError(context, http.StatusBadRequest, errors.New("invalid 'pageSize' value"))
 		return
 	}
-
-	findAllCarsUseCase := *usecases.NewGetAllCarsUseCase(carRepository, specificationRepository)
 
 	car, err := findAllCarsUseCase.Execute(page, pageSize)
 	if err != nil {

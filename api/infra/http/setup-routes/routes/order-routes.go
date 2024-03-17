@@ -5,6 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupOrderRoutes(router *gin.Engine, authGroup *gin.RouterGroup) {
+func SetupOrderRoutes(authGroup *gin.RouterGroup) {
 	authGroup.POST("/order", factory.PostOrderFactoryController)
 }

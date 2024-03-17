@@ -1,9 +1,8 @@
-package carendpoints
+package carcontroller
 
 import (
 	"net/http"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
@@ -22,7 +21,7 @@ import (
 // @Success	    201   				{object} 	dtos.CarOutputDTO "Successfully updated car"
 // @Failure		400       		    {object} 	validation_errors.HTTPErrorCar
 // @Router		/api/v1/cars/update/{id} [put]
-func UpdateCarController(context *gin.Context, carRepository repositories.CarRepository, specificationRepository repositories.SpecificationRepository) {
+func UpdateCarController(context *gin.Context, updateCarUseCase *usecases.PutCarUseCase) {
 
 	var request *dtos.CarInputDTO
 	if err := context.ShouldBindJSON(&request); err != nil {
@@ -31,8 +30,6 @@ func UpdateCarController(context *gin.Context, carRepository repositories.CarRep
 	}
 
 	id := context.Param("id")
-
-	updateCarUseCase := *usecases.NewUpdateCarUseCase(carRepository, specificationRepository)
 
 	updatedCar, err := updateCarUseCase.Execute(id, request)
 

@@ -1,4 +1,4 @@
-package usecases
+package carusecases
 
 import (
 	"errors"

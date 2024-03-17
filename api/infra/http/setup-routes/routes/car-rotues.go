@@ -2,32 +2,16 @@
 package routes
 
 import (
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database"
-	endpoints "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-endpoints"
+	carfactory "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/factories/car"
 	"github.com/gin-gonic/gin"
 )
 
-func SetupCarRoutes(router *gin.Engine) {
-	carRepository := database.PGCarRepository{}
-	specificationRepository := database.PGSpecification{}
+func SetupCarRoutes(router *gin.Engine, authGroup *gin.RouterGroup) {
 
-	router.GET("/api/v1/cars", func(context *gin.Context) {
-		endpoints.GetAllCarsController(context, &carRepository, &specificationRepository)
-	})
+	router.POST("/cars/create", carfactory.RegisterCarControllerFacotry)
+	router.PUT("/cars/update/:id", carfactory.UpdateCarControllerFacotry)
+	authGroup.DELETE("/cars/delete/:id", carfactory.DeleteCarControllerFacotry)
+	router.GET("/cars", carfactory.GetAllCarsControllerFactory)
+	authGroup.GET("/cars/:id", carfactory.FindCarByIdControllerFacotry)
 
-	router.GET("/api/v1/cars/:id", func(context *gin.Context) {
-		endpoints.FindCarByIdController(context, &carRepository, &specificationRepository)
-	})
-
-	router.POST("/api/v1/cars/create", func(context *gin.Context) {
-		endpoints.RegisterCarController(context, &carRepository, &specificationRepository)
-	})
-
-	router.DELETE("/api/v1/cars/delete/:id", func(context *gin.Context) {
-		endpoints.DeleteCarController(context, &carRepository, &specificationRepository)
-	})
-
-	router.PUT("/api/v1/cars/update/:id", func(context *gin.Context) {
-		endpoints.UpdateCarController(context, &carRepository, &specificationRepository)
-	})
 }

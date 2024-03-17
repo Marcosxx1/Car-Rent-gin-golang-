@@ -13,13 +13,13 @@ func Setup(router *gin.Engine) {
 	// Cast authGroup to *gin.RouterGroup, if we try to use authGroup directly, it will
 	// show us an error because authGroup is type of gin.IRoutes and our routes are expecting
 	// *gin.RouterGroup
-	authGroupPtr := authGroup.(*gin.RouterGroup)
+	authGroupRoutes := authGroup.(*gin.RouterGroup)
 
-	routes.SetupCategoryRoutes(router /* authGroupPtr */)
-	routes.SetupCarRoutes(router /* authGroupPtr */)
-	routes.SetupSpecificationRoutes(router /* authGroupPtr */)
-	routes.SetupUserRoutes(router /* authGroupPtr */)
-	routes.SetupMaintenanceRoutes(router, authGroupPtr)
-	routes.SetupReviewRoutes(router, authGroupPtr)
-	routes.SetupOrderRoutes(router, authGroupPtr)
+	routes.SetupCategoryRoutes(router /* authGroupRoutes */)
+	routes.SetupCarRoutes(router, authGroupRoutes)
+	routes.SetupSpecificationRoutes(router /* authGroupRoutes */)
+	routes.SetupUserRoutes(router /* authGroupRoutes */)
+	routes.SetupMaintenanceRoutes(authGroupRoutes)
+	routes.SetupReviewRoutes(authGroupRoutes)
+	routes.SetupOrderRoutes(authGroupRoutes)
 }

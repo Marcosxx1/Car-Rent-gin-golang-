@@ -20,7 +20,7 @@ import (
 // @Param pageSize query int false "Number of items per page (default is 10)"
 // @Success 200 {array} dtos.CarOutputDTO "List of cars"
 // @Failure				422					{array}		validation_errors.HTTPError
-// @Router /api/v1/cars [get]
+// @Router /cars [get]
 func GetAllCarsController(context *gin.Context, findAllCarsUseCase *usecases.GetAllCarsUseCase) {
 
 	pageStr := context.Query("page")

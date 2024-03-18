@@ -16,9 +16,9 @@ import (
 // @Tags                Reviews
 // @Accept              json
 // @Produce             json
-// @Param               request         body        dtos.ReviewInputDTO  true "Review information to be created"
-// @Success             201             {object}    dtos.ReviewOutputDTO "Successfully created review"
-// @Failure             422             {array}     validation_errors.HTTPErrorReview
+// @Param               request         body        reviewdto.ReviewInputDTO  true "Review information to be created"
+// @Success             201             {object}    reviewdto.ReviewOutputDTO "Successfully created review"
+// @Failure             422             {array}     validation_errors.HTTPError
 // @Router              /api/v1/reviews/create [post]
 func PostReviewsController(context *gin.Context, postReviewUseCase *usecases.PostReviewUseCase) {
 	userID := context.GetString("user_id")

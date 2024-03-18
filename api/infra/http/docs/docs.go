@@ -15,59 +15,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/cars": {
-            "get": {
-                "description": "Retrieve a list of cars with pagination support.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Car"
-                ],
-                "summary": "List all cars",
-                "operationId": "list-car",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Page number (default is 1)",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Number of items per page (default is 10)",
-                        "name": "pageSize",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "List of cars",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/dtos.CarOutputDTO"
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/validation_errors.HTTPError"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/cars/create": {
             "post": {
-                "description": "Create a new car with the provided information",
+                "description": "asdCreate a new car with the provided information",
                 "consumes": [
                     "application/json"
                 ],
@@ -419,6 +369,58 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/maintenance/maintenance/by-date-range": {
+            "get": {
+                "description": "Get maintenance records within the specified date range",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Maintenance"
+                ],
+                "summary": "Get maintenance records by date range",
+                "operationId": "get-maintenances-by-date-range",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Start date of the range (format: '2006-01-02')",
+                        "name": "startDate",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End date of the range (format: '2006-01-02')",
+                        "name": "endDate",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved maintenance records",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/maintenancedtos.MaintenanceOutputDTO"
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/validation_errors.HTTPErrorCar"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/maintenance/maintenances": {
             "get": {
                 "description": "Retrieve a list of maintenance records for a specific car",
@@ -692,6 +694,162 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/review/list": {
+            "get": {
+                "description": "Get all reviewsn",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Get all reviews",
+                "operationId": "get-review",
+                "responses": {
+                    "201": {
+                        "description": "Successfully created review",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/reviewdto.ReviewOutputDTO"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/review/{review_id}": {
+            "delete": {
+                "description": "Delete a review with the provided ID",
+                "tags": [
+                    "Review"
+                ],
+                "summary": "Delete a review",
+                "operationId": "delete-review",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Review ID to be delete",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Error details",
+                        "schema": {
+                            "$ref": "#/definitions/validation_errors.HTTPErrorCar"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reviews/:id": {
+            "put": {
+                "description": "Update an existing review with the provided information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Update an existing review",
+                "operationId": "put-review",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Review ID to be updated",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Review information to be updated",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/reviewdto.ReviewInputDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated review",
+                        "schema": {
+                            "$ref": "#/definitions/reviewdto.ReviewOutputDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Review not found",
+                        "schema": {}
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/validation_errors.HTTPError"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reviews/create": {
+            "post": {
+                "description": "Create a new review with the provided information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Create a new review",
+                "operationId": "post-review",
+                "parameters": [
+                    {
+                        "description": "Review information to be created",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/reviewdto.ReviewInputDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created review",
+                        "schema": {
+                            "$ref": "#/definitions/reviewdto.ReviewOutputDTO"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/validation_errors.HTTPError"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/specification/create": {
             "post": {
                 "description": "Create a new specification with the provided information.",
@@ -728,6 +886,56 @@ const docTemplate = `{
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/validation_errors.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/cars": {
+            "get": {
+                "description": "Retrieve a list of cars with pagination support.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Car"
+                ],
+                "summary": "List all cars",
+                "operationId": "list-car",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number (default is 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of items per page (default is 10)",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of cars",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dtos.CarOutputDTO"
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/validation_errors.HTTPError"
+                            }
                         }
                     }
                 }
@@ -1042,6 +1250,43 @@ const docTemplate = `{
                 }
             }
         },
+        "reviewdto.ReviewInputDTO": {
+            "type": "object",
+            "properties": {
+                "car_id": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "reviewdto.ReviewOutputDTO": {
+            "type": "object",
+            "properties": {
+                "carId": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "integer"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
         "specificationdtos.SpecificationInputDto": {
             "type": "object",
             "required": [
@@ -1122,12 +1367,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
-	Host:             "localhost:8080",
+	Version:          "",
+	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Serviço de locação de carros",
-	Description:      "Serviço utilizando o framework gin",
+	Title:            "",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

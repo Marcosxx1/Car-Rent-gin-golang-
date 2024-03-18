@@ -214,6 +214,30 @@ definitions:
       replacement_date:
         type: string
     type: object
+  reviewdto.ReviewInputDTO:
+    properties:
+      car_id:
+        type: string
+      content:
+        type: string
+      rating:
+        type: integer
+      user_id:
+        type: string
+    type: object
+  reviewdto.ReviewOutputDTO:
+    properties:
+      carId:
+        type: string
+      content:
+        type: string
+      id:
+        type: string
+      rating:
+        type: integer
+      userId:
+        type: string
+    type: object
   specificationdtos.SpecificationInputDto:
     properties:
       car_id:
@@ -266,46 +290,9 @@ definitions:
         example: ""
         type: string
     type: object
-host: localhost:8080
 info:
   contact: {}
-  description: Serviço utilizando o framework gin
-  title: Serviço de locação de carros
-  version: "1.0"
 paths:
-  /api/v1/cars:
-    get:
-      consumes:
-      - application/json
-      description: Retrieve a list of cars with pagination support.
-      operationId: list-car
-      parameters:
-      - description: Page number (default is 1)
-        in: query
-        name: page
-        type: integer
-      - description: Number of items per page (default is 10)
-        in: query
-        name: pageSize
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: List of cars
-          schema:
-            items:
-              $ref: '#/definitions/dtos.CarOutputDTO'
-            type: array
-        "422":
-          description: Unprocessable Entity
-          schema:
-            items:
-              $ref: '#/definitions/validation_errors.HTTPError'
-            type: array
-      summary: List all cars
-      tags:
-      - Car
   /api/v1/cars/{id}:
     get:
       consumes:
@@ -667,6 +654,41 @@ paths:
       summary: Get latest maintenance by carID
       tags:
       - Maintenance
+  /api/v1/maintenance/maintenance/by-date-range:
+    get:
+      consumes:
+      - application/json
+      description: Get maintenance records within the specified date range
+      operationId: get-maintenances-by-date-range
+      parameters:
+      - description: 'Start date of the range (format: ''2006-01-02'')'
+        in: query
+        name: startDate
+        required: true
+        type: string
+      - description: 'End date of the range (format: ''2006-01-02'')'
+        in: query
+        name: endDate
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved maintenance records
+          schema:
+            items:
+              $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
+            type: array
+        "422":
+          description: Unprocessable Entity
+          schema:
+            items:
+              $ref: '#/definitions/validation_errors.HTTPErrorCar'
+            type: array
+      summary: Get maintenance records by date range
+      tags:
+      - Maintenance
   /api/v1/maintenance/maintenances:
     get:
       consumes:
@@ -727,6 +749,110 @@ paths:
       summary: Get scheduled maintenances
       tags:
       - Maintenance
+  /api/v1/review/{review_id}:
+    delete:
+      description: Delete a review with the provided ID
+      operationId: delete-review
+      parameters:
+      - description: Review ID to be delete
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Error details
+          schema:
+            $ref: '#/definitions/validation_errors.HTTPErrorCar'
+      summary: Delete a review
+      tags:
+      - Review
+  /api/v1/review/list:
+    get:
+      consumes:
+      - application/json
+      description: Get all reviewsn
+      operationId: get-review
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created review
+          schema:
+            items:
+              $ref: '#/definitions/reviewdto.ReviewOutputDTO'
+            type: array
+      summary: Get all reviews
+      tags:
+      - Reviews
+  /api/v1/reviews/:id:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing review with the provided information
+      operationId: put-review
+      parameters:
+      - description: Review ID to be updated
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Review information to be updated
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/reviewdto.ReviewInputDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully updated review
+          schema:
+            $ref: '#/definitions/reviewdto.ReviewOutputDTO'
+        "404":
+          description: Review not found
+          schema: {}
+        "422":
+          description: Unprocessable Entity
+          schema:
+            items:
+              $ref: '#/definitions/validation_errors.HTTPError'
+            type: array
+      summary: Update an existing review
+      tags:
+      - Reviews
+  /api/v1/reviews/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new review with the provided information
+      operationId: post-review
+      parameters:
+      - description: Review information to be created
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/reviewdto.ReviewInputDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created review
+          schema:
+            $ref: '#/definitions/reviewdto.ReviewOutputDTO'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            items:
+              $ref: '#/definitions/validation_errors.HTTPError'
+            type: array
+      summary: Create a new review
+      tags:
+      - Reviews
   /api/v1/specification/create:
     post:
       consumes:
@@ -754,4 +880,37 @@ paths:
       summary: Create a new specification
       tags:
       - Specification
+  /cars:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of cars with pagination support.
+      operationId: list-car
+      parameters:
+      - description: Page number (default is 1)
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page (default is 10)
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of cars
+          schema:
+            items:
+              $ref: '#/definitions/dtos.CarOutputDTO'
+            type: array
+        "422":
+          description: Unprocessable Entity
+          schema:
+            items:
+              $ref: '#/definitions/validation_errors.HTTPError'
+            type: array
+      summary: List all cars
+      tags:
+      - Car
 swagger: "2.0"

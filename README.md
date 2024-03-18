@@ -77,7 +77,7 @@ Server running at port: 8080
 ## Swagger
 After server initialization Swagger will be avaliable at 
 ```bash
-http://localhost:8080/docs/index.html#/
+http://localhost:8080/swagger/index.html#/
 ```
 A quick look:
 ![alt text](image.png)
@@ -88,7 +88,7 @@ The application offers various API endpoints catering to different functionaliti
 ### Authentication
 With the user created:
 
-- `POST /api/v1/login`
+- `POST http://localhost:8080/signup`
 ```json 
 {
   "email": "john.doe@example.com",

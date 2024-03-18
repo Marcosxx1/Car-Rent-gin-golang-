@@ -17,10 +17,10 @@ import (
 // @Accept              json
 // @Produce             json
 // @Param               id              path        string    true  "Review ID to be updated"
-// @Param               request         body        dtos.ReviewInputDTO  true "Review information to be updated"
-// @Success             200             {object}    dtos.ReviewOutputDTO "Successfully updated review"
+// @Param               request         body        reviewdto.ReviewInputDTO  true "Review information to be updated"
+// @Success             200             {object}    reviewdto.ReviewOutputDTO "Successfully updated review"
 // @Failure             404             {object}    error                "Review not found"
-// @Failure             422             {array}     validation_errors.HTTPErrorReview
+// @Failure             422             {array}     validation_errors.HTTPError
 // @Router              /api/v1/reviews/:id [put]
 func PutReviewController(context *gin.Context, putReviewUseCase *usecases.UpdateReviewUseCase) {
 	reviewID := context.Param("id")

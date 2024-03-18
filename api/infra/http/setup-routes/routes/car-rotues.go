@@ -8,8 +8,8 @@ import (
 
 func SetupCarRoutes(router *gin.Engine, authGroup *gin.RouterGroup) {
 
-	router.POST("/cars/create", carfactory.RegisterCarControllerFacotry)
-	router.PUT("/cars/update/:id", carfactory.UpdateCarControllerFacotry)
+	authGroup.POST("/cars/create", carfactory.RegisterCarControllerFacotry)
+	authGroup.PUT("/cars/update/:id", carfactory.UpdateCarControllerFacotry)
 	authGroup.DELETE("/cars/delete/:id", carfactory.DeleteCarControllerFacotry)
 	router.GET("/cars", carfactory.GetAllCarsControllerFactory)
 	authGroup.GET("/cars/:id", carfactory.FindCarByIdControllerFacotry)

@@ -1,11 +1,14 @@
 package docssetup
 
 import (
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/docs"
 	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
+	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
-
+ 
 func Setup(router *gin.Engine) {
-	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+   docs.SwaggerInfo.BasePath = ""
+   router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 }

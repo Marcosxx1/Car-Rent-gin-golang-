@@ -7,14 +7,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func PostOrderFactoryController(context *gin.Context) {
-	userRepository := database.NewPGUserRepository()
-	maintenanceRepository := database.NewPgMaintenanceRepository()
+func DeleteOrderFactoryController(context *gin.Context) {
 	orderRepository := database.NewPGOrderRepository()
 
-	postOrderUseCase := orderusecases.NewPostOrderUseCase(userRepository, maintenanceRepository, orderRepository)
+	deleteOrderUseCase := orderusecases.NewDeleteOrderUseCase(orderRepository)
 
-	ordercontroller.PostOrderController(context, postOrderUseCase)
+	ordercontroller.DeleteOrderController(context, deleteOrderUseCase)
 
 }
  

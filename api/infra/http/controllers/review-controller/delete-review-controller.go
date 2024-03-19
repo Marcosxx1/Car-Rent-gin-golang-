@@ -12,7 +12,7 @@ import (
 // @Summary Delete a review
 // @Description Delete a review with the provided ID
 // @ID delete-review
-// @Tags Review
+// @Tags Reviews
 // @Produces json
 // @Param id path string true "Review ID to be delete"
 // @Success 200

@@ -214,6 +214,60 @@ definitions:
       replacement_date:
         type: string
     type: object
+  orderdto.OrderInputPartialDTO:
+    properties:
+      order_status:
+        allOf:
+        - $ref: '#/definitions/orderdto.OrderStatus'
+        enum:
+        - pending
+        - confirmed
+        - active
+        - completed
+        - cancelled
+      rental_end_date:
+        type: string
+      rental_start_date:
+        type: string
+      total_cost:
+        type: number
+    required:
+    - order_status
+    - rental_end_date
+    - rental_start_date
+    - total_cost
+    type: object
+  orderdto.OrderOutputDTO:
+    properties:
+      car_id:
+        type: string
+      id:
+        type: string
+      order_status:
+        type: boolean
+      rental_end_date:
+        type: string
+      rental_start_date:
+        type: string
+      total_cost:
+        type: number
+      user_id:
+        type: string
+    type: object
+  orderdto.OrderStatus:
+    enum:
+    - pending
+    - confirmed
+    - active
+    - completed
+    - cancelled
+    type: string
+    x-enum-varnames:
+    - OrderStatusPending
+    - OrderStatusConfirmed
+    - OrderStatusActive
+    - OrderStatusCompleted
+    - OrderStatusCancelled
   reviewdto.ReviewInputDTO:
     properties:
       car_id:
@@ -768,7 +822,7 @@ paths:
             $ref: '#/definitions/validation_errors.HTTPErrorCar'
       summary: Delete a review
       tags:
-      - Review
+      - Reviews
   /api/v1/review/list:
     get:
       consumes:
@@ -913,4 +967,70 @@ paths:
       summary: List all cars
       tags:
       - Car
+  /orders/{carID}:
+    post:
+      consumes:
+      - application/json
+      description: Create a new order with the given parameters
+      parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Car ID
+        in: path
+        name: carID
+        required: true
+        type: string
+      - description: Order input data
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/orderdto.OrderInputPartialDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Created order
+          schema:
+            $ref: '#/definitions/orderdto.OrderOutputDTO'
+      summary: Create a new order
+      tags:
+      - Orders
+  /orders/{order_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an order by its ID
+      operationId: delete-order-by-id
+      parameters:
+      - description: Order ID
+        in: path
+        name: order_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: Order not found
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+        default:
+          description: other error
+          schema:
+            type: string
+      summary: Delete order by ID
+      tags:
+      - Orders
 swagger: "2.0"

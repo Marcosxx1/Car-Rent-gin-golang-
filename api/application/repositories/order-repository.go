@@ -11,7 +11,9 @@ type OrderRepository interface {
 
 	// UpdateOrder updates an existing order in the database
 	UpdateOrder(id string, order *domain.Order) error
-
+	// DeleteOrder deletes an order from the database
+	DeleteOrder(orderID string) error
+	
 	// DeleteOrder deletes an order from the database
 	/* 	DeleteOrder(orderID string) error
 

@@ -1,4 +1,4 @@
-package orderendpoints
+package ordercontroller
 
 import (
 	"net/http"
@@ -10,6 +10,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// PostOrderController creates a new order.
+// @Summary Create a new order
+// @Description Create a new order with the given parameters
+// @Tags Orders
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer {token}"
+// @Param carID path string true "Car ID"
+// @Param requestBody body orderdto.OrderInputPartialDTO true "Order input data"
+// @Success 200 {object} orderdto.OrderOutputDTO "Created order"
+// @Router /orders/{carID} [post]
 func PostOrderController(context *gin.Context, postOrderUseCase *orderusecases.PostOrderUseCase) {
 
 	userID := context.GetString("user_id")     //comes from the auth middleware

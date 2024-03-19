@@ -590,3 +590,7 @@ Car-Rent-gin-golang-/
 Contributions are welcome! Feel free to open issues or submit pull requests for improvements or bug fixes.
 
 The Car Rental App's architecture provides clarity, modularity, and scalability. This documentation offers insights into installation, usage, functionalities, and requirements, fostering a better understanding of the application's ecosystem.
+
+
+###swagoo:
+ swag init --parseDependency --parseInternal due to package problems      

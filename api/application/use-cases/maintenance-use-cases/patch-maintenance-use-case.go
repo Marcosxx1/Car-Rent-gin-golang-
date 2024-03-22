@@ -5,9 +5,9 @@ import (
 	"sync"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	maintUt "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
+	maintenanceutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
+	maintenancedtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
 )
 
 type PatchMaintenanceUseCase struct {
@@ -24,9 +24,9 @@ func NewPatchMaintenanceUseCase(
 	}
 }
 
-func (useCase *PatchMaintenanceUseCase) Execute(maintenanceID string, inputDTO m.MaintenanceInputDTO) (*m.MaintenanceOutputDTO, error) {
+func (useCase *PatchMaintenanceUseCase) Execute(maintenanceID string, inputDTO maintenancedtos.MaintenanceInputDTO) (*maintenancedtos.MaintenanceOutputDTO, error) {
 	// Create channels for the result and errors
-	resultChan := make(chan *m.MaintenanceOutputDTO)
+	resultChan := make(chan *maintenancedtos.MaintenanceOutputDTO)
 	errorChan := make(chan error)
 	validationErrorSignal := make(chan bool)
 
@@ -34,7 +34,7 @@ func (useCase *PatchMaintenanceUseCase) Execute(maintenanceID string, inputDTO m
 
 	// Add counters for the goroutines
 	wg.Add(2)
-	go maintUt.PerformMaintenanceValidation(&wg, errorChan, validationErrorSignal, inputDTO)
+	go maintenanceutils.PerformMaintenanceValidation(&wg, errorChan, validationErrorSignal, inputDTO)
 	go useCase.performMaintenanceUpdate(&wg, errorChan, validationErrorSignal, resultChan, maintenanceID, inputDTO)
 
 	// Add counter for the goroutine to close channels
@@ -55,7 +55,7 @@ func (useCase *PatchMaintenanceUseCase) Execute(maintenanceID string, inputDTO m
 	}
 }
 
-func (useCase *PatchMaintenanceUseCase) performMaintenanceUpdate(wg *sync.WaitGroup, errorChan chan<- error, validationErrorSignal chan<- bool, resultChan chan<- *m.MaintenanceOutputDTO, maintenanceID string, inputDTO m.MaintenanceInputDTO) {
+func (useCase *PatchMaintenanceUseCase) performMaintenanceUpdate(wg *sync.WaitGroup, errorChan chan<- error, validationErrorSignal chan<- bool, resultChan chan<- *maintenancedtos.MaintenanceOutputDTO, maintenanceID string, inputDTO maintenancedtos.MaintenanceInputDTO) {
 	defer wg.Done()
 
 	existingMaintenance, err := useCase.maintenanceRepository.GetMaintenanceByID(maintenanceID)
@@ -85,6 +85,6 @@ func (useCase *PatchMaintenanceUseCase) performMaintenanceUpdate(wg *sync.WaitGr
 		}
 	}()
 
-	resultChan <- maintUt.ConvertToOutputDTO(maintenanceToUpdate)
+	resultChan <- maintenanceutils.ConvertToOutputDTO(maintenanceToUpdate)
 	validationErrorSignal <- false
 }

@@ -5,9 +5,9 @@ import (
 	"sync"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	maintUt "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
+	maintenanceutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
+	maintenancedtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
 )
 
 type ListMaintenanceUseCase struct {
@@ -20,10 +20,10 @@ func NewListMaintenanceUseCase(maintenanceRepository repositories.MaintenanceRep
 	}
 }
 
-func (useCase *ListMaintenanceUseCase) Execute(page, pageSize int) ([]*m.MaintenanceOutputDTO, error) {
+func (useCase *ListMaintenanceUseCase) Execute(page, pageSize int) ([]*maintenancedtos.MaintenanceOutputDTO, error) {
 	var wg sync.WaitGroup
 
-	resultChan := make(chan []*m.MaintenanceOutputDTO)
+	resultChan := make(chan []*maintenancedtos.MaintenanceOutputDTO)
 	errorChan := make(chan error)
 	validationErrorSignal := make(chan bool)
 
@@ -45,7 +45,7 @@ func (useCase *ListMaintenanceUseCase) Execute(page, pageSize int) ([]*m.Mainten
 		return nil, err
 	}
 }
-func (useCase *ListMaintenanceUseCase) performListMaintenance(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- []*m.MaintenanceOutputDTO, validationErrorSignal chan<- bool, page, pageSize int) {
+func (useCase *ListMaintenanceUseCase) performListMaintenance(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- []*maintenancedtos.MaintenanceOutputDTO, validationErrorSignal chan<- bool, page, pageSize int) {
 	defer wg.Done()
 
 	var maintenances []*domain.Maintenance
@@ -57,10 +57,10 @@ func (useCase *ListMaintenanceUseCase) performListMaintenance(wg *sync.WaitGroup
 			validationErrorSignal <- true
 			return
 		}
-		/* 		for _, m := range maintenances {
-			fmt.Printf("%+v\n", m)
+		/* 		for _, maintenancedtos := range maintenances {
+			fmt.Printf("%+v\n", maintenancedtos)
 		} */
-		resultChan <- maintUt.ConvertMaintenanceListToDTOs(maintenances)
+		resultChan <- maintenanceutils.ConvertMaintenanceListToDTOs(maintenances)
 		validationErrorSignal <- false
 	}()
 }

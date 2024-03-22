@@ -7,4 +7,5 @@ import (
 
 func SetupOrderRoutes(authGroup *gin.RouterGroup) {
 	authGroup.POST("/order", factory.PostOrderFactoryController)
+	authGroup.DELETE("order/id", factory.DeleteOrderFactoryController)
 }

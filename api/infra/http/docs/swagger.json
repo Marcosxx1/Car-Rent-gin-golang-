@@ -714,7 +714,7 @@
             "delete": {
                 "description": "Delete a review with the provided ID",
                 "tags": [
-                    "Review"
+                    "Reviews"
                 ],
                 "summary": "Delete a review",
                 "operationId": "delete-review",
@@ -925,6 +925,105 @@
                             "items": {
                                 "$ref": "#/definitions/validation_errors.HTTPError"
                             }
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{carID}": {
+            "post": {
+                "description": "Create a new order with the given parameters",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Create a new order",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Car ID",
+                        "name": "carID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Order input data",
+                        "name": "requestBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/orderdto.OrderInputPartialDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Created order",
+                        "schema": {
+                            "$ref": "#/definitions/orderdto.OrderOutputDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{order_id}": {
+            "delete": {
+                "description": "Deletes an order by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Delete order by ID",
+                "operationId": "delete-order-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order ID",
+                        "name": "order_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Order not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "default": {
+                        "description": "other error",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -1238,6 +1337,83 @@
                     "type": "string"
                 }
             }
+        },
+        "orderdto.OrderInputPartialDTO": {
+            "type": "object",
+            "required": [
+                "order_status",
+                "rental_end_date",
+                "rental_start_date",
+                "total_cost"
+            ],
+            "properties": {
+                "order_status": {
+                    "enum": [
+                        "pending",
+                        "confirmed",
+                        "active",
+                        "completed",
+                        "cancelled"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/orderdto.OrderStatus"
+                        }
+                    ]
+                },
+                "rental_end_date": {
+                    "type": "string"
+                },
+                "rental_start_date": {
+                    "type": "string"
+                },
+                "total_cost": {
+                    "type": "number"
+                }
+            }
+        },
+        "orderdto.OrderOutputDTO": {
+            "type": "object",
+            "properties": {
+                "car_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "order_status": {
+                    "type": "boolean"
+                },
+                "rental_end_date": {
+                    "type": "string"
+                },
+                "rental_start_date": {
+                    "type": "string"
+                },
+                "total_cost": {
+                    "type": "number"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "orderdto.OrderStatus": {
+            "type": "string",
+            "enum": [
+                "pending",
+                "confirmed",
+                "active",
+                "completed",
+                "cancelled"
+            ],
+            "x-enum-varnames": [
+                "OrderStatusPending",
+                "OrderStatusConfirmed",
+                "OrderStatusActive",
+                "OrderStatusCompleted",
+                "OrderStatusCancelled"
+            ]
         },
         "reviewdto.ReviewInputDTO": {
             "type": "object",

@@ -65,3 +65,17 @@ func (r *PGOrderRepository) UpdateOrder(id string, order *domain.Order) error {
 	}
 	return nil
 }
+
+func (r *PGOrderRepository) DeleteOrder(orderID string) error {
+	result := dbconfig.Postgres.Where("id = ?", orderID).Delete(&domain.Order{})
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return errors.New("order not found")
+	}
+
+	return nil
+}

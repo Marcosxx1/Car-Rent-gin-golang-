@@ -4,7 +4,7 @@ import "github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 
 type OrderRepository interface {
 	// CreateOrder creates a new order in the database
-	CreateOrder(order domain.Order) error
+	CreateOrder(order *domain.Order) error
 
 	// GetOrderByID retrieves an order by its ID
 	GetOrderByID(orderID string) (*domain.Order, error)
@@ -13,7 +13,7 @@ type OrderRepository interface {
 	UpdateOrder(id string, order *domain.Order) error
 	// DeleteOrder deletes an order from the database
 	DeleteOrder(orderID string) error
-	
+
 	// DeleteOrder deletes an order from the database
 	/* 	DeleteOrder(orderID string) error
 

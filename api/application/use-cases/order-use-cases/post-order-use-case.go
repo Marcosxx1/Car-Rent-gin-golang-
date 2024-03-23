@@ -1,7 +1,10 @@
 package orderusecases
 
 import (
+	"fmt"
+
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	orderdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/order-controller/order-dto"
 )
 
@@ -23,20 +26,24 @@ func NewPostOrderUseCase(
 }
 
 func (useCase *PostOrderUseCase) Execute(input orderdto.OrderInputCompleteDTO) (*orderdto.OrderOutputDTO, error) {
+	user, err := useCase.userRepository.GetById(input.UserID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to find user by ID %s: %w", input.UserID, err)
+	}
+	if user == nil {
+		return nil, fmt.Errorf("user with ID %s does not exist", input.UserID)
+	}
 
-	// 1. Veficiar se o usuário existe
-	// 2. Validar o input
-	// 3. Criar a instancia do pedido
-	//newOrder := domain.createOrderInstance(input.UserID, input.CarID, input.RentalStartDate, input.RentalEndDate, input.TotalCost, input.OrderStatus)
+	newOrder, err := domain.CreateOrderInstance(input.UserID, input.CarID, input.RentalStartDate, input.RentalEndDate, input.TotalCost, input.OrderStatus)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create order instance: %w", err)
+	}
 
-	// 4. Se tudo certo, salvar
-	/* 	createdOrder, err := useCase.orderRepository.CreateOrder(newOrder)
-	   	if err != nil {
-	   		return nil, err
-	   	} */
+	err = useCase.orderRepository.CreateOrder(newOrder)
+	if err != nil {
+		return nil, fmt.Errorf("failed to save order: %w", err)
+	}
 
-	// 5. Converter para o output
-	//outputDTO := orderdto.ConvertToOutputDTO(createdOrder)
-	//return outputDTO, nil
-	return nil, nil
+	outputDTO := orderdto.ConvertToOutputDTO(newOrder)
+	return outputDTO, nil
 }

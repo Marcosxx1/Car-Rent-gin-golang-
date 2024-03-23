@@ -23,7 +23,7 @@ func NewPGOrderRepository() repositories.OrderRepository {
 //
 // Returns:
 //   - error: An error if the operation fails, nil otherwise.
-func (r *PGOrderRepository) CreateOrder(order domain.Order) error {
+func (r *PGOrderRepository) CreateOrder(order *domain.Order) error {
 	return dbconfig.Postgres.Create(&order).Error
 }
 

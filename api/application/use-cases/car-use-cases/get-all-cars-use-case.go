@@ -3,9 +3,9 @@ package carusecases
 import (
 	"errors"
 
+	cardtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/car"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	utils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/utils"
-	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/utils"
 )
 
 type GetAllCarsUseCase struct {
@@ -22,13 +22,13 @@ func NewGetAllCarsUseCase(
 	}
 }
 
-func (useCase *GetAllCarsUseCase) Execute(page, pageSize int) ([]*dtos.CarOutputDTO, error) {
+func (useCase *GetAllCarsUseCase) Execute(page, pageSize int) ([]*cardtos.CarOutputDTO, error) {
 	allCars, err := useCase.carRepository.FindAllCars(page, pageSize)
 	if err != nil {
 		return nil, errors.New("error finding cars")
 	}
 
-	outputDTO := make([]*dtos.CarOutputDTO, 0)
+	outputDTO := make([]*cardtos.CarOutputDTO, 0)
 
 	for _, car := range allCars {
 		specifications, err := useCase.specificationRepository.FindAllSpecificationsByCarId(car.ID)
@@ -36,7 +36,7 @@ func (useCase *GetAllCarsUseCase) Execute(page, pageSize int) ([]*dtos.CarOutput
 			return nil, err
 		}
 
-		dto := &dtos.CarOutputDTO{
+		dto := &cardtos.CarOutputDTO{
 			ID:            car.ID,
 			Name:          car.Name,
 			Description:   car.Description,

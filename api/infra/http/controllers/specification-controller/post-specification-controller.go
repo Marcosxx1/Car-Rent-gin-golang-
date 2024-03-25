@@ -3,8 +3,8 @@ package specificationcontroller
 import (
 	"net/http"
 
+	specificationdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/specification"
 	specificationusecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/specification-use-cases"
-	specificationdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/specification-controller/specification-dtos"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
 )

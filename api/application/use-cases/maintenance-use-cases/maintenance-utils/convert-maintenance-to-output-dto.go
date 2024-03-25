@@ -1,12 +1,12 @@
 package maintenanceutils
 
 import (
+	maintenancedtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/maintenance"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
 )
 
-func ConvertMaintenanceListToDTOs(maintenanceList []*domain.Maintenance) []*m.MaintenanceOutputDTO {
-	outputDTOList := make([]*m.MaintenanceOutputDTO, len(maintenanceList))
+func ConvertMaintenanceListToDTOs(maintenanceList []*domain.Maintenance) []*maintenancedtos.MaintenanceOutputDTO {
+	outputDTOList := make([]*maintenancedtos.MaintenanceOutputDTO, len(maintenanceList))
 
 	for i, maintenance := range maintenanceList {
 		outputDTOList[i] = ConvertToOutputDTO(maintenance)
@@ -15,8 +15,8 @@ func ConvertMaintenanceListToDTOs(maintenanceList []*domain.Maintenance) []*m.Ma
 	return outputDTOList
 }
 
-func ConvertToOutputDTO(maintenance *domain.Maintenance) *m.MaintenanceOutputDTO {
-	return &m.MaintenanceOutputDTO{
+func ConvertToOutputDTO(maintenance *domain.Maintenance) *maintenancedtos.MaintenanceOutputDTO {
+	return &maintenancedtos.MaintenanceOutputDTO{
 		ID:                        maintenance.ID,
 		CarID:                     maintenance.CarID,
 		MaintenanceType:           maintenance.MaintenanceType,

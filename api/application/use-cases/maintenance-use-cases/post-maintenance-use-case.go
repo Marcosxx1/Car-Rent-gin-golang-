@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"sync"
 
+	maintenancedtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/maintenance"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	maintUt "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
+	maintenanceutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
 )
 
 type PostMaintenanceUseCase struct {
@@ -24,10 +24,10 @@ func NewPostMaintenanceUseCase(
 	}
 }
 
-func (useCase *PostMaintenanceUseCase) Execute(carID string, inputDTO m.MaintenanceInputDTO) (*m.MaintenanceOutputDTO, error) {
+func (useCase *PostMaintenanceUseCase) Execute(carID string, inputDTO maintenancedtos.MaintenanceInputDTO) (*maintenancedtos.MaintenanceOutputDTO, error) {
 
 	// Criamos channels para o resultado e os erros
-	resultChan := make(chan *m.MaintenanceOutputDTO)
+	resultChan := make(chan *maintenancedtos.MaintenanceOutputDTO)
 	errorChan := make(chan error)
 	validationErrorSignal := make(chan bool) // Um sinal para caso tenhamos um erro > true
 
@@ -35,8 +35,8 @@ func (useCase *PostMaintenanceUseCase) Execute(carID string, inputDTO m.Maintena
 
 	// Adiciona contadores para as goroutines
 	wg.Add(3)
-	go maintUt.PerformMaintenanceValidation(&wg, errorChan, validationErrorSignal, inputDTO)
-	go maintUt.CheckAndSetStatus(&wg, errorChan, validationErrorSignal, resultChan, carID, useCase.carRepository)
+	go maintenanceutils.PerformMaintenanceValidation(&wg, errorChan, validationErrorSignal, inputDTO)
+	go maintenanceutils.CheckAndSetStatus(&wg, errorChan, validationErrorSignal, resultChan, carID, useCase.carRepository)
 	go useCase.performMaintenanceCreation(&wg, errorChan, validationErrorSignal, resultChan, carID, inputDTO)
 
 	// Adiciona contador para a goroutine de fechamento de canais
@@ -57,7 +57,7 @@ func (useCase *PostMaintenanceUseCase) Execute(carID string, inputDTO m.Maintena
 	}
 }
 
-func (useCase *PostMaintenanceUseCase) performMaintenanceCreation(wg *sync.WaitGroup, errorChan chan<- error, validationErrorSignal chan<- bool, resultChan chan<- *m.MaintenanceOutputDTO, carID string, inputDTO m.MaintenanceInputDTO) {
+func (useCase *PostMaintenanceUseCase) performMaintenanceCreation(wg *sync.WaitGroup, errorChan chan<- error, validationErrorSignal chan<- bool, resultChan chan<- *maintenancedtos.MaintenanceOutputDTO, carID string, inputDTO maintenancedtos.MaintenanceInputDTO) {
 	defer wg.Done()
 
 	newMaintenance, err := domain.CreateMaintenanceInstance(carID, inputDTO)
@@ -76,6 +76,6 @@ func (useCase *PostMaintenanceUseCase) performMaintenanceCreation(wg *sync.WaitG
 		}
 	}()
 
-	resultChan <- maintUt.ConvertToOutputDTO(newMaintenance)
+	resultChan <- maintenanceutils.ConvertToOutputDTO(newMaintenance)
 	validationErrorSignal <- false
 }

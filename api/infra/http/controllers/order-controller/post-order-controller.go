@@ -3,8 +3,8 @@ package ordercontroller
 import (
 	"net/http"
 
+	orderdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/order"
 	orderusecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/order-use-cases"
-	orderdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/order-controller/order-dto"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/middlewares"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"

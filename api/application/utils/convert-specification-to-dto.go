@@ -1,15 +1,15 @@
 package utils
 
 import (
+	specificationdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/specification"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	s "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/specification-controller/specification-dtos"
 	"github.com/rs/xid"
 )
 
-func ConvertSpecificationToDTO(specificaion []*domain.Specification) []*s.SpecificationOutputDto {
-	var SpecificationsDTO []*s.SpecificationOutputDto
+func ConvertSpecificationToDTO(specificaion []*domain.Specification) []*specificationdtos.SpecificationOutputDto {
+	var SpecificationsDTO []*specificationdtos.SpecificationOutputDto
 	for _, spec := range specificaion {
-		SpecificationsDTO = append(SpecificationsDTO, &s.SpecificationOutputDto{
+		SpecificationsDTO = append(SpecificationsDTO, &specificationdtos.SpecificationOutputDto{
 			ID:          spec.ID,
 			Name:        spec.Name,
 			Description: spec.Description,
@@ -19,7 +19,7 @@ func ConvertSpecificationToDTO(specificaion []*domain.Specification) []*s.Specif
 	return SpecificationsDTO
 }
 
-func ConvertOutPutSpecificationToDomainUpdate(specification []*s.SpecificationOutputDto) []*domain.Specification {
+func ConvertOutPutSpecificationToDomainUpdate(specification []*specificationdtos.SpecificationOutputDto) []*domain.Specification {
 	var specifications []*domain.Specification
 
 	for _, inputDto := range specification {
@@ -35,7 +35,7 @@ func ConvertOutPutSpecificationToDomainUpdate(specification []*s.SpecificationOu
 	return specifications
 }
 
-func ConvertInputSpecificationToDomainUpdate(specification []*s.SpecificationInputDto) []*domain.Specification {
+func ConvertInputSpecificationToDomainUpdate(specification []*specificationdtos.SpecificationInputDto) []*domain.Specification {
 	var specifications []*domain.Specification
 
 	for _, inputDto := range specification {
@@ -51,7 +51,7 @@ func ConvertInputSpecificationToDomainUpdate(specification []*s.SpecificationInp
 	return specifications
 }
 
-func ConvertSpecificationToDomainCreate(specification []*s.SpecificationInputDto, id string) []*domain.Specification {
+func ConvertSpecificationToDomainCreate(specification []*specificationdtos.SpecificationInputDto, id string) []*domain.Specification {
 	var specifications []*domain.Specification
 
 	for _, inputDto := range specification {

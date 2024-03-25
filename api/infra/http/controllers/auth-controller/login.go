@@ -3,14 +3,14 @@ package auth
 import (
 	"net/http"
 
+	authdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/auth"
 	authusecase "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/auth-use-case"
-	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/user-controller/user-dtos"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
 )
 
 func LoginHandlerController(context *gin.Context, loginUseCase *authusecase.LoginUseCase) {
-	var request *userdtos.LoginInputDTO
+	var request *authdto.LoginInputDTO
 
 	if err := context.ShouldBindJSON(&request); err != nil {
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)

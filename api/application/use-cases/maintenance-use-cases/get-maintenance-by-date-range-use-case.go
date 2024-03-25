@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"sync"
 
+	maintenancedtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/maintenance"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	maintUt "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
-	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
+	maintenanceutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
 )
 
 type GetMaintenancesByDateRangeUseCase struct {
@@ -20,14 +20,14 @@ func NewGetMaintenancesByDateRangeUseCase(
 	}
 }
 
-func (useCase *GetMaintenancesByDateRangeUseCase) Execute(startDate, endDate string) ([]*m.MaintenanceOutputDTO, error) {
-	resultChan := make(chan []*m.MaintenanceOutputDTO)
+func (useCase *GetMaintenancesByDateRangeUseCase) Execute(startDate, endDate string) ([]*maintenancedtos.MaintenanceOutputDTO, error) {
+	resultChan := make(chan []*maintenancedtos.MaintenanceOutputDTO)
 	errorChan := make(chan error)
 
 	var wg sync.WaitGroup
 
 	wg.Add(2)
-	go maintUt.ValidateDateRange(&wg, errorChan, startDate, endDate)
+	go maintenanceutils.ValidateDateRange(&wg, errorChan, startDate, endDate)
 	go useCase.performMaintenanceRetrieval(&wg, errorChan, resultChan, startDate, endDate)
 
 	wg.Add(1)
@@ -46,7 +46,7 @@ func (useCase *GetMaintenancesByDateRangeUseCase) Execute(startDate, endDate str
 	}
 }
 
-func (useCase *GetMaintenancesByDateRangeUseCase) performMaintenanceRetrieval(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- []*m.MaintenanceOutputDTO, startDate, endDate string) {
+func (useCase *GetMaintenancesByDateRangeUseCase) performMaintenanceRetrieval(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- []*maintenancedtos.MaintenanceOutputDTO, startDate, endDate string) {
 	defer wg.Done()
 
 	maintenances, err := useCase.maintenanceRepository.GetMaintenancesByDateRange(startDate, endDate)
@@ -55,9 +55,9 @@ func (useCase *GetMaintenancesByDateRangeUseCase) performMaintenanceRetrieval(wg
 		return
 	}
 
-	outputDTOs := make([]*m.MaintenanceOutputDTO, len(maintenances))
+	outputDTOs := make([]*maintenancedtos.MaintenanceOutputDTO, len(maintenances))
 	for i, maintenance := range maintenances {
-		outputDTOs[i] = maintUt.ConvertToOutputDTO(maintenance)
+		outputDTOs[i] = maintenanceutils.ConvertToOutputDTO(maintenance)
 	}
 
 	resultChan <- outputDTOs

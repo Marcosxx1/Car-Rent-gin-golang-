@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sync"
 
+	reviewdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/review"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	reviewdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/review-controller/review-dto"
 )
 
 type GetAllReviewsUseCase struct {

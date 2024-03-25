@@ -3,6 +3,7 @@ package orderdto
 import (
 	"time"
 
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -28,14 +29,14 @@ type OrderInputCompleteDTO struct {
 	RentalStartDate time.Time
 	RentalEndDate   time.Time
 	TotalCost       float64
-	OrderStatus     OrderStatus
+	OrderStatus/* OrderStatus */ bool
 }
 
 type OrderInputPartialDTO struct {
-	RentalStartDate time.Time   `json:"rental_start_date" validate:"required"`
-	RentalEndDate   time.Time   `json:"rental_end_date" validate:"required,gtfield=RentalStartDate"`
-	TotalCost       float64     `json:"total_cost" validate:"required,gt=0,notnull"`
-	OrderStatus     OrderStatus `json:"order_status" validate:"required,oneof=pending confirmed active completed cancelled"`
+	RentalStartDate                   time.Time `json:"rental_start_date" validate:"required"`
+	RentalEndDate                     time.Time `json:"rental_end_date" validate:"required,gtfield=RentalStartDate"`
+	TotalCost                         float64   `json:"total_cost" validate:"required,gt=0,notnull"`
+	OrderStatus/* OrderStatus */ bool           `json:"order_status" validate:"required,oneof=pending confirmed active completed cancelled"`
 }
 
 type OrderOutputDTO struct {
@@ -50,4 +51,16 @@ type OrderOutputDTO struct {
 
 func (o *OrderInputPartialDTO) Validate() error {
 	return validate.Struct(o)
+}
+
+func ConvertToOutputDTO(newOrder *domain.Order) *OrderOutputDTO {
+	return &OrderOutputDTO{
+		ID:              newOrder.ID,
+		UserID:          newOrder.UserID,
+		CarID:           newOrder.CarID,
+		RentalStartDate: newOrder.RentalStartDate,
+		RentalEndDate:   newOrder.RentalEndDate,
+		TotalCost:       newOrder.TotalCost,
+		OrderStatus:     newOrder.OrderStatus,
+	}
 }

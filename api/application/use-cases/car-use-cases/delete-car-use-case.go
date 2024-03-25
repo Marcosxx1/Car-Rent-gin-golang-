@@ -3,17 +3,17 @@ package carusecases
 import (
 	"errors"
 
-	r "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
+	repositories "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 )
 
 type DeleteCarUseCase struct {
-	carRepository           r.CarRepository
-	specificationRepository r.SpecificationRepository
+	carRepository           repositories.CarRepository
+	specificationRepository repositories.SpecificationRepository
 }
 
 func NewDeleteCarUseCase(
-	carRepository r.CarRepository,
-	specificationRepository r.SpecificationRepository) *DeleteCarUseCase {
+	carRepository repositories.CarRepository,
+	specificationRepository repositories.SpecificationRepository) *DeleteCarUseCase {
 
 	return &DeleteCarUseCase{
 		carRepository:           carRepository,

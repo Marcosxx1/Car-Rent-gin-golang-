@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"sync"
 
+	maintenancedtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/maintenance"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	maintUt "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
+	maintenanceutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
 )
 
 type GetScheduledMaintenancesUseCase struct {
@@ -20,10 +20,10 @@ func NewGetScheduledMaintenancesUseCase(maintenanceRepository repositories.Maint
 	}
 }
 
-func (useCase *GetScheduledMaintenancesUseCase) Execute() ([]*m.MaintenanceOutputDTO, error) {
+func (useCase *GetScheduledMaintenancesUseCase) Execute() ([]*maintenancedtos.MaintenanceOutputDTO, error) {
 	var wg sync.WaitGroup
 
-	resultChan := make(chan []*m.MaintenanceOutputDTO)
+	resultChan := make(chan []*maintenancedtos.MaintenanceOutputDTO)
 	errorChan := make(chan error)
 	validationErrorSignal := make(chan bool)
 
@@ -46,7 +46,7 @@ func (useCase *GetScheduledMaintenancesUseCase) Execute() ([]*m.MaintenanceOutpu
 	}
 }
 
-func (useCase *GetScheduledMaintenancesUseCase) performGetScheduledMaintenances(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- []*m.MaintenanceOutputDTO, validationErrorSignal chan<- bool) {
+func (useCase *GetScheduledMaintenancesUseCase) performGetScheduledMaintenances(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- []*maintenancedtos.MaintenanceOutputDTO, validationErrorSignal chan<- bool) {
 	defer wg.Done()
 
 	var scheduledMaintenances []*domain.Maintenance
@@ -59,7 +59,7 @@ func (useCase *GetScheduledMaintenancesUseCase) performGetScheduledMaintenances(
 			return
 		}
 
-		resultChan <- maintUt.ConvertMaintenanceListToDTOs(scheduledMaintenances)
+		resultChan <- maintenanceutils.ConvertMaintenanceListToDTOs(scheduledMaintenances)
 		validationErrorSignal <- false
 	}()
 }

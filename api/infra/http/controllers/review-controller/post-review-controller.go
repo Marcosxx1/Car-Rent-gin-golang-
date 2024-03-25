@@ -3,8 +3,8 @@ package reviewcontroller
 import (
 	"net/http"
 
+	reviewdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/review"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/reviews-use-cases"
-	reviewdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/review-controller/review-dto"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
 )

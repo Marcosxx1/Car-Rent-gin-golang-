@@ -3,9 +3,9 @@ package maintenanceusecases
 import (
 	"fmt"
 
+	maintenancedtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/maintenance"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	maintUt "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
-	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
+	maintenanceutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
 )
 
 type DeleteMaintenanceUseCase struct {
@@ -23,7 +23,7 @@ func NewDeleteMaintenanceUseCase(
 }
 
 func (useCase *DeleteMaintenanceUseCase) Execute(maintenanceID string) error {
-	resultChan := make(chan *m.MaintenanceOutputDTO)
+	resultChan := make(chan *maintenancedtos.MaintenanceOutputDTO)
 	errorChan := make(chan error)
 
 	go useCase.performMaintenanceDeletion(errorChan, resultChan, maintenanceID)
@@ -36,7 +36,7 @@ func (useCase *DeleteMaintenanceUseCase) Execute(maintenanceID string) error {
 	}
 }
 
-func (useCase *DeleteMaintenanceUseCase) performMaintenanceDeletion(errorChan chan<- error, resultChan chan<- *m.MaintenanceOutputDTO, maintenanceID string) {
+func (useCase *DeleteMaintenanceUseCase) performMaintenanceDeletion(errorChan chan<- error, resultChan chan<- *maintenancedtos.MaintenanceOutputDTO, maintenanceID string) {
 	defer close(resultChan)
 	defer close(errorChan)
 
@@ -51,5 +51,5 @@ func (useCase *DeleteMaintenanceUseCase) performMaintenanceDeletion(errorChan ch
 		return
 	}
 
-	resultChan <- maintUt.ConvertToOutputDTO(existingMaintenance)
+	resultChan <- maintenanceutils.ConvertToOutputDTO(existingMaintenance)
 }

@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"sync"
 
+	maintenancedtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/maintenance"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	maintUt "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
+	maintenanceutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
 )
 
 type GetLatestMaintenanceByCar struct {
@@ -20,10 +20,10 @@ func NewGetLatestMaintenanceByCarIDUseCase(maintenanceRepository repositories.Ma
 	}
 }
 
-func (useCase *GetLatestMaintenanceByCar) Execute(carID string) (*m.MaintenanceOutputDTO, error) {
+func (useCase *GetLatestMaintenanceByCar) Execute(carID string) (*maintenancedtos.MaintenanceOutputDTO, error) {
 	var wg sync.WaitGroup
 
-	resultChan := make(chan *m.MaintenanceOutputDTO)
+	resultChan := make(chan *maintenancedtos.MaintenanceOutputDTO)
 	errorChan := make(chan error)
 	validationErrorSignal := make(chan bool)
 
@@ -46,7 +46,7 @@ func (useCase *GetLatestMaintenanceByCar) Execute(carID string) (*m.MaintenanceO
 	}
 }
 
-func (useCase *GetLatestMaintenanceByCar) performGetLatestMaintenanceByCar(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- *m.MaintenanceOutputDTO, validationErrorSignal chan<- bool, carID string) {
+func (useCase *GetLatestMaintenanceByCar) performGetLatestMaintenanceByCar(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- *maintenancedtos.MaintenanceOutputDTO, validationErrorSignal chan<- bool, carID string) {
 	defer wg.Done()
 
 	var maintenances *domain.Maintenance
@@ -59,7 +59,7 @@ func (useCase *GetLatestMaintenanceByCar) performGetLatestMaintenanceByCar(wg *s
 			return
 		}
 
-		resultChan <- maintUt.ConvertToOutputDTO(maintenances)
+		resultChan <- maintenanceutils.ConvertToOutputDTO(maintenances)
 		validationErrorSignal <- false
 	}()
 }

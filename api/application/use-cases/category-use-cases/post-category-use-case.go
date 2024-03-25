@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
+	categorydtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/category"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	categorydtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/category-controller/category-dtos"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/rs/xid"
 )

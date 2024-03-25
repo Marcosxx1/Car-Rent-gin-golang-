@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"sync"
 
+	maintenancedtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/maintenance"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	maintUt "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
+	maintenanceutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases/maintenance-utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain/enums"
-	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
 )
 
 type GetMaintenanceByStatusUseCase struct {
@@ -21,11 +21,11 @@ func NewGetMaintenanceByStatusUseCase(maintenanceRepository repositories.Mainten
 	}
 }
 
-func (useCase *GetMaintenanceByStatusUseCase) Execute(maintenance_status enums.MaintenanceStatus) ([]*m.MaintenanceOutputDTO, error) {
+func (useCase *GetMaintenanceByStatusUseCase) Execute(maintenance_status enums.MaintenanceStatus) ([]*maintenancedtos.MaintenanceOutputDTO, error) {
 	var wg sync.WaitGroup
 	fmt.Println("Execute : ", maintenance_status)
 
-	resultChan := make(chan []*m.MaintenanceOutputDTO)
+	resultChan := make(chan []*maintenancedtos.MaintenanceOutputDTO)
 	errorChan := make(chan error)
 	validationErrorSignal := make(chan bool)
 
@@ -48,7 +48,7 @@ func (useCase *GetMaintenanceByStatusUseCase) Execute(maintenance_status enums.M
 	}
 }
 
-func (useCase *GetMaintenanceByStatusUseCase) performGetMaintenanceByStatus(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- []*m.MaintenanceOutputDTO, validationErrorSignal chan<- bool, maintenance_status enums.MaintenanceStatus) {
+func (useCase *GetMaintenanceByStatusUseCase) performGetMaintenanceByStatus(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- []*maintenancedtos.MaintenanceOutputDTO, validationErrorSignal chan<- bool, maintenance_status enums.MaintenanceStatus) {
 	defer wg.Done()
 
 	var maintenances []*domain.Maintenance
@@ -63,12 +63,12 @@ func (useCase *GetMaintenanceByStatusUseCase) performGetMaintenanceByStatus(wg *
 		}
 
 		if len(maintenances) == 0 {
-			resultChan <- []*m.MaintenanceOutputDTO{}
+			resultChan <- []*maintenancedtos.MaintenanceOutputDTO{}
 			validationErrorSignal <- false
 			return
 		}
 
-		resultChan <- maintUt.ConvertMaintenanceListToDTOs(maintenances)
+		resultChan <- maintenanceutils.ConvertMaintenanceListToDTOs(maintenances)
 		validationErrorSignal <- false
 	}()
 }

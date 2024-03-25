@@ -1,5 +1,6 @@
 package mocksandstructs
 
+/*
 import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	"github.com/stretchr/testify/mock"
@@ -72,3 +73,4 @@ func (m *MockCarRepository) AlterCarStatus(id string, available bool) error {
 	args := m.Called(id, available)
 	return args.Error(0)
 }
+*/

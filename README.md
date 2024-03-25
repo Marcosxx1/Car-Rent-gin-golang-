@@ -281,6 +281,23 @@ When accessing this route, if successful a token will be generated that will be 
 Car-Rent-gin-golang-/
 ┣ api/
 ┃ ┣ application/
+┃ ┃ ┣ dtos/
+┃ ┃ ┃ ┣ auth/
+┃ ┃ ┃ ┃ ┗ auth-dtos.go
+┃ ┃ ┃ ┣ car/
+┃ ┃ ┃ ┃ ┗ car-dto.go
+┃ ┃ ┃ ┣ category/
+┃ ┃ ┃ ┃ ┗ category-dto.go
+┃ ┃ ┃ ┣ maintenance/
+┃ ┃ ┃ ┃ ┗ maintenance-dto.go
+┃ ┃ ┃ ┣ order/
+┃ ┃ ┃ ┃ ┗ orders-dto.go
+┃ ┃ ┃ ┣ review/
+┃ ┃ ┃ ┃ ┗ review-dtos.go
+┃ ┃ ┃ ┣ specification/
+┃ ┃ ┃ ┃ ┗ specification-dto.go
+┃ ┃ ┃ ┗ user/
+┃ ┃ ┃   ┗ user-dto.go
 ┃ ┃ ┣ repositories/
 ┃ ┃ ┃ ┣ car-repository.go
 ┃ ┃ ┃ ┣ category-repository.go
@@ -289,12 +306,12 @@ Car-Rent-gin-golang-/
 ┃ ┃ ┃ ┣ reviews-repository.go
 ┃ ┃ ┃ ┣ specification-repository.go
 ┃ ┃ ┃ ┗ user-repository.go
-┃ ┃ ┗ use-cases/
-┃ ┃   ┣ auth-use-case/
+┃ ┃ ┣ use-cases/
+┃ ┃ ┃ ┣ auth-use-case/
 ┃ ┃ ┃ ┃ ┣ change-password-use-case.go
 ┃ ┃ ┃ ┃ ┣ login-use-case.go
 ┃ ┃ ┃ ┃ ┗ sign-in-use-case.go
-┃ ┃   ┣ car-use-cases/
+┃ ┃ ┃ ┣ car-use-cases/
 ┃ ┃ ┃ ┃ ┣ car-use-case-tests/
 ┃ ┃ ┃ ┃ ┃ ┣ car-utils/
 ┃ ┃ ┃ ┃ ┃ ┃ ┣ car-create-validation.go
@@ -312,11 +329,11 @@ Car-Rent-gin-golang-/
 ┃ ┃ ┃ ┃ ┣ get-car-by-id-use-case.go
 ┃ ┃ ┃ ┃ ┣ post-car-use-case.go
 ┃ ┃ ┃ ┃ ┗ put-car-use-case.go
-┃ ┃   ┣ category-use-cases/
+┃ ┃ ┃ ┣ category-use-cases/
 ┃ ┃ ┃ ┃ ┣ get-all-categories-use-case.go
 ┃ ┃ ┃ ┃ ┣ post-category-use-case.go
 ┃ ┃ ┃ ┃ ┗ post-category-use-case_test.go
-┃ ┃   ┣ maintenance-use-cases/
+┃ ┃ ┃ ┣ maintenance-use-cases/
 ┃ ┃ ┃ ┃ ┣ maintenance-utils/
 ┃ ┃ ┃ ┃ ┃ ┣ check-and-set-car-status.go
 ┃ ┃ ┃ ┃ ┃ ┣ convert-maintenance-to-output-dto.go
@@ -332,21 +349,26 @@ Car-Rent-gin-golang-/
 ┃ ┃ ┃ ┃ ┣ get-scheduled-maintenances-use-case.go
 ┃ ┃ ┃ ┃ ┣ patch-maintenance-use-case.go
 ┃ ┃ ┃ ┃ ┗ post-maintenance-use-case.go
-┃ ┃   ┣ order-use-cases/
+┃ ┃ ┃ ┣ order-use-cases/
+┃ ┃ ┃ ┃ ┣ delete-order-use-case.go
+┃ ┃ ┃ ┃ ┣ get-orders-by-id-and-query-use-case.go
 ┃ ┃ ┃ ┃ ┗ post-order-use-case.go
-┃ ┃   ┣ reviews-use-cases/
+┃ ┃ ┃ ┣ reviews-use-cases/
 ┃ ┃ ┃ ┃ ┣ delete-review-use-case.go
 ┃ ┃ ┃ ┃ ┣ get-all-reviews-use-case.go
 ┃ ┃ ┃ ┃ ┣ post-review-use-case.go
 ┃ ┃ ┃ ┃ ┗ put-review-use-case.go
-┃ ┃   ┣ specification-use-cases/
+┃ ┃ ┃ ┣ specification-use-cases/
 ┃ ┃ ┃ ┃ ┣ post-specification-use-case-test.go
 ┃ ┃ ┃ ┃ ┗ post-specification-use-case.go
-┃ ┃   ┣ user-use-cases/
-┃ ┃ ┃ ┃ ┣ get-user-by-id-use-case.go
-┃ ┃ ┃ ┃ ┗ patch-user-use-case.go
-┃ ┃   ┗ utils/
-┃ ┃ ┃   ┗ convert-specification-to-dto.go
+┃ ┃ ┃ ┗ user-use-cases/
+┃ ┃ ┃   ┣ user-utils/
+┃ ┃ ┃ ┃ ┃ ┗ convert-domain-to-dto.go
+┃ ┃ ┃   ┣ get-user-by-id-use-case.go
+┃ ┃ ┃   ┗ patch-user-use-case.go
+┃ ┃ ┗ utils/
+┃ ┃   ┣ convert-specification-to-dto.go
+┃ ┃   ┗ parse-maintenance-status.go
 ┃ ┣ domain/
 ┃ ┃ ┣ enums/
 ┃ ┃ ┃ ┗ maintenance-status.enum.go
@@ -383,23 +405,15 @@ Car-Rent-gin-golang-/
 ┃ ┃ ┃ ┃ ┃ ┣ login.go
 ┃ ┃ ┃ ┃ ┃ ┗ sign-up.go
 ┃ ┃ ┃ ┃ ┣ car-controller/
-┃ ┃ ┃ ┃ ┃ ┣ car-dtos/
-┃ ┃ ┃ ┃ ┃ ┃ ┗ car-dto.go
 ┃ ┃ ┃ ┃ ┃ ┣ delete-car-controller.go
 ┃ ┃ ┃ ┃ ┃ ┣ get-all-cars-controller.go
 ┃ ┃ ┃ ┃ ┃ ┣ get-car-by-id-controller.go
 ┃ ┃ ┃ ┃ ┃ ┣ post-car-controller.go
 ┃ ┃ ┃ ┃ ┃ ┗ update-car-controller.go
 ┃ ┃ ┃ ┃ ┣ category-controller/
-┃ ┃ ┃ ┃ ┃ ┣ category-dtos/
-┃ ┃ ┃ ┃ ┃ ┃ ┗ category-dto.go
 ┃ ┃ ┃ ┃ ┃ ┣ get-all-categories.go
 ┃ ┃ ┃ ┃ ┃ ┗ post-category.go
 ┃ ┃ ┃ ┃ ┣ maintenance-controller/
-┃ ┃ ┃ ┃ ┃ ┣ dtos/
-┃ ┃ ┃ ┃ ┃ ┃ ┗ maintenance-dto.go
-┃ ┃ ┃ ┃ ┃ ┣ endpoint-utils/
-┃ ┃ ┃ ┃ ┃ ┃ ┗ parse-maintenance-status.go
 ┃ ┃ ┃ ┃ ┃ ┣ delete-maintenance-controller.go
 ┃ ┃ ┃ ┃ ┃ ┣ get-all-maintenances-controller.go
 ┃ ┃ ┃ ┃ ┃ ┣ get-latest-maintenance-by-car-controller.go
@@ -410,27 +424,20 @@ Car-Rent-gin-golang-/
 ┃ ┃ ┃ ┃ ┃ ┣ patch-maintenance-controller.go
 ┃ ┃ ┃ ┃ ┃ ┗ post-maintenance-controller.go
 ┃ ┃ ┃ ┃ ┣ order-controller/
-┃ ┃ ┃ ┃ ┃ ┣ order-dto/
-┃ ┃ ┃ ┃ ┃ ┃ ┗ orders-dto.go
+┃ ┃ ┃ ┃ ┃ ┣ delete-order-controller.go
+┃ ┃ ┃ ┃ ┃ ┣ get-orders-by-id-and-query-controller.go
 ┃ ┃ ┃ ┃ ┃ ┗ post-order-controller.go
 ┃ ┃ ┃ ┃ ┣ review-controller/
-┃ ┃ ┃ ┃ ┃ ┣ review-dto/
-┃ ┃ ┃ ┃ ┃ ┃ ┗ review-dtos.go
 ┃ ┃ ┃ ┃ ┃ ┣ delete-review-controller.go
 ┃ ┃ ┃ ┃ ┃ ┣ get-all-reviews-controller.go
 ┃ ┃ ┃ ┃ ┃ ┣ post-review-controller.go
 ┃ ┃ ┃ ┃ ┃ ┗ put-review-controller.go
 ┃ ┃ ┃ ┃ ┣ specification-controller/
-┃ ┃ ┃ ┃ ┃ ┣ specification-dtos/
-┃ ┃ ┃ ┃ ┃ ┃ ┗ specification-dto.go
 ┃ ┃ ┃ ┃ ┃ ┗ post-specification-controller.go
 ┃ ┃ ┃ ┃ ┗ user-controller/
-┃ ┃ ┃ ┃   ┣ user-dtos/
-┃ ┃ ┃ ┃ ┃ ┃ ┗ user-dto.go
-┃ ┃ ┃ ┃   ┗ user-endpoints/
-┃ ┃ ┃ ┃ ┃   ┣ change-passwor-controller.go
-┃ ┃ ┃ ┃ ┃   ┣ get-user-by-id-controller.go
-┃ ┃ ┃ ┃ ┃   ┗ patch-user-controller.go
+┃ ┃ ┃ ┃   ┣ change-passwor-controller.go
+┃ ┃ ┃ ┃   ┣ get-user-by-id-controller.go
+┃ ┃ ┃ ┃   ┗ patch-user-controller.go
 ┃ ┃ ┃ ┣ docs/
 ┃ ┃ ┃ ┃ ┣ setup-docs-routes/
 ┃ ┃ ┃ ┃ ┃ ┗ setup-docs-route.go
@@ -461,14 +468,20 @@ Car-Rent-gin-golang-/
 ┃ ┃ ┃ ┃ ┃ ┣ patch-maintenance-controller-factory.go
 ┃ ┃ ┃ ┃ ┃ ┗ post-maintenance-controller-factory.go
 ┃ ┃ ┃ ┃ ┣ orders/
+┃ ┃ ┃ ┃ ┃ ┣ delete-order-controller-factory.go
+┃ ┃ ┃ ┃ ┃ ┣ get-orders-by-id-and-query-controller-factory.go
 ┃ ┃ ┃ ┃ ┃ ┗ post-order-controller-factory.go
 ┃ ┃ ┃ ┃ ┣ reviews/
 ┃ ┃ ┃ ┃ ┃ ┣ delete-review-controller-factory.go
 ┃ ┃ ┃ ┃ ┃ ┣ get-all-reviews-controller-factory.go
 ┃ ┃ ┃ ┃ ┃ ┣ post-review-controller-factory.go
 ┃ ┃ ┃ ┃ ┃ ┗ update-review-controller-factory.go
-┃ ┃ ┃ ┃ ┗ specification/
-┃ ┃ ┃ ┃   ┗ post-specification-controller-factory.go
+┃ ┃ ┃ ┃ ┣ specification/
+┃ ┃ ┃ ┃ ┃ ┗ post-specification-controller-factory.go
+┃ ┃ ┃ ┃ ┗ user/
+┃ ┃ ┃ ┃   ┣ change-passwor-controller-controller-factory.go
+┃ ┃ ┃ ┃   ┣ get-user-by-id-controller-factory.go
+┃ ┃ ┃ ┃   ┗ patch-user-controller-controller-factory.go
 ┃ ┃ ┃ ┣ middlewares/
 ┃ ┃ ┃ ┃ ┣ get-id.go
 ┃ ┃ ┃ ┃ ┗ sanitization.go
@@ -487,6 +500,9 @@ Car-Rent-gin-golang-/
 ┃   ┗ validation_errors/
 ┃ ┃   ┣ error.go
 ┃ ┃   ┗ validator.go
+┣ tmp/
+┃ ┣ build-errors.log
+┃ ┗ main.exe
 ┣ .air.toml
 ┣ .env
 ┣ .gitignore

@@ -3,10 +3,10 @@ package authusecase
 import (
 	"errors"
 
+	authdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/auth"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/auth-controller/auth"
 	hashpassword "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/auth-controller/hash-password"
-	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/user-controller/user-dtos"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,7 +27,7 @@ func NewLoginUseCase(context *gin.Context, userRepository repositories.UserRepos
 	}
 }
 
-func (useCase *LoginUseCase) Execute(request *userdtos.LoginInputDTO) (string, error) {
+func (useCase *LoginUseCase) Execute(request *authdto.LoginInputDTO) (string, error) {
 	existingUser, err := useCase.userRepository.FindByEmail(request.Email)
 	if err != nil {
 		return "", err

@@ -3,10 +3,10 @@ package authusecase
 import (
 	"fmt"
 
+	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/user"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	hashpassword "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/auth-controller/hash-password"
-	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/user-controller/user-dtos"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/rs/xid"
 )

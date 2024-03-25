@@ -3,8 +3,8 @@ package auth
 import (
 	"net/http"
 
+	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/user"
 	authusecase "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/auth-use-case"
-	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/user-controller/user-dtos"
 	"github.com/gin-gonic/gin"
 )
 

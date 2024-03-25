@@ -3,13 +3,13 @@ package userendpoints
 import (
 	"net/http"
 
-	r "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
+	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/user"
+	repositories "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	userusecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/user-use-cases"
-	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/user-controller/user-dtos"
 	"github.com/gin-gonic/gin"
 )
 
-func PatchUserController(context *gin.Context, userRepository r.UserRepository) {
+func PatchUserController(context *gin.Context, userRepository repositories.UserRepository) {
 
 	var request userdtos.UserUpdateDTO
 	if err := context.ShouldBindJSON(&request); err != nil {

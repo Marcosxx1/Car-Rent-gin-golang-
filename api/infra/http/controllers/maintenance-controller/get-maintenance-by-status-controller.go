@@ -5,7 +5,8 @@ import (
 	"net/http"
 
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/maintenance-use-cases"
-	endpointutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/endpoint-utils"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/utils"
+
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
 )
@@ -28,7 +29,7 @@ func GetMaintenanceByStatusController(context *gin.Context, getMaintenanceByStat
 	rawMaintenanceStatus := context.Param("maintenance_status")
 
 	// Convert the string to the corresponding enum value
-	maintenanceStatus, err := endpointutils.ParseMaintenanceStatus(rawMaintenanceStatus)
+	maintenanceStatus, err := utils.ParseMaintenanceStatus(rawMaintenanceStatus)
 	if err != nil {
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return

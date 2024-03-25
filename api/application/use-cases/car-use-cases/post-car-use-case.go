@@ -7,7 +7,7 @@ import (
 	cardtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/car"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	carutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases/car-use-case-tests/car-utils"
-	utils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/utils"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	"github.com/rs/xid"
 )

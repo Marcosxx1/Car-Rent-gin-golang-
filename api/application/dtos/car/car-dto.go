@@ -2,7 +2,7 @@ package cardtos
 
 import (
 	specificationdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/specification"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/utils"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 )
 

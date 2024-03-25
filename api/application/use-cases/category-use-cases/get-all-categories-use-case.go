@@ -1,8 +1,8 @@
 package categoryusecases
 
 import (
+	categorydtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/category"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	categorydtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/category-controller/category-dtos"
 )
 
 type GetAllCategoriesUseCase struct {

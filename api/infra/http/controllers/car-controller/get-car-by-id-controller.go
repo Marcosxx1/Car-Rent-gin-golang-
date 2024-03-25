@@ -16,7 +16,7 @@ import (
 // @Accept			json
 // @Produce			json
 // @Param        	id   			path   		string  true  	  "Car ID"
-// @Success	    	201   			{object} 	dtos.CarOutputDTO "car"
+// @Success	    	201   			{object} 	cardtos.CarOutputDTO "car"
 // @Failure			422				{array}		validation_errors.HTTPError
 // @Router			/api/v1/cars/{id} [get]
 func FindCarByIdController(context *gin.Context, findByIdUseCase *usecases.GetCarByIdUseCase) {

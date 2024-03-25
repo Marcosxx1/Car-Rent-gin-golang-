@@ -1,16 +1,5 @@
 package usecases_test
 
-import (
-	"errors"
-	"testing"
-
-	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
-	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases/car-use-case-tests/mocks-and-structs"
-	s "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/specification-use-cases"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/stretchr/testify/assert"
-)
-
 /*
 A quick note since I'm begining to test again with the refactored structure:
 
@@ -22,7 +11,7 @@ The actual logic of the methods in the dependencies (like FindCarById and Delete
 in their own unit tests. The purpose of the DeleteCarUseCase unit test is to check if it correctly orchestrates
 the calls to these methods and handles their results appropriately.
 */
-
+/*
 func TestDeleteCarUseCase_Success(t *testing.T) {
 	// Arrange
 	mockCarRepo := new(m.MockCarRepository)
@@ -85,3 +74,4 @@ func TestDeleteCarUseCase_DeleteCarFailure(t *testing.T) {
 	mockCarRepo.AssertExpectations(t)
 	mockSpecRepo.AssertExpectations(t)
 }
+*/

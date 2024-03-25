@@ -18,7 +18,7 @@ import (
 // @Produce json
 // @Param page query int false "Page number (default is 1)"
 // @Param pageSize query int false "Number of items per page (default is 10)"
-// @Success 200 {array} dtos.CarOutputDTO "List of cars"
+// @Success 200 {array} cardtos.CarOutputDTO "List of cars"
 // @Failure				422					{array}		validation_errors.HTTPError
 // @Router /cars [get]
 func GetAllCarsController(context *gin.Context, findAllCarsUseCase *usecases.GetAllCarsUseCase) {

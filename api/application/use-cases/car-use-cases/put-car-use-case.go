@@ -4,21 +4,21 @@ import (
 	"fmt"
 	"sync"
 
-	r "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
+	cardtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/car"
+	repositories "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	carutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases/car-use-case-tests/car-utils"
 	utils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
 )
 
 type PutCarUseCase struct {
-	carRepository           r.CarRepository
-	specificationRepository r.SpecificationRepository
+	carRepository           repositories.CarRepository
+	specificationRepository repositories.SpecificationRepository
 }
 
 func NewUpdateCarUseCase(
-	carRepository r.CarRepository,
-	specificationRepository r.SpecificationRepository) *PutCarUseCase {
+	carRepository repositories.CarRepository,
+	specificationRepository repositories.SpecificationRepository) *PutCarUseCase {
 
 	return &PutCarUseCase{
 		carRepository:           carRepository,
@@ -26,9 +26,9 @@ func NewUpdateCarUseCase(
 	}
 }
 
-func (useCase *PutCarUseCase) Execute(carID string, inputDTO *dtos.CarInputDTO) (*dtos.CarOutputDTO, error) {
+func (useCase *PutCarUseCase) Execute(carID string, inputDTO *cardtos.CarInputDTO) (*cardtos.CarOutputDTO, error) {
 
-	resultChan := make(chan *dtos.CarOutputDTO)
+	resultChan := make(chan *cardtos.CarOutputDTO)
 	errorChan := make(chan error)
 	validationErrorSignal := make(chan bool)
 
@@ -54,7 +54,7 @@ func (useCase *PutCarUseCase) Execute(carID string, inputDTO *dtos.CarInputDTO) 
 	}
 }
 
-func (useCase *PutCarUseCase) performCarUpdate(wg *sync.WaitGroup, resultChan chan<- *dtos.CarOutputDTO, errorChan chan<- error, validationErrorSignal <-chan bool, carID string, inputDTO *dtos.CarInputDTO) {
+func (useCase *PutCarUseCase) performCarUpdate(wg *sync.WaitGroup, resultChan chan<- *cardtos.CarOutputDTO, errorChan chan<- error, validationErrorSignal <-chan bool, carID string, inputDTO *cardtos.CarInputDTO) {
 	defer wg.Done()
 
 	if <-validationErrorSignal {
@@ -89,5 +89,5 @@ func (useCase *PutCarUseCase) performCarUpdate(wg *sync.WaitGroup, resultChan ch
 		errorChan <- fmt.Errorf("failed to update specification record: %w", err)
 	}
 
-	resultChan <- dtos.ConvertDomainToOutPut(carID, carUpdated, specificationUpdated)
+	resultChan <- cardtos.ConvertDomainToOutPut(carID, carUpdated, specificationUpdated)
 }

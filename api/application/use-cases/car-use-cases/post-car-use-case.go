@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"sync"
 
+	cardtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/car"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	carutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases/car-use-case-tests/car-utils"
 	utils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
 	"github.com/rs/xid"
 )
 
@@ -26,10 +26,10 @@ func NewPostCarUseCase(
 	}
 }
 
-func (useCase *PostCarUseCase) ExecuteConcurrently(inputDTO *dtos.CarInputDTO) (*dtos.CarOutputDTO, error) {
+func (useCase *PostCarUseCase) ExecuteConcurrently(inputDTO *cardtos.CarInputDTO) (*cardtos.CarOutputDTO, error) {
 	carID := xid.New().String()
 
-	resultChan := make(chan *dtos.CarOutputDTO)
+	resultChan := make(chan *cardtos.CarOutputDTO)
 	errorChan := make(chan error)
 	validationErrorSignal := make(chan bool) // Um sinal para caso tenhamos um erro > true
 
@@ -55,7 +55,7 @@ func (useCase *PostCarUseCase) ExecuteConcurrently(inputDTO *dtos.CarInputDTO) (
 	}
 }
 
-func (useCase *PostCarUseCase) performCarCreation(wg *sync.WaitGroup, resultChan chan<- *dtos.CarOutputDTO, errorChan chan<- error, validationErrorSignal <-chan bool, carID string, inputDTO *dtos.CarInputDTO) {
+func (useCase *PostCarUseCase) performCarCreation(wg *sync.WaitGroup, resultChan chan<- *cardtos.CarOutputDTO, errorChan chan<- error, validationErrorSignal <-chan bool, carID string, inputDTO *cardtos.CarInputDTO) {
 	defer wg.Done()
 
 	if <-validationErrorSignal { // Verifica se houve erro de validação
@@ -90,5 +90,5 @@ func (useCase *PostCarUseCase) performCarCreation(wg *sync.WaitGroup, resultChan
 		return
 	}
 
-	resultChan <- dtos.ConvertToOutputDTO(carID, inputDTO)
+	resultChan <- cardtos.ConvertToOutputDTO(carID, inputDTO)
 }

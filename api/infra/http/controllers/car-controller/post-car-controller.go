@@ -3,8 +3,8 @@ package carcontroller
 import (
 	"net/http"
 
+	cardtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/car"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/car-use-cases"
-	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
 )
@@ -16,13 +16,13 @@ import (
 // @Tags				Car
 // @Accept				json
 // @Produce				json
-// @Param				request				body 		dtos.CarInputDTO	true "Car information to be created"
-// @Success	    		201   				{object} 	dtos.CarOutputDTO "Successfully created car"
+// @Param				request				body 		cardtos.CarInputDTO	true "Car information to be created"
+// @Success	    		201   				{object} 	cardtos.CarOutputDTO "Successfully created car"
 // @Failure				422					{array}		validation_errors.HTTPErrorCar
 // @Router				/api/v1/cars/create [post]
 func RegisterCarController(context *gin.Context, postCarUseCase *usecases.PostCarUseCase) {
 
-	var request *dtos.CarInputDTO
+	var request *cardtos.CarInputDTO
 	if err := context.ShouldBindJSON(&request); err != nil {
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return

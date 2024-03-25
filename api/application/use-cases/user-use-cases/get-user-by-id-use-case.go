@@ -5,14 +5,22 @@ import (
 	repositories "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 )
 
-func GetUserByIdUseCase(id string, repo repositories.UserRepository) (*userdtos.UserOutPutDTO, error) {
+type GetUserByIdUseCase struct {
+	userRepository repositories.UserRepository
+}
 
-	existUser, err := repo.GetById(id)
+func NewGetUserByIdUseCase(userRepository repositories.UserRepository) *GetUserByIdUseCase {
+	return &GetUserByIdUseCase{
+		userRepository: userRepository,
+	}
+}
+
+func (userRepo *GetUserByIdUseCase) Execute(id string) (*userdtos.UserOutPutDTO, error) {
+
+	existUser, err := userRepo.userRepository.GetById(id)
 	if err != nil {
 		return nil, err
 	}
-	println(existUser)
-	//fmt.Printf("%+v\n", existUser)
 
 	userToBeReturned := &userdtos.UserOutPutDTO{
 		ID:        existUser.ID,

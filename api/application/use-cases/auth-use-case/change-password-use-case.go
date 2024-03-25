@@ -9,8 +9,18 @@ import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 )
 
-func ChangePasswordUseCase(id string, currentPassword string, newPassword string, userRepository repositories.UserRepository) error {
-	existingUser, err := userRepository.GetById(id)
+type ChangePasswordUseCase struct{
+	userRepository repositories.UserRepository
+}
+
+func NewChangePasswordUseCase(usreRepository repositories.UserRepository)*ChangePasswordUseCase{
+	return &ChangePasswordUseCase{
+		userRepository: usreRepository,
+	}
+}
+
+func(userRepo *ChangePasswordUseCase) Execute(id string, currentPassword string, newPassword string) error {
+	existingUser, err := userRepo.userRepository.GetById(id)
 	if err != nil {
 		return fmt.Errorf("failed to retrieve user: %w", err)
 	}
@@ -30,7 +40,7 @@ func ChangePasswordUseCase(id string, currentPassword string, newPassword string
 		return err
 	}
 
-	if err := userRepository.UpdatePassword(id, existingUserPassword); err != nil {
+	if err := userRepo.userRepository.UpdatePassword(id, existingUserPassword); err != nil {
 		return fmt.Errorf("failed to update password: %w", err)
 	}
 

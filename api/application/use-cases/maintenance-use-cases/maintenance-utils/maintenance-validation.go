@@ -3,11 +3,11 @@ package maintenanceutils
 import (
 	"sync"
 
-	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
+	maintenancedtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/maintenance"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 )
 
-func PerformMaintenanceValidation(wg *sync.WaitGroup, errorChan chan<- error, validationErrorSignal chan<- bool, inputDTO m.MaintenanceInputDTO) {
+func PerformMaintenanceValidation(wg *sync.WaitGroup, errorChan chan<- error, validationErrorSignal chan<- bool, inputDTO maintenancedtos.MaintenanceInputDTO) {
 	defer wg.Done()
 
 	if err := validation_errors.ValidateStruct(inputDTO); err != nil {

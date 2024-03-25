@@ -1,7 +1,7 @@
 package categoryusecases
 
 import (
-	categorydtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/category"
+	categorydtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/category"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 )
 

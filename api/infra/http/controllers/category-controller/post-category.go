@@ -3,7 +3,7 @@ package categorycontroller
 import (
 	"net/http"
 
-	categorydtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/category"
+	categorydtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/category"
 	usecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/category-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"

@@ -36,7 +36,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dtos.CarInputDTO"
+                            "$ref": "#/definitions/cardtos.CarInputDTO"
                         }
                     }
                 ],
@@ -44,7 +44,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Successfully created car",
                         "schema": {
-                            "$ref": "#/definitions/dtos.CarOutputDTO"
+                            "$ref": "#/definitions/cardtos.CarOutputDTO"
                         }
                     },
                     "422": {
@@ -123,7 +123,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dtos.CarInputDTO"
+                            "$ref": "#/definitions/cardtos.CarInputDTO"
                         }
                     }
                 ],
@@ -131,7 +131,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Successfully updated car",
                         "schema": {
-                            "$ref": "#/definitions/dtos.CarOutputDTO"
+                            "$ref": "#/definitions/cardtos.CarOutputDTO"
                         }
                     },
                     "400": {
@@ -170,7 +170,7 @@ const docTemplate = `{
                     "201": {
                         "description": "car",
                         "schema": {
-                            "$ref": "#/definitions/dtos.CarOutputDTO"
+                            "$ref": "#/definitions/cardtos.CarOutputDTO"
                         }
                     },
                     "422": {
@@ -925,7 +925,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/dtos.CarOutputDTO"
+                                "$ref": "#/definitions/cardtos.CarOutputDTO"
                             }
                         }
                     },
@@ -936,6 +936,43 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/validation_errors.HTTPError"
                             }
+                        }
+                    }
+                }
+            }
+        },
+        "/orders": {
+            "get": {
+                "description": "Retrieve an order by order ID or user ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Retrieve an order",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order ID",
+                        "name": "orderID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userID",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieved order",
+                        "schema": {
+                            "$ref": "#/definitions/orderdto.OrderOutputDTO"
                         }
                     }
                 }
@@ -1039,44 +1076,38 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/signup": {
+            "post": {
+                "description": "Create a new maintenance with the provided information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create a new user",
+                "operationId": "post-user",
+                "parameters": [
+                    {
+                        "description": "user information to be created",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/userdtos.UserInputDTO"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
         }
     },
     "definitions": {
-        "categorydtos.CategoryInputDTO": {
-            "type": "object",
-            "required": [
-                "description",
-                "name"
-            ],
-            "properties": {
-                "description": {
-                    "type": "string",
-                    "example": "'description is required'"
-                },
-                "name": {
-                    "type": "string",
-                    "example": "'name is required'"
-                }
-            }
-        },
-        "categorydtos.CategoryOutputDTO": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "dtos.CarInputDTO": {
+        "cardtos.CarInputDTO": {
             "type": "object",
             "required": [
                 "available",
@@ -1121,7 +1152,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dtos.CarOutputDTO": {
+        "cardtos.CarOutputDTO": {
             "type": "object",
             "properties": {
                 "available": {
@@ -1156,6 +1187,40 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/specificationdtos.SpecificationOutputDto"
                     }
+                }
+            }
+        },
+        "categorydtos.CategoryInputDTO": {
+            "type": "object",
+            "required": [
+                "description",
+                "name"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "example": "'description is required'"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "'name is required'"
+                }
+            }
+        },
+        "categorydtos.CategoryOutputDTO": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },
@@ -1359,18 +1424,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "order_status": {
-                    "enum": [
-                        "pending",
-                        "confirmed",
-                        "active",
-                        "completed",
-                        "cancelled"
-                    ],
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/orderdto.OrderStatus"
-                        }
-                    ]
+                    "type": "boolean"
                 },
                 "rental_end_date": {
                     "type": "string"
@@ -1408,23 +1462,6 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "orderdto.OrderStatus": {
-            "type": "string",
-            "enum": [
-                "pending",
-                "confirmed",
-                "active",
-                "completed",
-                "cancelled"
-            ],
-            "x-enum-varnames": [
-                "OrderStatusPending",
-                "OrderStatusConfirmed",
-                "OrderStatusActive",
-                "OrderStatusCompleted",
-                "OrderStatusCancelled"
-            ]
         },
         "reviewdto.ReviewInputDTO": {
             "type": "object",
@@ -1495,6 +1532,36 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "userdtos.UserInputDTO": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password",
+                "role",
+                "status"
+            ],
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "status": {
                     "type": "string"
                 }
             }

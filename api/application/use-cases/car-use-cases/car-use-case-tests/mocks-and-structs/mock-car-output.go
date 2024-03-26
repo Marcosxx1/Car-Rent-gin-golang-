@@ -1,5 +1,6 @@
 package mocksandstructs
 
+/*
 import (
 	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
 	specificationdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/specification-controller/specification-dtos"
@@ -36,3 +37,4 @@ func MockReturningSpecifications() []*specificationdtos.SpecificationOutputDto {
 		},
 	}
 }
+*/

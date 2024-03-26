@@ -3,8 +3,8 @@ package domain
 import (
 	"time"
 
+	maintenancedtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/maintenance"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain/enums"
-	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
 	"github.com/rs/xid"
 	"gorm.io/gorm"
 )
@@ -39,7 +39,7 @@ type Part struct {
 	ReplacementDate time.Time `json:"replacement_date"`
 }
 
-func CreateMaintenanceInstance(carID string, inputDTO m.MaintenanceInputDTO) (*Maintenance, error) {
+func CreateMaintenanceInstance(carID string, inputDTO maintenancedtos.MaintenanceInputDTO) (*Maintenance, error) {
 	newMaintenanceID := xid.New().String()
 
 	parts := ConvertPartsInputToDTO(inputDTO.Parts, newMaintenanceID)
@@ -63,10 +63,10 @@ func CreateMaintenanceInstance(carID string, inputDTO m.MaintenanceInputDTO) (*M
 	}, nil
 }
 
-func ConvertPartsOutPutToDTO(parts []Part) []m.PartOutputDTO {
-	var partsDTO []m.PartOutputDTO
+func ConvertPartsOutPutToDTO(parts []Part) []maintenancedtos.PartOutputDTO {
+	var partsDTO []maintenancedtos.PartOutputDTO
 	for _, part := range parts {
-		partsDTO = append(partsDTO, m.PartOutputDTO{
+		partsDTO = append(partsDTO, maintenancedtos.PartOutputDTO{
 			MaintenanceID:   part.MaintenanceID,
 			Name:            part.Name,
 			Cost:            part.Cost,
@@ -77,7 +77,7 @@ func ConvertPartsOutPutToDTO(parts []Part) []m.PartOutputDTO {
 	return partsDTO
 }
 
-func ConvertPartsInputToDTO(parts []m.PartInputDTO, newMaintenanceID string) []Part {
+func ConvertPartsInputToDTO(parts []maintenancedtos.PartInputDTO, newMaintenanceID string) []Part {
 	var partsDTO []Part
 	for _, part := range parts {
 		partsDTO = append(partsDTO, Part{

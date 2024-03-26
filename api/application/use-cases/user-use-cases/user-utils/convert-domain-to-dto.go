@@ -1,8 +1,8 @@
 package userutils
 
 import (
+	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/user"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/user-controller/user-dtos"
 )
 
 func ConvertUserDomainToOutputDTO(user *domain.User) *userdtos.UserOutPutDTO {

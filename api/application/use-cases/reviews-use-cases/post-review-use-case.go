@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"sync"
 
+	reviewdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/review"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	reviewdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/review-controller/review-dto"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/rs/xid"
 )

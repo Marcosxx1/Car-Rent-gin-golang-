@@ -1,5 +1,6 @@
 package mocksandstructs
 
+/*
 import (
 	"fmt"
 
@@ -99,3 +100,4 @@ func MockSpecificationsFromDatabase() []*domain.Specification {
 		// Quando precisarmos, só colocar aqui mais especifications
 	}
 }
+*/

@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
+	specificationdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/specification"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/specification-controller/specification-dtos"
 	"github.com/rs/xid"
 )
 
@@ -20,7 +20,7 @@ func NewPostSpecificationUseCase(specificationRepository repositories.Specificat
 	}
 }
 
-func (useCase *PostSpecificationUseCase) Execute(registerSpecification *dtos.SpecificationInputDto) (*dtos.SpecificationOutputDto, error) {
+func (useCase *PostSpecificationUseCase) Execute(registerSpecification *specificationdtos.SpecificationInputDto) (*specificationdtos.SpecificationOutputDto, error) {
 
 	existingSpecification, err := useCase.specificationRepository.FindSpecificationByName(registerSpecification.Name)
 	if err != nil {
@@ -41,7 +41,7 @@ func (useCase *PostSpecificationUseCase) Execute(registerSpecification *dtos.Spe
 		return nil, fmt.Errorf("failed to create specification: %w", err)
 	}
 
-	outputDTO := &dtos.SpecificationOutputDto{
+	outputDTO := &specificationdtos.SpecificationOutputDto{
 		ID:          newSpecification.ID,
 		Name:        newSpecification.Name,
 		Description: newSpecification.Description,

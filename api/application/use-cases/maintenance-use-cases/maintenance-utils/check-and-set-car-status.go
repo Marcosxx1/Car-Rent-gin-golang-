@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"sync"
 
+	maintenancedtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/maintenance"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	m "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/maintenance-controller/dtos"
 )
 
-func CheckAndSetStatus(wg *sync.WaitGroup, errorChan chan<- error, validationErrorSignal chan<- bool, resultChan chan<- *m.MaintenanceOutputDTO, carID string, carRepository repositories.CarRepository) {
+func CheckAndSetStatus(wg *sync.WaitGroup, errorChan chan<- error, validationErrorSignal chan<- bool, resultChan chan<- *maintenancedtos.MaintenanceOutputDTO, carID string, carRepository repositories.CarRepository) {
 	defer wg.Done()
 
 	car, err := carRepository.FindCarById(carID)

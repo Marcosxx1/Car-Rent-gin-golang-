@@ -1,10 +1,11 @@
-package endpointutils
+package utils
 
 import (
 	"fmt"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain/enums"
 )
+
 
 func ParseMaintenanceStatus(value string) (enums.MaintenanceStatus, error) {
 	switch value {

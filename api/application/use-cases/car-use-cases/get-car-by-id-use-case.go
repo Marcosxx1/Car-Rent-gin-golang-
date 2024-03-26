@@ -3,19 +3,19 @@ package carusecases
 import (
 	"errors"
 
-	r "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	utils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/utils"
-	dtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/car-controller/car-dtos"
+	cardtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/car"
+	repositories "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/utils"
 )
 
 type GetCarByIdUseCase struct {
-	carRepository           r.CarRepository
-	specificationRepository r.SpecificationRepository
+	carRepository           repositories.CarRepository
+	specificationRepository repositories.SpecificationRepository
 }
 
 func NewFindCarByIdUseCase(
-	carRepository r.CarRepository,
-	specificationRepository r.SpecificationRepository) *GetCarByIdUseCase {
+	carRepository repositories.CarRepository,
+	specificationRepository repositories.SpecificationRepository) *GetCarByIdUseCase {
 
 	return &GetCarByIdUseCase{
 		carRepository:           carRepository,
@@ -23,7 +23,7 @@ func NewFindCarByIdUseCase(
 	}
 }
 
-func (useCase *GetCarByIdUseCase) Execute(id string) (*dtos.CarOutputDTO, error) {
+func (useCase *GetCarByIdUseCase) Execute(id string) (*cardtos.CarOutputDTO, error) {
 	existCar, err := useCase.carRepository.FindCarById(id)
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func (useCase *GetCarByIdUseCase) Execute(id string) (*dtos.CarOutputDTO, error)
 		return nil, errors.New("specifications not found")
 	}
 
-	carToBeReturned := &dtos.CarOutputDTO{
+	carToBeReturned := &cardtos.CarOutputDTO{
 		ID:            existCar.ID,
 		Name:          existCar.Name,
 		Description:   existCar.Description,

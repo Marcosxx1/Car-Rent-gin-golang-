@@ -1,24 +1,23 @@
-package userendpoints
+package usercontroller
 
 import (
 	"net/http"
 
-	r "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
+	authdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/auth"
 	authusecase "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/auth-use-case"
-	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/user-controller/user-dtos"
 	"github.com/gin-gonic/gin"
 )
 
-func ChangePasswordController(context *gin.Context, userRepo r.UserRepository) {
+func ChangePasswordController(context *gin.Context, userUseCase *authusecase.ChangePasswordUseCase) {
 	userID := context.Param("id")
 
-	var request userdtos.ChangePasswordDTO
+	var request authdto.ChangePasswordDTO
 	if err := context.ShouldBindJSON(&request); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	err := authusecase.ChangePasswordUseCase(userID, request.CurrentPassword, request.NewPassword, userRepo)
+	err := userUseCase.Execute(userID, request.CurrentPassword, request.NewPassword)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

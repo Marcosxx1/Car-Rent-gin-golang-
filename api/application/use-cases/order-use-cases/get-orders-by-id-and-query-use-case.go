@@ -3,8 +3,8 @@ package orderusecases
 import (
 	"fmt"
 
+	orderdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/order"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	orderdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/order-controller/order-dto"
 )
 
 type GetOrderByIdAndQueryUseCase struct {

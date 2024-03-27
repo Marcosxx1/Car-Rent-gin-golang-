@@ -64,3 +64,22 @@ func ConvertToOutputDTO(newOrder *domain.Order) *OrderOutputDTO {
 		OrderStatus:     newOrder.OrderStatus,
 	}
 }
+
+func ConvertToOutputDTOList(orders []*domain.Order) []*OrderOutputDTO {
+	var orderDTOs []*OrderOutputDTO
+
+	for _, newOrder := range orders {
+			orderDTO := &OrderOutputDTO{
+					ID:              newOrder.ID,
+					UserID:          newOrder.UserID,
+					CarID:           newOrder.CarID,
+					RentalStartDate: newOrder.RentalStartDate,
+					RentalEndDate:   newOrder.RentalEndDate,
+					TotalCost:       newOrder.TotalCost,
+					OrderStatus:     newOrder.OrderStatus,
+			}
+			orderDTOs = append(orderDTOs, orderDTO)
+	}
+
+	return orderDTOs
+}

@@ -1,14 +1,16 @@
 package repositories
 
-import "github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
+import (
+	orderdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/order"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
+)
 
 type OrderRepository interface {
 	// CreateOrder creates a new order in the database
 	CreateOrder(order *domain.Order) error
 
 	// GetOrderByID retrieves an order by its ID
-	GetOrderByID(orderID string) (*domain.Order, error)
-
+	GetOrdersByOptions(options *orderdto.OrderOutputDTO) ([]*domain.Order, error)
 	// UpdateOrder updates an existing order in the database
 	UpdateOrder(id string, order *domain.Order) error
 	// DeleteOrder deletes an order from the database

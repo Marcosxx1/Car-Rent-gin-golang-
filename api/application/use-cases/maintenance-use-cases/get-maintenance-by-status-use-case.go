@@ -23,7 +23,6 @@ func NewGetMaintenanceByStatusUseCase(maintenanceRepository repositories.Mainten
 
 func (useCase *GetMaintenanceByStatusUseCase) Execute(maintenance_status enums.MaintenanceStatus) ([]*maintenancedtos.MaintenanceOutputDTO, error) {
 	var wg sync.WaitGroup
-	fmt.Println("Execute : ", maintenance_status)
 
 	resultChan := make(chan []*maintenancedtos.MaintenanceOutputDTO)
 	errorChan := make(chan error)
@@ -52,7 +51,6 @@ func (useCase *GetMaintenanceByStatusUseCase) performGetMaintenanceByStatus(wg *
 	defer wg.Done()
 
 	var maintenances []*domain.Maintenance
-	fmt.Println("performGetMaintenanceByStatus : ", maintenance_status)
 
 	go func() {
 		var err error

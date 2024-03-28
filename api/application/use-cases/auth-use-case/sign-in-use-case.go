@@ -2,12 +2,13 @@ package authusecase
 
 import (
 	"fmt"
+	"sync"
 
 	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/user"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
+	userutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/user-use-cases/user-utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
 	hashpassword "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/auth-controller/hash-password"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/rs/xid"
 )
 
@@ -21,42 +22,62 @@ func NewPostUserUseCase(userRepository repositories.UserRepository) *PostUserUse
 	}
 }
 
-func (useCase *PostUserUseCase) Execute(registerRequest userdtos.UserInputDTO) (*userdtos.UserOutPutDTO, error) {
+func (useCase *PostUserUseCase) Execute(userInputDto userdtos.UserInputDTO) (*userdtos.UserOutPutDTO, error) {
+	resultChan := make(chan *userdtos.UserOutPutDTO)
+	errorChan := make(chan error)
+	validationErrorSignal := make(chan bool)
 
-	existUser, err := useCase.userRepository.FindByEmail(registerRequest.Email)
+	var wg sync.WaitGroup
 
-	if existUser != nil {
-		return nil, fmt.Errorf("user with email %s already exists", registerRequest.Email)
+	wg.Add(3)
+	go userutils.UserValidation(&wg, errorChan, validationErrorSignal, userInputDto)
+	go useCase.performUserCreation(&wg, errorChan, validationErrorSignal, resultChan, userInputDto)
+
+	go func() {
+		wg.Wait()
+		close(resultChan)
+		close(errorChan)
+		close(validationErrorSignal)
+	}()
+
+	for {
+		select {
+		case result := <-resultChan:
+			return result, nil
+		case err := <-errorChan:
+			return nil, err
+		}
 	}
+}
 
-	if err != nil {
-		return nil, err
-	}
 
-	hashedPassword, err := hashpassword.HashPassword(registerRequest.Password)
+func (useCase *PostUserUseCase) performUserCreation(wg *sync.WaitGroup, errorChan chan<- error, validationErrorSignal chan<- bool, resultChan chan<- *userdtos.UserOutPutDTO, userInputDto userdtos.UserInputDTO) {
+	defer wg.Done()
+
+	hashedPassword, err := hashpassword.HashPassword(userInputDto.Password)
 	if err != nil {
-		return nil, fmt.Errorf("failed to hash password: %w", err)
+		errorChan <- fmt.Errorf("failed to hash password: %w", err)
+		validationErrorSignal <- true
+		return
 	}
 
 	newUser := &domain.User{
 		ID:       xid.New().String(),
-		Name:     registerRequest.Name,
-		Email:    registerRequest.Email,
+		Name:     userInputDto.Name,
+		Email:    userInputDto.Email,
 		Password: hashedPassword,
-		Role:     registerRequest.Role,
-		Status:   registerRequest.Status,
-		Avatar:   registerRequest.Avatar,
-	}
-
-	if err := validation_errors.ValidateStruct(newUser); err != nil {
-		return nil, err
+		Role:     userInputDto.Role,
+		Status:   userInputDto.Status,
+		Avatar:   userInputDto.Avatar,
 	}
 
 	if err := useCase.userRepository.PostUser(newUser); err != nil {
-		return nil, fmt.Errorf("failed to singin user: %w", err)
+		errorChan <- fmt.Errorf("failed to save user: %w", err)
+		validationErrorSignal <- true
+		return
 	}
 
-	outPut := &userdtos.UserOutPutDTO{
+	resultChan <- &userdtos.UserOutPutDTO{
 		ID:     newUser.ID,
 		Name:   newUser.Name,
 		Email:  newUser.Email,
@@ -64,5 +85,5 @@ func (useCase *PostUserUseCase) Execute(registerRequest userdtos.UserInputDTO) (
 		Avatar: newUser.Avatar,
 	}
 
-	return outPut, nil
+	validationErrorSignal <- false
 }

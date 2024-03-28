@@ -1,28 +1,5 @@
 definitions:
-  categorydtos.CategoryInputDTO:
-    properties:
-      description:
-        example: '''description is required'''
-        type: string
-      name:
-        example: '''name is required'''
-        type: string
-    required:
-    - description
-    - name
-    type: object
-  categorydtos.CategoryOutputDTO:
-    properties:
-      created_at:
-        type: string
-      description:
-        type: string
-      id:
-        type: string
-      name:
-        type: string
-    type: object
-  dtos.CarInputDTO:
+  cardtos.CarInputDTO:
     properties:
       available:
         type: boolean
@@ -54,7 +31,7 @@ definitions:
     - license_plate
     - name
     type: object
-  dtos.CarOutputDTO:
+  cardtos.CarOutputDTO:
     properties:
       available:
         type: boolean
@@ -78,6 +55,29 @@ definitions:
         items:
           $ref: '#/definitions/specificationdtos.SpecificationOutputDto'
         type: array
+    type: object
+  categorydtos.CategoryInputDTO:
+    properties:
+      description:
+        example: '''description is required'''
+        type: string
+      name:
+        example: '''name is required'''
+        type: string
+    required:
+    - description
+    - name
+    type: object
+  categorydtos.CategoryOutputDTO:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
     type: object
   enums.MaintenanceStatus:
     enum:
@@ -217,14 +217,7 @@ definitions:
   orderdto.OrderInputPartialDTO:
     properties:
       order_status:
-        allOf:
-        - $ref: '#/definitions/orderdto.OrderStatus'
-        enum:
-        - pending
-        - confirmed
-        - active
-        - completed
-        - cancelled
+        type: boolean
       rental_end_date:
         type: string
       rental_start_date:
@@ -254,20 +247,6 @@ definitions:
       user_id:
         type: string
     type: object
-  orderdto.OrderStatus:
-    enum:
-    - pending
-    - confirmed
-    - active
-    - completed
-    - cancelled
-    type: string
-    x-enum-varnames:
-    - OrderStatusPending
-    - OrderStatusConfirmed
-    - OrderStatusActive
-    - OrderStatusCompleted
-    - OrderStatusCancelled
   reviewdto.ReviewInputDTO:
     properties:
       car_id:
@@ -315,6 +294,27 @@ definitions:
         type: string
       name:
         type: string
+    type: object
+  userdtos.UserInputDTO:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      role:
+        type: string
+      status:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    - role
+    - status
     type: object
   validation_errors.HTTPError:
     properties:
@@ -365,7 +365,7 @@ paths:
         "201":
           description: car
           schema:
-            $ref: '#/definitions/dtos.CarOutputDTO'
+            $ref: '#/definitions/cardtos.CarOutputDTO'
         "422":
           description: Unprocessable Entity
           schema:
@@ -387,14 +387,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/dtos.CarInputDTO'
+          $ref: '#/definitions/cardtos.CarInputDTO'
       produces:
       - application/json
       responses:
         "201":
           description: Successfully created car
           schema:
-            $ref: '#/definitions/dtos.CarOutputDTO'
+            $ref: '#/definitions/cardtos.CarOutputDTO'
         "422":
           description: Unprocessable Entity
           schema:
@@ -445,14 +445,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/dtos.CarInputDTO'
+          $ref: '#/definitions/cardtos.CarInputDTO'
       produces:
       - application/json
       responses:
         "201":
           description: Successfully updated car
           schema:
-            $ref: '#/definitions/dtos.CarOutputDTO'
+            $ref: '#/definitions/cardtos.CarOutputDTO'
         "400":
           description: Bad Request
           schema:
@@ -956,7 +956,7 @@ paths:
           description: List of cars
           schema:
             items:
-              $ref: '#/definitions/dtos.CarOutputDTO'
+              $ref: '#/definitions/cardtos.CarOutputDTO'
             type: array
         "422":
           description: Unprocessable Entity
@@ -967,6 +967,30 @@ paths:
       summary: List all cars
       tags:
       - Car
+  /orders:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve an order by order ID or user ID
+      parameters:
+      - description: Order ID
+        in: query
+        name: orderID
+        type: string
+      - description: User ID
+        in: query
+        name: userID
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Retrieved order
+          schema:
+            $ref: '#/definitions/orderdto.OrderOutputDTO'
+      summary: Retrieve an order
+      tags:
+      - Orders
   /orders/{carID}:
     post:
       consumes:
@@ -1033,4 +1057,23 @@ paths:
       summary: Delete order by ID
       tags:
       - Orders
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: Create a new maintenance with the provided information
+      operationId: post-user
+      parameters:
+      - description: user information to be created
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/userdtos.UserInputDTO'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new user
+      tags:
+      - User
 swagger: "2.0"

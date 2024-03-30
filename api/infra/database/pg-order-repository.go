@@ -55,7 +55,7 @@ func (r *PGOrderRepository) GetOrdersByOptions(options *orderdto.OrderOutputDTO)
 	    para receber valores. Se a declaração fosse simplesmente var
 	    values []interface{}, values seria inicializado como nil, e
 	   	não poderia ser usado diretamente para adicionar valores usando o operador .... */
-			values := []interface{}{}
+	values := []interface{}{}
 
 	// Construct conditions based on non-zero values in options
 	if options.ID != "" {

@@ -14,12 +14,12 @@ func Setup(router *gin.Engine) {
 	// show us an error because authGroup is type of gin.IRoutes and our routes are expecting
 	// *gin.RouterGroup
 	authGroupRoutes := authGroup.(*gin.RouterGroup)
-	routes.AuthRoutes(router)
-	routes.SetupCategoryRoutes(router /* authGroupRoutes */)
-	routes.SetupCarRoutes(router, authGroupRoutes)
-	routes.SetupSpecificationRoutes(router /* authGroupRoutes */)
-	routes.SetupUserRoutes(router /* authGroupRoutes */)
-	routes.SetupMaintenanceRoutes(authGroupRoutes)
-	routes.SetupReviewRoutes(authGroupRoutes)
-	routes.SetupOrderRoutes(authGroupRoutes)
+	routes.AuthRoutes(router)                                     // don't need authentication
+	routes.SetupCategoryRoutes(router /* authGroupRoutes */)      // need to be admin
+	routes.SetupCarRoutes(router, authGroupRoutes)                //don't need authentication
+	routes.SetupSpecificationRoutes(router /* authGroupRoutes */) //don't need authentication
+	routes.SetupUserRoutes(router /* authGroupRoutes */)          // can be admin or normal user
+	routes.SetupMaintenanceRoutes(authGroupRoutes)                // needs to be admin
+	routes.SetupReviewRoutes(authGroupRoutes)                     // need to be logged user
+	routes.SetupOrderRoutes(authGroupRoutes)                      // needs to be admin
 }

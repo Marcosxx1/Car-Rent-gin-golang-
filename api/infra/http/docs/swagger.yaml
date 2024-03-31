@@ -1,4 +1,14 @@
 definitions:
+  authdto.LoginInputDTO:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
   cardtos.CarInputDTO:
     properties:
       available:
@@ -967,6 +977,26 @@ paths:
       summary: List all cars
       tags:
       - Car
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: If the provided e-mail and password are correct an jwt token will
+        be generated with the user id
+      operationId: login
+      parameters:
+      - description: user information to login
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/authdto.LoginInputDTO'
+      produces:
+      - application/json
+      responses: {}
+      summary: Log in the application
+      tags:
+      - Auth
   /orders:
     get:
       consumes:
@@ -1062,7 +1092,7 @@ paths:
       consumes:
       - application/json
       description: Create a new maintenance with the provided information
-      operationId: post-user
+      operationId: sign-up
       parameters:
       - description: user information to be created
         in: body
@@ -1075,5 +1105,5 @@ paths:
       responses: {}
       summary: Create a new user
       tags:
-      - User
+      - Auth
 swagger: "2.0"

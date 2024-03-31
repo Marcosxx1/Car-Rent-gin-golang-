@@ -9,6 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// LoginHandlerController handles the HTTP POST request for login.
+// @Summary				Log in the application
+// @Description			If the provided e-mail and password are correct an jwt token will be generated with the user id
+// @ID					login
+// @Tags				Auth
+// @Accept				json
+// @Produce				json
+// @Param				request				body 			authdto.LoginInputDTO	true "user information to login"
+// @Router				/login 			[post]
 func LoginHandlerController(context *gin.Context, loginUseCase *authusecase.LoginUseCase) {
 	var request *authdto.LoginInputDTO
 

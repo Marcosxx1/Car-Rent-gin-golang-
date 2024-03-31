@@ -3,6 +3,7 @@ package ordercontroller
 import (
 	"net/http"
 
+	orderdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/order"
 	orderusecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/order-use-cases"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
@@ -19,12 +20,13 @@ import (
 // @Success 200 {object} orderdto.OrderOutputDTO "Retrieved order"
 // @Router /orders [get]
 func GetOrderByIdAndQueryController(context *gin.Context, getOrderByIdAndQueryUseCase *orderusecases.GetOrderByIdAndQueryUseCase) {
-	orderID := context.Query("orderID")
+	var orderID *orderdto.OrderOutputDTO
+	orderID.ID = context.Query("orderID")
 
-	if orderID == "" {
+	if orderID.ID == "" {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Either orderID or userID must be provided"})
 		return
-	} 
+	}
 
 	order, err := getOrderByIdAndQueryUseCase.Execute(orderID)
 	if err != nil {

@@ -941,6 +941,34 @@ const docTemplate = `{
                 }
             }
         },
+        "/login": {
+            "post": {
+                "description": "If the provided e-mail and password are correct an jwt token will be generated with the user id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Log in the application",
+                "operationId": "login",
+                "parameters": [
+                    {
+                        "description": "user information to login",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/authdto.LoginInputDTO"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/orders": {
             "get": {
                 "description": "Retrieve an order by order ID or user ID",
@@ -1087,10 +1115,10 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Auth"
                 ],
                 "summary": "Create a new user",
-                "operationId": "post-user",
+                "operationId": "sign-up",
                 "parameters": [
                     {
                         "description": "user information to be created",
@@ -1107,6 +1135,21 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "authdto.LoginInputDTO": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "cardtos.CarInputDTO": {
             "type": "object",
             "required": [

@@ -42,7 +42,7 @@ func (useCase *LoginUseCase) Execute(request *authdto.LoginInputDTO) (string, er
 		return "", ErrInvalidPassword
 	}
 
-	token, err := auth.GenerateAuthToken(existingUser.ID)
+	token, err := auth.GenerateAuthToken(existingUser.ID, string(existingUser.Role))
 	if err != nil {
 		return "", ErrGenerateAuthToken
 	}

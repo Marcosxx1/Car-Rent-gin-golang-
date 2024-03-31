@@ -24,7 +24,6 @@ func JWTMiddleware() gin.HandlerFunc {
 		}
 
 		tokenString := tokenParts[1]
-		/* fmt.Println("tokenString : ", tokenString) */
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			return auth.MySecretKey, nil
 		})
@@ -46,7 +45,15 @@ func JWTMiddleware() gin.HandlerFunc {
 			return
 		}
 
+		role, ok := claims["role"].(string)
+		if !ok {
+			c.AbortWithStatusJSON(401, gin.H{"error": "Invalid role in token"})
+			return
+		}
+
 		c.Set("user_id", userID)
+		c.Set("user_role", role)
+
 		c.Next()
 	}
 }

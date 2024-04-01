@@ -15,20 +15,39 @@ import (
 // @Tags Orders
 // @Accept json
 // @Produce json
-// @Param orderID query string false "Order ID"
-// @Param userID query string false "User ID"
+// @Param options query string false "Order ID"
 // @Success 200 {object} orderdto.OrderOutputDTO "Retrieved order"
 // @Router /orders [get]
-func GetOrderByIdAndQueryController(context *gin.Context, getOrderByIdAndQueryUseCase *orderusecases.GetOrderByIdAndQueryUseCase) {
-	var orderID *orderdto.OrderOutputDTO
-	orderID.ID = context.Query("orderID")
 
-	if orderID.ID == "" {
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Either orderID or userID must be provided"})
+func GetOrderByQueryController(context *gin.Context, getOrderByQueryUseCase *orderusecases.GetOrderByQueryUseCase) {
+	options := context.Query("options")
+	userID := context.Query("userID")
+
+	if options == "" && userID == "" {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Either options or userID must be provided"})
 		return
 	}
 
-	order, err := getOrderByIdAndQueryUseCase.Execute(orderID)
+	// Convert options string to Options type
+	var opt orderdto.Options
+	switch options {
+	case "id":
+		opt = orderdto.ID
+	case "user_id":
+		opt = orderdto.UserID
+	case "car_id":
+		opt = orderdto.CarID
+	case "rental_start_date":
+		opt = orderdto.RentalStartDate
+	case "rental_end_date":
+		opt = orderdto.RentalEndDate
+	case "total_cost":
+		opt = orderdto.TotalCost
+	default:
+		opt = orderdto.Options(options)
+	}
+
+	order, err := getOrderByQueryUseCase.Execute(&opt)
 	if err != nil {
 		validation_errors.NewError(context, http.StatusNotFound, err)
 		return

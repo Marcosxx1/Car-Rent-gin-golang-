@@ -49,6 +49,17 @@ type OrderOutputDTO struct {
 	OrderStatus     bool      `json:"order_status"`
 }
 
+type Options string
+
+const (
+	ID              Options = "id"
+	UserID          Options = "user_id"
+	CarID           Options = "car_id"
+	RentalStartDate Options = "rental_start_date"
+	RentalEndDate   Options = "rental_end_date"
+	TotalCost       Options = "total_cost"
+)
+
 func (o *OrderInputPartialDTO) Validate() error {
 	return validate.Struct(o)
 }
@@ -69,16 +80,16 @@ func ConvertToOutputDTOList(orders []*domain.Order) []*OrderOutputDTO {
 	var orderDTOs []*OrderOutputDTO
 
 	for _, newOrder := range orders {
-			orderDTO := &OrderOutputDTO{
-					ID:              newOrder.ID,
-					UserID:          newOrder.UserID,
-					CarID:           newOrder.CarID,
-					RentalStartDate: newOrder.RentalStartDate,
-					RentalEndDate:   newOrder.RentalEndDate,
-					TotalCost:       newOrder.TotalCost,
-					OrderStatus:     newOrder.OrderStatus,
-			}
-			orderDTOs = append(orderDTOs, orderDTO)
+		orderDTO := &OrderOutputDTO{
+			ID:              newOrder.ID,
+			UserID:          newOrder.UserID,
+			CarID:           newOrder.CarID,
+			RentalStartDate: newOrder.RentalStartDate,
+			RentalEndDate:   newOrder.RentalEndDate,
+			TotalCost:       newOrder.TotalCost,
+			OrderStatus:     newOrder.OrderStatus,
+		}
+		orderDTOs = append(orderDTOs, orderDTO)
 	}
 
 	return orderDTOs

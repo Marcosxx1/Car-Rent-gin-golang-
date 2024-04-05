@@ -25,7 +25,7 @@ func NewGetOrderByQueryUseCase(
 	}
 }
 
-func (useCase *GetOrderByQueryUseCase) Execute(options *orderdto.Options) ([]*orderdto.OrderOutputDTO, error) {
+func (useCase *GetOrderByQueryUseCase) Execute(options *orderdto.OrderInputCompleteDTO) ([]*orderdto.OrderOutputDTO, error) {
 	var wg sync.WaitGroup
 	resultChan := make(chan []*orderdto.OrderOutputDTO)
 	errorChan := make(chan error)
@@ -51,7 +51,7 @@ func (useCase *GetOrderByQueryUseCase) Execute(options *orderdto.Options) ([]*or
 	}
 }
 
-func (useCase *GetOrderByQueryUseCase) performGetOrderByOptions(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- []*orderdto.OrderOutputDTO, validationErrorSignal chan<- bool, options *orderdto.Options) {
+func (useCase *GetOrderByQueryUseCase) performGetOrderByOptions(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- []*orderdto.OrderOutputDTO, validationErrorSignal chan<- bool, options *orderdto.OrderInputCompleteDTO) {
 	defer wg.Done()
 
 	orders, err := useCase.orderRepository.GetOrdersByOptions(options)

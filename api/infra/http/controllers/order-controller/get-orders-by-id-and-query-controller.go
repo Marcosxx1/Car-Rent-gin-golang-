@@ -1,10 +1,12 @@
 package ordercontroller
 
 import (
+	"fmt"
 	"net/http"
 
 	orderdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/order"
 	orderusecases "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/order-use-cases"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
 )
@@ -27,27 +29,38 @@ func GetOrderByQueryController(context *gin.Context, getOrderByQueryUseCase *ord
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Either options or userID must be provided"})
 		return
 	}
-
-	// Convert options string to Options type
-	var opt orderdto.Options
+	//??????????????????????????????????????????????????????????????????????????
+	var searchOptions *orderdto.OrderInputCompleteDTO
 	switch options {
 	case "id":
-		opt = orderdto.ID
+		searchOptions.CarID = options
 	case "user_id":
-		opt = orderdto.UserID
+		searchOptions.UserID = options
 	case "car_id":
-		opt = orderdto.CarID
+		searchOptions.CarID = options
 	case "rental_start_date":
-		opt = orderdto.RentalStartDate
+		startDate, err := utils.StringToTime(options)
+		if err != nil {
+			fmt.Println("Algo")
+		}
+		searchOptions.RentalStartDate = startDate
 	case "rental_end_date":
-		opt = orderdto.RentalEndDate
+		endDate, err := utils.StringToTime(options)
+		if err != nil {
+			fmt.Println("Algo")
+		}
+		searchOptions.RentalEndDate = endDate
 	case "total_cost":
-		opt = orderdto.TotalCost
+		parsedTotalCost, err := utils.StringToFloat64(options)
+		if err != nil {
+			fmt.Println("total cost error")
+		}
+		searchOptions.TotalCost = parsedTotalCost
 	default:
-		opt = orderdto.Options(options)
+		// throw error?
 	}
-
-	order, err := getOrderByQueryUseCase.Execute(&opt)
+	fmt.Println(searchOptions)
+	order, err := getOrderByQueryUseCase.Execute(searchOptions)
 	if err != nil {
 		validation_errors.NewError(context, http.StatusNotFound, err)
 		return

@@ -52,7 +52,6 @@ type OrderOutputDTO struct {
 type Options string
 
 const (
-	ID              Options = "id"
 	UserID          Options = "user_id"
 	CarID           Options = "car_id"
 	RentalStartDate Options = "rental_start_date"

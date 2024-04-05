@@ -12,8 +12,8 @@ func GetOrderByIdAndQueryFactoryControlle(context *gin.Context) {
 	maintenanceRepository := database.NewPgMaintenanceRepository()
 	orderRepository := database.NewPGOrderRepository()
 
-	getOrderByIdAndQueryUseCase := orderusecases.NewGetOrderByIdAndQueryUseCase(userRepository, maintenanceRepository, orderRepository)
+	getOrderByQueryUseCase := orderusecases.NewGetOrderByQueryUseCase(userRepository, maintenanceRepository, orderRepository)
 
-	ordercontroller.GetOrderByIdAndQueryController(context, getOrderByIdAndQueryUseCase)
+	ordercontroller.GetOrderByQueryController(context, getOrderByQueryUseCase)
 
 }

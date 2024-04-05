@@ -8,24 +8,24 @@ import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 )
 
-type GetOrderByIdAndQueryUseCase struct {
+type GetOrderByQueryUseCase struct {
 	userRepository        repositories.UserRepository
 	maintenanceRepository repositories.MaintenanceRepository
 	orderRepository       repositories.OrderRepository
 }
 
-func NewGetOrderByIdAndQueryUseCase(
+func NewGetOrderByQueryUseCase(
 	userRepository repositories.UserRepository,
 	maintenanceRepository repositories.MaintenanceRepository,
-	orderRepository repositories.OrderRepository) *GetOrderByIdAndQueryUseCase {
-	return &GetOrderByIdAndQueryUseCase{
+	orderRepository repositories.OrderRepository) *GetOrderByQueryUseCase {
+	return &GetOrderByQueryUseCase{
 		userRepository:        userRepository,
 		maintenanceRepository: maintenanceRepository,
 		orderRepository:       orderRepository,
 	}
 }
 
-func (useCase *GetOrderByIdAndQueryUseCase) Execute(options *orderdto.OrderOutputDTO) ([]*orderdto.OrderOutputDTO, error) {
+func (useCase *GetOrderByQueryUseCase) Execute(options *orderdto.OrderInputCompleteDTO) ([]*orderdto.OrderOutputDTO, error) {
 	var wg sync.WaitGroup
 	resultChan := make(chan []*orderdto.OrderOutputDTO)
 	errorChan := make(chan error)
@@ -51,7 +51,7 @@ func (useCase *GetOrderByIdAndQueryUseCase) Execute(options *orderdto.OrderOutpu
 	}
 }
 
-func (useCase *GetOrderByIdAndQueryUseCase) performGetOrderByOptions(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- []*orderdto.OrderOutputDTO, validationErrorSignal chan<- bool, options *orderdto.OrderOutputDTO) {
+func (useCase *GetOrderByQueryUseCase) performGetOrderByOptions(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- []*orderdto.OrderOutputDTO, validationErrorSignal chan<- bool, options *orderdto.OrderInputCompleteDTO) {
 	defer wg.Done()
 
 	orders, err := useCase.orderRepository.GetOrdersByOptions(options)

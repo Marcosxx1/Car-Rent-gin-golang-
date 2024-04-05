@@ -10,7 +10,7 @@ type OrderRepository interface {
 	CreateOrder(order *domain.Order) error
 
 	// GetOrderByID retrieves an order by its ID
-	GetOrdersByOptions(options *orderdto.OrderOutputDTO) ([]*domain.Order, error)
+	GetOrdersByOptions(options *orderdto.OrderInputCompleteDTO) ([]*domain.Order, error)
 	// UpdateOrder updates an existing order in the database
 	UpdateOrder(id string, order *domain.Order) error
 	// DeleteOrder deletes an order from the database

@@ -89,6 +89,14 @@ definitions:
       name:
         type: string
     type: object
+  domain.Role:
+    enum:
+    - admin
+    - user
+    type: string
+    x-enum-varnames:
+    - RoleAdmin
+    - RoleUser
   enums.MaintenanceStatus:
     enum:
     - Scheduled
@@ -316,9 +324,14 @@ definitions:
       password:
         type: string
       role:
-        type: string
+        allOf:
+        - $ref: '#/definitions/domain.Role'
+        enum:
+        - admin
+        - user
+        - manager
       status:
-        type: string
+        type: boolean
     required:
     - email
     - name
@@ -1001,24 +1014,22 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieve an order by order ID or user ID
+      description: Fetches orders based on query parameters such as options and userID.
       parameters:
-      - description: Order ID
+      - description: Query parameters for filtering orders
         in: query
-        name: orderID
-        type: string
-      - description: User ID
-        in: query
-        name: userID
+        name: options
         type: string
       produces:
       - application/json
       responses:
         "200":
-          description: Retrieved order
+          description: OK
           schema:
-            $ref: '#/definitions/orderdto.OrderOutputDTO'
-      summary: Retrieve an order
+            items:
+              $ref: '#/definitions/orderdto.OrderOutputDTO'
+            type: array
+      summary: Get orders by query parameters
       tags:
       - Orders
   /orders/{carID}:

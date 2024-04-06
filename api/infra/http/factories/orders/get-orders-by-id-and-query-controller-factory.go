@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetOrderByIdAndQueryFactoryControlle(context *gin.Context) {
+func GetOrderByQueryFactoryController(context *gin.Context) {
 	userRepository := database.NewPGUserRepository()
 	maintenanceRepository := database.NewPgMaintenanceRepository()
 	orderRepository := database.NewPGOrderRepository()

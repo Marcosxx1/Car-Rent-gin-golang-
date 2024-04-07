@@ -50,7 +50,6 @@ func (useCase *PostUserUseCase) Execute(userInputDto userdtos.UserInputDTO) (*us
 	}
 }
 
-
 func (useCase *PostUserUseCase) performUserCreation(wg *sync.WaitGroup, errorChan chan<- error, validationErrorSignal chan<- bool, resultChan chan<- *userdtos.UserOutPutDTO, userInputDto userdtos.UserInputDTO) {
 	defer wg.Done()
 

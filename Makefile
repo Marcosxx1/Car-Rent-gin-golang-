@@ -1,2 +1,12 @@
+.PHONY: build run clean
+
 build:
-	env GOOS=linux GOARCH=amd64 CGOENABLE=0 go build -ldflags="-s -w" -o bin/main api/infra/http/main.go
+	docker build -t car-rent-go .
+
+run: build
+	docker run --name car-rent-go -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=car-rent-go -d postgres
+	docker run --link car-rent-go:postgres car-rent-go
+
+clean:
+	docker stop car-rent-go
+	docker rm car-rent-go

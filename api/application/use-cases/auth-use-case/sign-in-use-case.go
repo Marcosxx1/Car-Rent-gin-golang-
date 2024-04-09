@@ -53,6 +53,15 @@ func (useCase *PostUserUseCase) Execute(userInputDto userdtos.UserInputDTO) (*us
 func (useCase *PostUserUseCase) performUserCreation(wg *sync.WaitGroup, errorChan chan<- error, validationErrorSignal chan<- bool, resultChan chan<- *userdtos.UserOutPutDTO, userInputDto userdtos.UserInputDTO) {
 	defer wg.Done()
 
+	// even though we are validating with v10:
+	// 	Password string      `json:"password" binding:"required" validate:"required,min=8"`
+	// it could be a nice aproach to validate even further
+	if userInputDto.Password == "" {
+		errorChan <- fmt.Errorf("password is required")
+		validationErrorSignal <- true
+		return
+	}
+
 	hashedPassword, err := hashpassword.HashPassword(userInputDto.Password)
 	if err != nil {
 		errorChan <- fmt.Errorf("failed to hash password: %w", err)

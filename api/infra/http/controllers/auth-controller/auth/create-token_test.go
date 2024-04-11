@@ -15,21 +15,17 @@ func TestGenerateAuthTokenSuccess(t *testing.T) {
 		t.Errorf("GenerateAuthToken() failed unexpectedly: %v", err)
 	}
 
-	// Add assertions to verify the correctness of the generated token
 	if len(token) == 0 {
 		t.Error("Generated token is empty")
 	}
-	// You can also verify the format or specific claims of the token if needed
 }
 
 func TestGenerateAuthTokenInvalidInput(t *testing.T) {
-	// Test with empty user ID
 	_, err := GenerateAuthToken("", user_role)
 	if err == nil {
 		t.Error("GenerateAuthToken() should fail with empty user ID")
 	}
 
-	// Test with empty user role
 	_, err = GenerateAuthToken(user_id, "")
 	if err == nil {
 		t.Error("GenerateAuthToken() should fail with empty user role")

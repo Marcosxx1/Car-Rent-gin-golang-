@@ -14,7 +14,14 @@ var (
 	ErrInvalidPassword   = errors.New("invalid username or password")
 	ErrGenerateAuthToken = errors.New("failed to generate authentication token")
 )
-
+/* type UserRepository interface {
+	PostUser(userData *domain.User) error
+	GetById(id string) (*domain.User, error)
+	FindByEmail(email string) (*domain.User, error)
+	Update(id string, data *domain.User) (*domain.User, error)
+	UpdatePassword(id, newPassword string) error
+}
+ */
 type LoginUseCase struct {
 	userRepository repositories.UserRepository
 	context        *gin.Context

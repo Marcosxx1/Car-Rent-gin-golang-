@@ -42,7 +42,6 @@ As well in with the other projects this architecture enables enhanced modularity
   - [Maintenance](#specification)
   - [User](#user)
   - [Orders](#orders)
-  - [Payments(WIP)](#payments)
   - [Reviews](#reviews)
 - [Folder Structure](#folder-structure)
 - [Contributing](#contributing)
@@ -96,183 +95,7 @@ With the user created:
 }
 
 ```
-When accessing this route, if successful a token will be generated that will be needed in some of the routes
 
-
-### Category
-
-#### Create Category
-
-- **Endpoint:** `POST /api/v1/category/create`
-- **Description:** Creates a new category.
-- **Handler Function:** `category_endpoints.PostCategoryController`
-
-### List Categories
-- **Endpoint:** `GET /api/v1/category/list`
-- **Description:** Retrieves a list of categories.
-- **Handler Function:** `category_endpoints.ListCategoriesController`
-
-### Car
-
-#### Get All Cars
-
-- **Endpoint:** `GET /api/v1/cars`
-- **Description:** Retrieves a list of all cars.
-- **Handler Function:** `endpoints.GetAllCarsController`
-
-### Find Car by ID
-
-- **Endpoint:** `GET /api/v1/cars/:id`
-- **Description:** Retrieves details of a specific car by ID.
-- **Handler Function:** `endpoints.FindCarByIdController`
-
-### Register Car
-
-- **Endpoint:** `POST /api/v1/cars/create`
-- **Description:** Registers a new car.
-- **Handler Function:** `endpoints.RegisterCarController`
-
-### Delete Car
-
-- **Endpoint:** `DELETE /api/v1/cars/delete/:id`
-- **Description:** Deletes a car by ID.
-- **Handler Function:** `endpoints.DeleteCarController`
-
-### Update Car
-
-- **Endpoint:** `PUT /api/v1/cars/update/:id`
-- **Description:** Updates information for a specific car.
-- **Handler Function:** `endpoints.UpdateCarController`
-
-
-### Specification
-
-#### Create Specification
-- **Endpoint:** `POST /api/v1/specification/create`
-- **Description:** Creates a new specification.
-- **Handler Function:** `specificationendpoints.PostSpecificationController`
-
-### Maintenance
-
-#### Register Maintenance
-
-- **Endpoint:** `POST /api/v1/cars/:carID/maintenance/create`
-- **Description:** Registers maintenance for a specific car.
-- **Handler Function:** `maintenancecontroller.RegisterMaintenanceController`
-
-### Get Maintenance by ID
-
-- **Endpoint:** `GET /api/v1/maintenance/:id`
-- **Description:** Retrieves details of specific maintenance by ID.
-- **Handler Function:** `maintenancecontroller.GetMaintenanceByIdController`
-
-### Update Maintenance
-
-- **Endpoint:** `PATCH /api/v1/maintenance/:id`
-- **Description:** Updates information for specific maintenance.
-- **Handler Function:** `maintenancecontroller.UpdateMaintenanceController`
-
-### Delete Maintenance
-
-- **Endpoint:** `DELETE /api/v1/maintenance/:id`
-- **Description:** Deletes specific maintenance.
-- **Handler Function:** `maintenancecontroller.DeleteMaintenanceController`
-
-
-### User
-
-#### Create User
-- **Endpoint:** `POST /api/v1/user/create`
-- **Description:** Registers a new user.
-- **Handler Function:** `userendpoints.RegisterUserController`
-
-
-### Get User by ID
-- **Endpoint:** `GET /api/v1/user/:id`
-- **Description:** Retrieves user details by ID.
-- **Handler Function:** `userendpoints.GetUserByIdController`
-
-### Update User
-- **Endpoint:** `PATCH /api/v1/user/:id`
-- **Description:** Updates user information.
-- **Handler Function:** `userendpoints.PatchUserController`
-
-### Change Password
-- **Endpoint:** `PATCH /api/v1/user/:id/change-password`
-- **Description:** Changes the password for a user.
-- **Handler Function:** `userendpoints.ChangePasswordController`
-
-### Orders
-
-#### Create Order
-
-- **Endpoint:** `POST /api/v1/orders/create`
-- **Description:** Creates a new order.
-- **Handler Function:** `orders_endpoints.CreateOrderController`
-
-### Get Order by ID (WIP)
-
-- **Endpoint:** `GET /api/v1/orders/:id`
-- **Description:** Retrieves details of a specific order by ID.
-- **Handler Function:** `orders_endpoints.GetOrderByIdController`
-
-### Update Order (WIP)
-
-- **Endpoint:** `PATCH /api/v1/orders/:id`
-- **Description:** Updates information for a specific order.
-- **Handler Function:** `orders_endpoints.UpdateOrderController`
-
-### Cancel Order (WIP)
-
-- **Endpoint:** `DELETE /api/v1/orders/:id/cancel`
-- **Description:** Cancels a specific order.
-- **Handler Function:** `orders_endpoints.CancelOrderController`
-
-### Payments
-
-#### Make Payment (WIP)
-
-- **Endpoint:** `POST /api/v1/payments/make-payment`
-- **Description:** Processes a payment for an order.
-- **Handler Function:** `payments_endpoints.MakePaymentController`
-
-### Get Payment by ID (WIP)
-
-- **Endpoint:** `GET /api/v1/payments/:id`
-- **Description:** Retrieves details of a specific payment by ID.
-- **Handler Function:** `payments_endpoints.GetPaymentByIdController`
-
-### Reviews
-
-### Create Review
-
-- **Endpoint:** `POST /api/v1/review/create`
-- **Description:** Creates a new review.
-- **Handler Function:** `reviewcontroller.PostReviewsController`
-
-### Get Review by ID 
-
-- **Endpoint:** `GET /api/v1/reviews/:id`
-- **Description:** Retrieves details of a specific review by ID.
-- **Handler Function:** `reviews_endpoints.GetReviewByIdController`
-
-### Get All Reviews
-
-- **Endpoint:** `GET /api/v1/review/list`
-- **Description:** Retrieves all reviews availiable.
-- **Handler Function:** `reviewcontroller.GetAllReviewsController`
-
-### Update Review 
-
-- **Endpoint:** `PATCH /api/v1/reviews/:id`
-- **Description:** Updates information for a specific review.
-- **Handler Function:** `reviews_endpoints.UpdateReviewController`
-
-### Delete Review 
-
-- **Endpoint:** `DELETE /api/v1/reviews/:id`
-- **Description:** Deletes a specific review.
-- **Handler Function:** `reviews_endpoints.DeleteReviewController`
 
 
 ## Folder Structure (WIP)
@@ -594,11 +417,7 @@ Car-Rent-gin-golang-/
 - Users can upload multiple images for the same car.  :o:
 - Users responsible for registration should be administrators.  :o:
 
-### Payments 
-- Validation mechanisms to ensure accurate payment details. :o:
-- Robust error handling to enhance user experience. :o:
-- User authentication and authorization for secure payment transactions. :o:
-- Comprehensive documentation covering payment processing and error handling. :o:
+
 
  
 ## Contributing
@@ -610,3 +429,18 @@ The Car Rental App's architecture provides clarity, modularity, and scalability.
 
 ###swagoo:
  swag init --parseDependency --parseInternal due to package problems      
+
+ docker build -t car-rent-go .
+
+ docker pull postgres
+
+ docker run --name car-rent-go -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=car-rent-go -d postgres
+
+docker run --link car-rent-go:postgres car-rent-go
+
+
+docker run --name car-rent-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=car-rent-go -d postgres
+
+docker exec -it car-rent-postgres psql -U postgres
+
+CREATE DATABASE car_rent_go;

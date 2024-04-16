@@ -2,10 +2,12 @@ package orderusecases
 
 import (
 	"fmt"
+	"net/url"
 	"sync"
 
 	orderdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/order"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/utils"
 )
 
 type GetOrderByQueryUseCase struct {
@@ -25,24 +27,25 @@ func NewGetOrderByQueryUseCase(
 	}
 }
 
-func (useCase *GetOrderByQueryUseCase) Execute(options *orderdto.OrderInputCompleteDTO) ([]*orderdto.OrderOutputDTO, error) {
+func (useCase *GetOrderByQueryUseCase) Execute(queryParams url.Values) ([]*orderdto.OrderOutputDTO, error) {
 	var wg sync.WaitGroup
 	resultChan := make(chan []*orderdto.OrderOutputDTO)
 	errorChan := make(chan error)
 	validationErrorSignal := make(chan bool)
 
-	wg.Add(1)
+	options, err := utils.ConvertOptionsToOrderInputComplete(queryParams)
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert query parameters: %w", err)
+	}
 
+	wg.Add(1)
 	go useCase.performGetOrderByOptions(&wg, errorChan, resultChan, validationErrorSignal, options)
 
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		wg.Wait()
-		close(resultChan)
-		close(errorChan)
-	}()
+	wg.Wait()
+	close(resultChan)
+	close(errorChan)
 
+	// Check for errors
 	select {
 	case orderList := <-resultChan:
 		return orderList, nil
@@ -51,7 +54,7 @@ func (useCase *GetOrderByQueryUseCase) Execute(options *orderdto.OrderInputCompl
 	}
 }
 
-func (useCase *GetOrderByQueryUseCase) performGetOrderByOptions(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- []*orderdto.OrderOutputDTO, validationErrorSignal chan<- bool, options *orderdto.OrderInputCompleteDTO) {
+func (useCase *GetOrderByQueryUseCase) performGetOrderByOptions(wg *sync.WaitGroup, errorChan chan<- error, resultChan chan<- []*orderdto.OrderOutputDTO, validationErrorSignal chan<- bool, options *orderdto.OrderOutputDTO) {
 	defer wg.Done()
 
 	orders, err := useCase.orderRepository.GetOrdersByOptions(options)

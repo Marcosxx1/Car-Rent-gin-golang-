@@ -45,7 +45,7 @@ func (r *PGOrderRepository) CreateOrder(order *domain.Order) error {
 // The function returns a slice of domain.Order pointers representing the retrieved orders
 // along with an error. If no orders match the specified criteria, the function returns nil for
 // the slice of orders and nil error.
-func (r *PGOrderRepository) GetOrdersByOptions(options *orderdto.OrderInputCompleteDTO) ([]*domain.Order, error) {
+func (r *PGOrderRepository) GetOrdersByOptions(options *orderdto.OrderOutputDTO) ([]*domain.Order, error) {
 	var orders []*domain.Order
 	query := dbconfig.Postgres
 

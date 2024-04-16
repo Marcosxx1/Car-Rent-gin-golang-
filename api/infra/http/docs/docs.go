@@ -971,7 +971,7 @@ const docTemplate = `{
         },
         "/orders": {
             "get": {
-                "description": "Retrieve an order by order ID or user ID",
+                "description": "Fetches orders based on query parameters such as options and userID.",
                 "consumes": [
                     "application/json"
                 ],
@@ -981,26 +981,23 @@ const docTemplate = `{
                 "tags": [
                     "Orders"
                 ],
-                "summary": "Retrieve an order",
+                "summary": "Get orders by query parameters",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Order ID",
-                        "name": "orderID",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "userID",
+                        "description": "Query parameters for filtering orders",
+                        "name": "options",
                         "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Retrieved order",
+                        "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/orderdto.OrderOutputDTO"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/orderdto.OrderOutputDTO"
+                            }
                         }
                     }
                 }
@@ -1266,6 +1263,17 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "domain.Role": {
+            "type": "string",
+            "enum": [
+                "admin",
+                "user"
+            ],
+            "x-enum-varnames": [
+                "RoleAdmin",
+                "RoleUser"
+            ]
         },
         "enums.MaintenanceStatus": {
             "type": "string",
@@ -1602,10 +1610,19 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "role": {
-                    "type": "string"
+                    "enum": [
+                        "admin",
+                        "user",
+                        "manager"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/domain.Role"
+                        }
+                    ]
                 },
                 "status": {
-                    "type": "string"
+                    "type": "boolean"
                 }
             }
         },

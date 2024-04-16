@@ -5,7 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupOrderRoutes(authGroup *gin.RouterGroup) {
+func SetupOrderRoutes(authGroup *gin.RouterGroup, router *gin.Engine) {
+	router.GET("order", factory.GetOrderByQueryFactoryController)
 	authGroup.POST("/order", factory.PostOrderFactoryController)
 	authGroup.DELETE("order/id", factory.DeleteOrderFactoryController)
 }

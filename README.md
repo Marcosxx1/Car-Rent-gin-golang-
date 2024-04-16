@@ -42,7 +42,6 @@ As well in with the other projects this architecture enables enhanced modularity
   - [Maintenance](#specification)
   - [User](#user)
   - [Orders](#orders)
-  - [Payments(WIP)](#payments)
   - [Reviews](#reviews)
 - [Folder Structure](#folder-structure)
 - [Contributing](#contributing)

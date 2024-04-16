@@ -4,22 +4,21 @@ import (
 	"testing"
 
 	authdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/auth"
-	testingmocks "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/testing-mocks"
+	databasemocks "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/database/database-mocks"
 	"github.com/gin-gonic/gin"
 )
 
-
 func TestLoginUseCase_Execute(t *testing.T) {
-	mockContext := &gin.Context{} 
-	mockUserRepo := &testingmocks.MockUserRepository{}
+	mockContext := &gin.Context{}
+	mockUserRepo := &databasemocks.MockUserRepository{}
 	useCase := NewLoginUseCase(mockContext, mockUserRepo)
 
 	tests := []struct {
-		name     string
-		request  *authdto.LoginInputDTO
-		want     string
-		wantErr  bool
-		errMsg   string
+		name    string
+		request *authdto.LoginInputDTO
+		want    string
+		wantErr bool
+		errMsg  string
 	}{
 		{
 			name: "Valid Login",

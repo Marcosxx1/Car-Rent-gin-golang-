@@ -1,8 +1,7 @@
 package usecases
 
 import (
-	"fmt"
-	"sync"
+	"errors"
 
 	reviewdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/review"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
@@ -19,55 +18,25 @@ func NewGetAllReviewsUseCase(reviewRepository repositories.ReviewsRepository) *G
 }
 
 func (useCase *GetAllReviewsUseCase) Execute() ([]*reviewdto.ReviewOutputDTO, error) {
-	resultChan := make(chan []*reviewdto.ReviewOutputDTO)
-	errorChan := make(chan error)
-	validationErrorSignal := make(chan bool)
-
-	var wg sync.WaitGroup
-
-	wg.Add(2)
-	go useCase.performaGetAllReviews(&wg, resultChan, errorChan, validationErrorSignal)
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		wg.Wait()
-		close(resultChan)
-		close(errorChan)
-		close(validationErrorSignal)
-	}()
-
-	select {
-	case reviewsOutput := <-resultChan:
-		return reviewsOutput, nil
-	case err := <-errorChan:
-		if <-validationErrorSignal {
-			fmt.Println("Some error to be defined TODO")
-		}
-		return nil, err
-	}
-}
-
-func (useCase *GetAllReviewsUseCase) performaGetAllReviews(wg *sync.WaitGroup, resultChan chan<- []*reviewdto.ReviewOutputDTO, errorChan chan<- error, validationErrorSignal chan<- bool) {
-	defer wg.Done()
-
 	reviews, err := useCase.reviewRepository.GetAllReviews()
-
 	if err != nil {
-		errorChan <- fmt.Errorf("failed to retrieve reviews: %w", err)
-		validationErrorSignal <- true
-		return
+		return nil, errors.New("error retrieving reviews")
 	}
 
 	if len(reviews) == 0 {
-		errorChan <- fmt.Errorf("no reviews found")
-		validationErrorSignal <- true
-		return
+		return nil, errors.New("no reviews found")
 	}
 
-	go func() {
-		outPutDto := reviewdto.ConvertMultipleReviewsToOutPut(reviews)
-		validationErrorSignal <- false
-		resultChan <- outPutDto
-	}()
+	outputDTOs := make([]*reviewdto.ReviewOutputDTO, len(reviews))
+
+	for i, review := range reviews {
+		outputDTOs[i] = &reviewdto.ReviewOutputDTO{
+			ID:     review.ID,
+			UserId: review.UserId,
+			CarId:  review.CarId,
+			Rating: review.Rating,
+		} 
+	}
+	// simple is better!!!
+	return outputDTOs, nil
 }

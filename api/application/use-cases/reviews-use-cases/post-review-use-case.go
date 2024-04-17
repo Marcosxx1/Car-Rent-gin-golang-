@@ -38,6 +38,7 @@ func (useCase *PostReviewUseCase) Execute(userID string, carID string, inputDTO 
 		wg.Wait()
 		close(resultChan)
 		close(errorChan)
+		close(validationErrorSignal)
 	}()
 
 	select {
@@ -48,14 +49,8 @@ func (useCase *PostReviewUseCase) Execute(userID string, carID string, inputDTO 
 	}
 }
 
-func validateReviewInput(wg *sync.WaitGroup, errorChan chan<- error, validationErrorSignal chan<- bool, inputDTO *reviewdto.ReviewInputDTO) {
+func validateReviewInput(wg *sync.WaitGroup, errorChan chan error, validationErrorSignal chan bool, inputDTO *reviewdto.ReviewInputDTO) {
 	defer wg.Done()
-
-	if inputDTO.Rating == nil || *inputDTO.Rating < 1 || *inputDTO.Rating > 5 {
-		errorChan <- fmt.Errorf("invalid rating")
-		validationErrorSignal <- true
-		return
-	}
 
 	if err := validation_errors.ValidateStruct(inputDTO); err != nil {
 		errorChan <- err
@@ -66,7 +61,7 @@ func validateReviewInput(wg *sync.WaitGroup, errorChan chan<- error, validationE
 	validationErrorSignal <- false
 }
 
-func (useCase *PostReviewUseCase) performReviewCreation(wg *sync.WaitGroup, resultChan chan<- *reviewdto.ReviewOutputDTO, errorChan chan<- error, validationErrorSignal <-chan bool, userID string, carID string, inputDTO *reviewdto.ReviewInputDTO) {
+func (useCase *PostReviewUseCase) performReviewCreation(wg *sync.WaitGroup, resultChan chan *reviewdto.ReviewOutputDTO, errorChan chan error, validationErrorSignal <-chan bool, userID string, carID string, inputDTO *reviewdto.ReviewInputDTO) {
 	defer wg.Done()
 
 	if <-validationErrorSignal {

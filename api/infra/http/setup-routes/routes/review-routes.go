@@ -5,9 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupReviewRoutes(authGroup *gin.RouterGroup) {
+func SetupReviewRoutes(router *gin.Engine, authGroup *gin.RouterGroup) {
 	authGroup.POST("/review/create", factory.PostReviewsFactoryController)
-	authGroup.GET("/review/list", factory.GetAllReviewsFactoryController)
+	router.GET("/review/list", factory.GetAllReviewsFactoryController)
 	authGroup.PUT("/review/:id", factory.UpdateReviewFactoryController)
 	authGroup.DELETE("/review/:id", factory.DeleteReviewFactoryController)
 }

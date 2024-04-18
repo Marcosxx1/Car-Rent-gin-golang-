@@ -8,7 +8,7 @@ import (
 type ReviewInputDTO struct {
 	Rating  *int   `json:"rating" validate:"required,gte=1,lte=5"`
 	Content string `json:"content" validate:"required,max=500"`
-	UserId  string `json:"user_id" validate:"required"`
+	UserId  string `json:"user_id"`
 	CarId   string `json:"car_id" validate:"required"`
 }
 

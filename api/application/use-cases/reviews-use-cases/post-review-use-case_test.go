@@ -71,8 +71,8 @@ func TestPostReviewUseCase_ValidationFailed(t *testing.T) {
 	}
 
 	assert.Contains(t, err.Error(), "content is required", "Expected error message for empty content")
-	assert.Contains(t, err.Error(), "userid is required", "Expected error message for empty UserID")
-	assert.Contains(t, err.Error(), "carid is required", "Expected error message for empty CarID")
+/* 	assert.Contains(t, err.Error(), "userid is required", "Expected error message for empty UserID") // since we're passing the id via token on the context, this may not be necessary, TODO
+ */	assert.Contains(t, err.Error(), "carid is required", "Expected error message for empty CarID")
 
 	assert.Nil(t, outputDTO, "Expected a nil outputDTO due to validation failure")
 

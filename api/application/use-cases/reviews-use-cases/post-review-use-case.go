@@ -22,6 +22,12 @@ func NewPostReviewUseCase(reviewRepository repositories.ReviewsRepository) *Post
 }
 
 func (useCase *PostReviewUseCase) Execute(userID string, carID string, inputDTO *reviewdto.ReviewInputDTO) (*reviewdto.ReviewOutputDTO, error) {
+
+/* 	// post-review is an authenticated endpoint, userID should come in the context that we're getting in the controller, but if wer don't have...
+	if strings.TrimSpace(userID) == "" {
+		return nil, fmt.Errorf("user ID is required")
+	} */
+
 	resultChan := make(chan *reviewdto.ReviewOutputDTO)
 	errorChan := make(chan error)
 	validationErrorSignal := make(chan bool)
@@ -76,13 +82,14 @@ func (useCase *PostReviewUseCase) performReviewCreation(wg *sync.WaitGroup, resu
 		Content: inputDTO.Content,
 	}
 
-	createdReviewID, err := useCase.reviewRepository.CreateReview(newReview)
+	createdReview, err := useCase.reviewRepository.CreateReview(newReview)
+
 	if err != nil {
 		errorChan <- fmt.Errorf("failed to create review: %w", err)
 		return
 	}
 
-	outputDTO := reviewdto.ConvertReviewToOutput(createdReviewID)
+	outputDTO := reviewdto.ConvertReviewToOutput(createdReview)
 
 	resultChan <- outputDTO
 }

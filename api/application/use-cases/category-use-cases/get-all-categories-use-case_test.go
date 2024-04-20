@@ -42,7 +42,7 @@ func TestGetAllCategoriesErrorRetrievingCategories(t *testing.T) {
 	output, err := usecase.Execute()
 
 	assert.Nil(t, output, "Expected output to be nil, it wasn't")
-	assert.NotNil(t, err, "Expected err to not be nil, it was") // almost
+	assert.NotNil(t, err, "Expected err to not be nil, it was")
 
 	assert.Error(t, err, "Expected error, but no error got returned")
 }
@@ -57,7 +57,7 @@ func TestGetAllCategoriesNoCategoryFound(t *testing.T) {
 	output, err := usecase.Execute()
 
 	assert.Nil(t, output, "Expected output to be nil, it wasn't")
-	assert.NotNil(t, err, "Expected err to not be nil, it was") // almost
+	assert.NotNil(t, err, "Expected err to not be nil, it was")
 	assert.Contains(t, err.Error(), "no categories found", "Expected error message to contain 'no categories found'")
 	assert.Error(t, err, "Expected error, but no error got returned")
 }

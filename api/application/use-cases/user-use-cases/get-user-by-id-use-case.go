@@ -1,6 +1,8 @@
 package userusecases
 
 import (
+	"errors"
+
 	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/user"
 	repositories "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 )
@@ -15,11 +17,14 @@ func NewGetUserByIdUseCase(userRepository repositories.UserRepository) *GetUserB
 	}
 }
 
-func (userRepo *GetUserByIdUseCase) Execute(id string) (*userdtos.UserOutPutDTO, error) {
-
-	existUser, err := userRepo.userRepository.GetById(id)
+func (useCase *GetUserByIdUseCase) Execute(id string) (*userdtos.UserOutPutDTO, error) {
+	existUser, err := useCase.userRepository.GetById(id)
 	if err != nil {
 		return nil, err
+	}
+
+	if existUser == nil {
+		return nil, errors.New("user not found")
 	}
 
 	userToBeReturned := &userdtos.UserOutPutDTO{

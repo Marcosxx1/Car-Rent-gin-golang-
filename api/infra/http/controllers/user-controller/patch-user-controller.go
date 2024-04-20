@@ -8,6 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Update user by ID
+// @Description Update user details by ID
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID"
+// @Param request body userdtos.UserUpdateDTO true "Update User Request"
+// @Security Bearer
+// @Param Authorization header string true "Authorization"
+// @Success 200 {object} userdtos.UserUpdateDTO
+// @Router /user/{id} [patch]
 func PatchUserController(context *gin.Context, userUseCase *userusecases.PutUserUseCase) {
 
 	var request userdtos.UserUpdateDTO

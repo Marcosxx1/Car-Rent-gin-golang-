@@ -12,6 +12,9 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// @securityDefinitions.apikey Bearer
+// @in header
+// @name Authorization
 func main() {
 	gin.SetMode(gin.ReleaseMode)
 

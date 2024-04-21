@@ -1,6 +1,8 @@
 package categoryusecases
 
 import (
+	"errors"
+
 	categorydtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/category"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 )
@@ -20,8 +22,13 @@ func (useCase *GetAllCategoriesUseCase) Execute() ([]*categorydtos.CategoryOutpu
 
 	allCategories, err := useCase.categoryRepository.GetAll()
 	if err != nil {
-		return nil, err
+		return nil, errors.New("error retrieving categories")
 	}
+
+	if len(allCategories) == 0 {
+		return nil, errors.New("no categories found")
+	}
+
 	outPutDTO := make([]*categorydtos.CategoryOutputDTO, 0)
 	for _, car := range allCategories {
 		dto := &categorydtos.CategoryOutputDTO{

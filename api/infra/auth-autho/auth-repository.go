@@ -1,4 +1,4 @@
-package auth
+package authautho
 
 import (
 	"fmt"
@@ -8,9 +8,15 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+type AuthRepository struct{}
+
+func NewAuthRepository() *AuthRepository {
+	return &AuthRepository{}
+}
+
 var MySecretKey = []byte(os.Getenv("MY_AUTH"))
 
-func GenerateAuthToken(user_id string, user_role string) (string, error) {
+func (a *AuthRepository) GenerateAuthToken(user_id string, user_role string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
 			"role":    user_role,
@@ -19,20 +25,21 @@ func GenerateAuthToken(user_id string, user_role string) (string, error) {
 		})
 
 	tokenString, err := token.SignedString(MySecretKey)
+
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to sign token: %w", err)
 	}
 
 	return tokenString, nil
 }
 
-func ValidateAuthToken(tokenString string) error {
+func (a *AuthRepository) ValidateAuthToken(tokenString string) error {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return MySecretKey, nil
 	})
 
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to parse token: %w", err)
 	}
 
 	if !token.Valid {

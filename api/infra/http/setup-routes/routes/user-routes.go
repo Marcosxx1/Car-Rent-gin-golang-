@@ -5,10 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupUserRoutes(router *gin.Engine) {
-	
-	router.GET("/user/:id", factory.GetUserByIdControllerFactory)
-	router.PATCH("/user/:id", factory.PatchUserControllerFactory)
-	router.PATCH("/user/:id/change-password", factory.ChangePasswordControllerFactory)
+func SetupUserRoutes(authGroup *gin.RouterGroup) {
+
+	authGroup.GET("/user/:id", factory.GetUserByIdControllerFactory)
+	authGroup.PATCH("/user/:id", factory.PatchUserControllerFactory)
+	authGroup.PATCH("/user/change-password", factory.ChangePasswordControllerFactory)
 
 }

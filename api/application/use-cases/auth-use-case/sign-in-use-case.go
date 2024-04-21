@@ -2,71 +2,38 @@ package authusecase
 
 import (
 	"fmt"
-	"sync"
 
 	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/user"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	userutils "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/user-use-cases/user-utils"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	hashpassword "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/auth-controller/hash-password"
 	"github.com/rs/xid"
 )
 
 type PostUserUseCase struct {
-	userRepository repositories.UserRepository
+	userRepository     repositories.UserRepository
+	passwordRepository repositories.PasswordRepository
 }
 
-func NewPostUserUseCase(userRepository repositories.UserRepository) *PostUserUseCase {
+func NewPostUserUseCase(userRepository repositories.UserRepository, passwordRepository repositories.PasswordRepository) *PostUserUseCase {
 	return &PostUserUseCase{
-		userRepository: userRepository,
+		userRepository:     userRepository,
+		passwordRepository: passwordRepository,
 	}
 }
 
 func (useCase *PostUserUseCase) Execute(userInputDto userdtos.UserInputDTO) (*userdtos.UserOutPutDTO, error) {
-	resultChan := make(chan *userdtos.UserOutPutDTO)
-	errorChan := make(chan error)
-	validationErrorSignal := make(chan bool)
-
-	var wg sync.WaitGroup
-
-	wg.Add(3)
-	go userutils.UserValidation(&wg, errorChan, validationErrorSignal, userInputDto)
-	go useCase.performUserCreation(&wg, errorChan, validationErrorSignal, resultChan, userInputDto)
-
-	go func() {
-		wg.Wait()
-		close(resultChan)
-		close(errorChan)
-		close(validationErrorSignal)
-	}()
-
-	for {
-		select {
-		case result := <-resultChan:
-			return result, nil
-		case err := <-errorChan:
-			return nil, err
-		}
-	}
-}
-
-func (useCase *PostUserUseCase) performUserCreation(wg *sync.WaitGroup, errorChan chan<- error, validationErrorSignal chan<- bool, resultChan chan<- *userdtos.UserOutPutDTO, userInputDto userdtos.UserInputDTO) {
-	defer wg.Done()
-
-	// even though we are validating with v10:
-	// 	Password string      `json:"password" binding:"required" validate:"required,min=8"`
-	// it could be a nice aproach to validate even further
-	if userInputDto.Password == "" {
-		errorChan <- fmt.Errorf("password is required")
-		validationErrorSignal <- true
-		return
-	}
-
-	hashedPassword, err := hashpassword.HashPassword(userInputDto.Password)
+	existingUser, err := useCase.userRepository.FindByEmail(userInputDto.Email)
 	if err != nil {
-		errorChan <- fmt.Errorf("failed to hash password: %w", err)
-		validationErrorSignal <- true
-		return
+		return nil, fmt.Errorf("failed to check existing user: %w", err)
+	}
+
+	if existingUser != nil {
+		return nil, fmt.Errorf("user already exists")
+	}
+
+	hashedPassword, err := useCase.passwordRepository.HashPassword(userInputDto.Password)
+	if err != nil {
+		return nil, fmt.Errorf("failed to hash password: %w", err)
 	}
 
 	newUser := &domain.User{
@@ -80,18 +47,14 @@ func (useCase *PostUserUseCase) performUserCreation(wg *sync.WaitGroup, errorCha
 	}
 
 	if err := useCase.userRepository.PostUser(newUser); err != nil {
-		errorChan <- fmt.Errorf("failed to save user: %w", err)
-		validationErrorSignal <- true
-		return
+		return nil, fmt.Errorf("failed to save user: %w", err)
 	}
 
-	resultChan <- &userdtos.UserOutPutDTO{
+	return &userdtos.UserOutPutDTO{
 		ID:     newUser.ID,
 		Name:   newUser.Name,
 		Email:  newUser.Email,
 		Status: newUser.Status,
 		Avatar: newUser.Avatar,
-	}
-
-	validationErrorSignal <- false
+	}, nil
 }

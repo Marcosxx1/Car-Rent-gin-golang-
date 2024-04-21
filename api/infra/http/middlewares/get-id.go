@@ -3,7 +3,8 @@ package middlewares
 import (
 	"strings"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/auth-controller/auth"
+	authautho "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/auth-autho"
+
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -25,7 +26,7 @@ func JWTMiddleware() gin.HandlerFunc {
 
 		tokenString := tokenParts[1]
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-			return auth.MySecretKey, nil
+			return authautho.MySecretKey, nil
 		})
 
 		if err != nil || !token.Valid {

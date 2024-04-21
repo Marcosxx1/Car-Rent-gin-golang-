@@ -8,6 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Get user by ID
+// @Description Retrieve user details by ID
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID"
+// @Security ApiKeyAuth
+// @Success 200 {object} userdtos.UserOutPutDTO
+// @Router /user/{id} [get]
 func GetUserByIdController(context *gin.Context, userUseCase *userusecases.GetUserByIdUseCase) {
 
 	id := context.Param("id")

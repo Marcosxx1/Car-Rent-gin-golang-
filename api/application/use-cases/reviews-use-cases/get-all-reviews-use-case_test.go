@@ -52,7 +52,7 @@ func TestGetAllReviewsNotFound(t *testing.T) {
 	_, err := useCase.Execute()
 
 	// Assertions
-	assert.Error(t, err, "Expected error, but no got returned")
+	assert.Error(t, err, "Expected error, but no error got returned")
 	assert.Contains(t, err.Error(), "no reviews found", "Expected error message to contain 'no reviews found'")
 
 	mockRepo.AssertExpectations(t)

@@ -5,53 +5,45 @@ import (
 
 	authdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/auth"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/auth-controller/auth"
-	hashpassword "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/auth-controller/hash-password"
-	"github.com/gin-gonic/gin"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 )
 
-var (
-	ErrInvalidPassword   = errors.New("invalid username or password")
-	ErrGenerateAuthToken = errors.New("failed to generate authentication token")
-)
-/* type UserRepository interface {
-	PostUser(userData *domain.User) error
-	GetById(id string) (*domain.User, error)
-	FindByEmail(email string) (*domain.User, error)
-	Update(id string, data *domain.User) (*domain.User, error)
-	UpdatePassword(id, newPassword string) error
-}
- */
 type LoginUseCase struct {
-	userRepository repositories.UserRepository
-	context        *gin.Context
+	userRepository     repositories.UserRepository
+	passwordRepository repositories.PasswordRepository
+	authRepository     repositories.AuthRepository
 }
 
-func NewLoginUseCase(context *gin.Context, userRepository repositories.UserRepository) *LoginUseCase {
+func NewLoginUseCase(userRepository repositories.UserRepository, passwordRepository repositories.PasswordRepository, authRepository repositories.AuthRepository) *LoginUseCase {
 	return &LoginUseCase{
-		userRepository: userRepository,
-		context:        context,
+		userRepository:     userRepository,
+		passwordRepository: passwordRepository,
+		authRepository:     authRepository,
 	}
 }
 
 func (useCase *LoginUseCase) Execute(request *authdto.LoginInputDTO) (string, error) {
+
+	if err := validation_errors.ValidateStruct(request); err != nil {
+		return "", err
+	}
+
 	existingUser, err := useCase.userRepository.FindByEmail(request.Email)
 	if err != nil {
 		return "", err
 	}
 
 	if existingUser.ID == "" {
-		useCase.context.JSON(400, gin.H{"error": "user does not exist"})
-		return "", nil // TODO better error handling
+		return "", errors.New("user not found")
 	}
 
-	if !hashpassword.VerifyPassword(request.Password, existingUser.Password) {
-		return "", ErrInvalidPassword
+	if !useCase.passwordRepository.VerifyPassword(request.Password, existingUser.Password) {
+		return "", errors.New("invalid username or password")
 	}
 
-	token, err := auth.GenerateAuthToken(existingUser.ID, string(existingUser.Role))
+	token, err := useCase.authRepository.GenerateAuthToken(existingUser.ID, string(existingUser.Role))
 	if err != nil {
-		return "", ErrGenerateAuthToken
+		return "", errors.New("failed to generate authentication token")
 	}
 
 	//useCase.context.SetCookie("token", token, int(expirationTime.Unix()), "/", "localhost", false, true)

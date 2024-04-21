@@ -336,6 +336,49 @@ Car-Rent-gin-golang-/
 </details>
 </pre>
 
+# Unit Testing Roadmap
+
+## Introduction 
+- I will understand the importance of unit testing
+- I will Learn the basics of unit testing in Go
+- I will Set up a testing environment
+
+
+## Writing Unit Tests (WIP)
+- Identify the unit of work (function, method, package)
+- Define the test case scenarios (happy path, edge cases, error cases)
+- Write test functions using `t.Run` or `t.Helper` to group tests
+- Use assertions to validate expected outcomes (`assert.Equal`, `assert.Nil`, `assert.NotNil`)
+
+## Test Coverage
+- Monitor test coverage using tools like `go test -cover`
+- Aim for high test coverage to ensure comprehensive testing
+- Identify and write tests for uncovered areas
+
+## Mocking and Stubbing
+- Understand the need for mocking and stubbing in unit testing
+- Use libraries like `testify/mock` or hand-crafted mocks to simulate dependencies
+- Mock external dependencies (e.g., databases, APIs) to isolate unit tests
+
+## Running Tests
+- Run tests using `go test ./...` to execute all tests in the package and sub-packages
+- Use flags like `-v` for verbose output and `-run` to filter tests
+- Analyze test results and fix failures
+
+## Best Practices
+- Write descriptive test names to document intent
+- Keep tests isolated, independent, and repeatable
+- Refactor and maintain tests as the codebase evolves
+
+## Continuous Integration (CI)
+- Integrate tests into CI pipelines (e.g., GitHub Actions, Jenkins)
+- Automate test execution on code commits and pull requests
+- Monitor CI results and address failures promptly
+
+## Conclusion
+- Celebrate successes and learn from failures
+- Continuously improve testing skills and practices
+- Encourage team collaboration and knowledge sharing on testing
 
 
 ## Functional Requirements (FR)

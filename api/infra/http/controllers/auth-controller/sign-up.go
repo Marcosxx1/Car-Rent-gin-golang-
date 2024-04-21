@@ -8,9 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// RegisterUserController handles the HTTP POST request to create a new maintenance.
+// RegisterUserController handles the HTTP POST request to create a new user.
 // @Summary				Create a new user
-// @Description			Create a new maintenance with the provided information
+// @Description			Create a new user with the provided information
 // @ID					sign-up
 // @Tags				Auth
 // @Accept				json

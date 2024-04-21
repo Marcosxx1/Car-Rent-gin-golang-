@@ -9,34 +9,26 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// LoginHandlerController handles the HTTP POST request for login.
-// @Summary				Log in the application
-// @Description			If the provided e-mail and password are correct an jwt token will be generated with the user id
+// RegisterUserController handles the HTTP POST request to create a new maintenance.
+// @Summary				Create a new user
+// @Description			Create a new maintenance with the provided information
 // @ID					login
 // @Tags				Auth
 // @Accept				json
 // @Produce				json
-// @Param				request				body 			authdto.LoginInputDTO	true "user information to login"
-// @Router				/login 			[post]
+// @Param				request				body 			authdto.LoginInputDTO	true "information to log in"
+// @Router				/login [post]
 func LoginHandlerController(context *gin.Context, loginUseCase *authusecase.LoginUseCase) {
-	var request *authdto.LoginInputDTO
+	var request authdto.LoginInputDTO
 
 	if err := context.ShouldBindJSON(&request); err != nil {
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return
 	}
 
-	token, err := loginUseCase.Execute(request)
-
+	token, err := loginUseCase.Execute(&request)
 	if err != nil {
-		switch err {
-		case authusecase.ErrInvalidPassword:
-			context.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
-		case authusecase.ErrGenerateAuthToken:
-			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate authentication token"})
-		default:
-			context.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
-		}
+		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 

@@ -18,7 +18,7 @@ func Setup(router *gin.Engine) {
 	routes.SetupCategoryRoutes(router /* authGroupRoutes */)      // need to be admin
 	routes.SetupCarRoutes(router, authGroupRoutes)                //don't need authentication
 	routes.SetupSpecificationRoutes(router /* authGroupRoutes */) //don't need authentication
-	routes.SetupUserRoutes(router /* authGroupRoutes */)          // can be admin or normal user
+	routes.SetupUserRoutes(authGroupRoutes)                       // can be admin or normal user
 	routes.SetupMaintenanceRoutes(authGroupRoutes)                // needs to be admin
 	routes.SetupReviewRoutes(router, authGroupRoutes)             // need to be logged user
 	routes.SetupOrderRoutes(authGroupRoutes, router)              // needs to be admin

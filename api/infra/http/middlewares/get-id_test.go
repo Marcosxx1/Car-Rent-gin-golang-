@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/http/controllers/auth-controller/auth"
+	authautho "github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/auth-autho"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/assert"
@@ -58,7 +58,7 @@ func generateTestToken(userID, role string) string {
 		"role":    role,
 	})
 
-	tokenString, _ := token.SignedString(auth.MySecretKey)
+	tokenString, _ := token.SignedString(authautho.MySecretKey)
 	return tokenString
 }
 
@@ -108,7 +108,7 @@ func generateExpiredTestToken(userID, role string) string {
 		"exp":     time.Now().Add(-time.Hour).Unix(),
 	})
 
-	tokenString, _ := token.SignedString(auth.MySecretKey)
+	tokenString, _ := token.SignedString(authautho.MySecretKey)
 	return tokenString
 }
 
@@ -138,7 +138,7 @@ func generateTestTokenWithInvalidClaims() string {
 		"invalid_key": "invalid_value",
 	})
 
-	tokenString, _ := token.SignedString(auth.MySecretKey)
+	tokenString, _ := token.SignedString(authautho.MySecretKey)
 	return tokenString
 }
 
@@ -169,7 +169,7 @@ func generateTestTokenWithInvalidUserID() string {
 		"role":    "admin",
 	})
 
-	tokenString, _ := token.SignedString(auth.MySecretKey)
+	tokenString, _ := token.SignedString(authautho.MySecretKey)
 	return tokenString
 }
 
@@ -200,6 +200,6 @@ func generateTestTokenWithInvalidRole() string {
 		"role":    123,
 	})
 
-	tokenString, _ := token.SignedString(auth.MySecretKey)
+	tokenString, _ := token.SignedString(authautho.MySecretKey)
 	return tokenString
 }

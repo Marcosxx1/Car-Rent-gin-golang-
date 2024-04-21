@@ -16,10 +16,13 @@ import (
 // @Param id path string true "User ID"
 // @Param request body authdto.ChangePasswordDTO true "Change Password Request"
 // @Security ApiKeyAuth
-// @Router /user/{id}/change-password [post]
+// @Router /user/change-password [post]
 func ChangePasswordController(context *gin.Context, userUseCase *authusecase.ChangePasswordUseCase) {
-	userID := context.Param("id")
-
+	userID := context.GetString("user_id")
+	if userID == "" {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "User ID is required"})
+		return
+	}
 	var request authdto.ChangePasswordDTO
 	if err := context.ShouldBindJSON(&request); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

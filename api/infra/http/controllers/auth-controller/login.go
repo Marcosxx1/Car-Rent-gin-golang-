@@ -25,12 +25,12 @@ func LoginHandlerController(context *gin.Context, loginUseCase *authusecase.Logi
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return
 	}
-
+ 
 	token, err := loginUseCase.Execute(&request)
-	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+ 	if err != nil {
+		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"token": token})
+	context.JSON(http.StatusOK, token)
 }

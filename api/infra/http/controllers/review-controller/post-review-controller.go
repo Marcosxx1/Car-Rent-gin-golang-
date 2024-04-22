@@ -1,6 +1,7 @@
 package reviewcontroller
 
 import (
+	"fmt"
 	"net/http"
 
 	reviewdto "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/review"
@@ -30,8 +31,10 @@ func PostReviewsController(context *gin.Context, postReviewUseCase *usecases.Pos
 	}
 
 	carID := request.CarId
-
+	fmt.Println("asdasd")
 	createdReview, err := postReviewUseCase.Execute(userID, carID, request)
+	fmt.Println("auqi")
+
 	if err != nil {
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return

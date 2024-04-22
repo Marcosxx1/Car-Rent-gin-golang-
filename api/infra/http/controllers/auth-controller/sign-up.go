@@ -5,6 +5,7 @@ import (
 
 	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/user"
 	authusecase "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/use-cases/auth-use-case"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,9 +27,10 @@ func RegisterUserController(context *gin.Context, userUseCase *authusecase.PostU
 
 	createdUser, err := userUseCase.Execute(*request)
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
+
 		return
 	}
 
 	context.JSON(http.StatusOK, createdUser)
-}
+} 

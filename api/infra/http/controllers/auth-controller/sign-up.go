@@ -21,16 +21,15 @@ import (
 func RegisterUserController(context *gin.Context, userUseCase *authusecase.PostUserUseCase) {
 	var request *userdtos.UserInputDTO
 	if err := context.ShouldBindJSON(&request); err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		validation_errors.NewValidationError(context, http.StatusUnprocessableEntity, err)
 		return
 	}
 
 	createdUser, err := userUseCase.Execute(*request)
 	if err != nil {
-		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
-
+		validation_errors.NewValidationError(context, http.StatusUnprocessableEntity, err)
 		return
 	}
 
 	context.JSON(http.StatusOK, createdUser)
-} 
+}

@@ -2,15 +2,14 @@ package userdtos
 
 import (
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
-	"github.com/go-playground/validator/v10"
 )
 
 type UserInputDTO struct {
-	Name     string      `json:"name" validate:"required"`
-	Email    string      `json:"email" validate:"required,email"`
-	Password string      `json:"password" validate:"required,min=8"`
-	Role     domain.Role `json:"role" validate:"required,oneof=admin user manager"`
-	Status   bool        `json:"status" validate:"required"`
+	Name     string      `json:"name" binding:"required" validate:"required"`
+	Email    string      `json:"email" binding:"required" validate:"required,email"`
+	Password string      `json:"password" binding:"required" validate:"required,min=8"`
+	Role     domain.Role `json:"role" binding:"required" validate:"required,oneof=admin user manager"`
+	Status   bool        `json:"status" binding:"required" validate:"required"`
 	Avatar   string      `json:"avatar"`
 }
 
@@ -31,7 +30,3 @@ type UserOutPutDTO struct {
 	CreatedAt string `json:"created_at"`
 }
 
-func ValidateRole(fl validator.FieldLevel) bool {
-	role := fl.Field().String()
-	return role == string(domain.RoleAdmin) || role == string(domain.RoleUser)
-}

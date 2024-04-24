@@ -33,3 +33,4 @@ func RegisterUserController(context *gin.Context, userUseCase *authusecase.PostU
 
 	context.JSON(http.StatusOK, createdUser)
 }
+

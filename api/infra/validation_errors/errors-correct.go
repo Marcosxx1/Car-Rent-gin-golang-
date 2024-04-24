@@ -21,13 +21,13 @@ func NewValidationError(context *gin.Context, status int, err error) {
 // formatValidationErrors formata mensagens de erro para erros de validação.
 // Ele itera sobre os erros de validação e constrói mensagens de erro formatadas.
 func formatValidationErrors(errs validator.ValidationErrors) gin.H {
-	var errorMsgs []string
+	var errorMessages []string
 	for _, e := range errs {
-		errorMsgs = append(errorMsgs, fmt.Sprintf("%s is required", e.Field()))
+		errorMessages = append(errorMessages, fmt.Sprintf("%s is required", e.Field()))
 	}
 	return gin.H{
 		"errors": gin.H{
-			"message": errorMsgs,
+			"message": errorMessages,
 		},
 	}
 }

@@ -11,13 +11,13 @@ import (
 
 // RegisterUserController handles the HTTP POST request to create a new user.
 // @Summary				Create a new user
-// @Description			Create a new user with the provided information
-// @ID					sign-up
-// @Tags				Auth
+// @Description		Create a new user with the provided information
+// @ID						sign-up
+// @Tags					Auth
 // @Accept				json
 // @Produce				json
-// @Param				request				body 			userdtos.UserInputDTO	true "user information to be created"
-// @Router				/signup [post]
+// @Param					request				body 			userdtos.UserInputDTO	true "user information to be created"
+// @Router				/signup 		 [post]
 func RegisterUserController(context *gin.Context, userUseCase *authusecase.PostUserUseCase) {
 	var request *userdtos.UserInputDTO
 	if err := context.ShouldBindJSON(&request); err != nil {

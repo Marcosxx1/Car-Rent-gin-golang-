@@ -30,7 +30,7 @@ func (useCase *PostUserUseCase) Execute(userInputDto userdtos.UserInputDTO) (*us
 
 	existingUser, err := useCase.userRepository.FindByEmail(userInputDto.Email)
 	if err != nil {
-		return nil, fmt.Errorf("failed to check existing user: %w", err)
+		return nil, fmt.Errorf("failed to check existing user")
 	}
 
 	if existingUser != nil {

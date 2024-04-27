@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
-	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 )
 
 type ChangePasswordUseCase struct {
@@ -24,7 +23,11 @@ func (userRepo *ChangePasswordUseCase) Execute(id string, currentPassword string
 	if err != nil {
 		return fmt.Errorf("failed to retrieve user: %w", err)
 	}
-	fmt.Println(currentPassword, existingUser.Password)
+
+	if existingUser.ID == "" {
+		return fmt.Errorf("user not found")
+	}
+
 	if !userRepo.passwordRepository.VerifyPassword(currentPassword, existingUser.Password) {
 		return fmt.Errorf("current password does not match")
 	}
@@ -36,9 +39,6 @@ func (userRepo *ChangePasswordUseCase) Execute(id string, currentPassword string
 
 	existingUserPassword := newHashedPassword
 
-	if err := validation_errors.ValidateStruct(existingUser); err != nil {
-		return err
-	}
 
 	if err := userRepo.userRepository.UpdatePassword(id, existingUserPassword); err != nil {
 		return fmt.Errorf("failed to update password: %w", err)

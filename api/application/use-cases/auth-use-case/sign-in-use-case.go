@@ -6,6 +6,7 @@ import (
 	userdtos "github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/dtos/user"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/application/repositories"
 	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/domain"
+	"github.com/Marcosxx1/Car-Rent-gin-golang-/api/infra/validation_errors"
 	"github.com/rs/xid"
 )
 
@@ -22,9 +23,14 @@ func NewPostUserUseCase(userRepository repositories.UserRepository, passwordRepo
 }
 
 func (useCase *PostUserUseCase) Execute(userInputDto userdtos.UserInputDTO) (*userdtos.UserOutPutDTO, error) {
+
+	if err := validation_errors.ValidateStruct(userInputDto); err != nil {
+		return nil, err
+	}
+
 	existingUser, err := useCase.userRepository.FindByEmail(userInputDto.Email)
 	if err != nil {
-		return nil, fmt.Errorf("failed to check existing user: %w", err)
+		return nil, fmt.Errorf("failed to check existing user")
 	}
 
 	if existingUser != nil {

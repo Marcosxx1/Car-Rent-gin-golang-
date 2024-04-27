@@ -30,8 +30,8 @@ func PostReviewsController(context *gin.Context, postReviewUseCase *usecases.Pos
 	}
 
 	carID := request.CarId
-
 	createdReview, err := postReviewUseCase.Execute(userID, carID, request)
+
 	if err != nil {
 		validation_errors.NewError(context, http.StatusUnprocessableEntity, err)
 		return

@@ -16,7 +16,7 @@ func (m *MockUserRepository) PostUser(userData *domain.User) error {
 }
 
 func (m *MockUserRepository) GetById(id string) (*domain.User, error) {
-	args := m.Called()
+	args := m.Called(id)
 
 	return args.Get(0).(*domain.User), args.Error(1)
 }

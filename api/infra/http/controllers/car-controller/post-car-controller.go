@@ -16,6 +16,7 @@ import (
 // @Tags				Car
 // @Accept				json
 // @Produce				json
+// @Security ApiKeyAuth
 // @Param				request				body 		cardtos.CarInputDTO	true "Car information to be created"
 // @Success	    		201   				{object} 	cardtos.CarOutputDTO "Successfully created car"
 // @Failure				422					{array}		validation_errors.HTTPErrorCar

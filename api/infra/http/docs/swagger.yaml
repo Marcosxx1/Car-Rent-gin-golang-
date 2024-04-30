@@ -2,8 +2,10 @@ definitions:
   authdto.ChangePasswordDTO:
     properties:
       current_password:
+        minLength: 8
         type: string
       new_password:
+        minLength: 8
         type: string
     required:
     - current_password
@@ -14,6 +16,7 @@ definitions:
       email:
         type: string
       password:
+        minLength: 8
         type: string
     required:
     - email
@@ -385,10 +388,7 @@ definitions:
       status:
         type: boolean
     required:
-    - avatar
     - email
-    - name
-    - status
     type: object
   validation_errors.HTTPError:
     properties:
@@ -475,6 +475,8 @@ paths:
             items:
               $ref: '#/definitions/validation_errors.HTTPErrorCar'
             type: array
+      security:
+      - ApiKeyAuth: []
       summary: Create a new car
       tags:
       - Car
@@ -499,6 +501,8 @@ paths:
           description: Error details
           schema:
             $ref: '#/definitions/validation_errors.HTTPErrorCar'
+      security:
+      - ApiKeyAuth: []
       summary: Delete a car
       tags:
       - Car
@@ -531,6 +535,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/validation_errors.HTTPErrorCar'
+      security:
+      - ApiKeyAuth: []
       summary: Update a car
       tags:
       - Car
@@ -1045,11 +1051,10 @@ paths:
     post:
       consumes:
       - application/json
-      description: If the provided e-mail and password are correct an jwt token will
-        be generated with the user id
+      description: Create a new maintenance with the provided information
       operationId: login
       parameters:
-      - description: user information to login
+      - description: information to log in
         in: body
         name: request
         required: true
@@ -1058,7 +1063,7 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: Log in the application
+      summary: Create a new user
       tags:
       - Auth
   /orders:
@@ -1153,7 +1158,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create a new maintenance with the provided information
+      description: Create a new user with the provided information
       operationId: sign-up
       parameters:
       - description: user information to be created
@@ -1224,7 +1229,7 @@ paths:
       summary: Update user by ID
       tags:
       - User
-  /user/{id}/change-password:
+  /user/change-password:
     post:
       consumes:
       - application/json

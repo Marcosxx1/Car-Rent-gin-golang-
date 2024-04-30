@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/api/v1/cars/create": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create a new car with the provided information",
                 "consumes": [
                     "application/json"
@@ -61,6 +66,11 @@ const docTemplate = `{
         },
         "/api/v1/cars/delete/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Delete a car with the provided ID.",
                 "consumes": [
                     "application/json"
@@ -97,6 +107,11 @@ const docTemplate = `{
         },
         "/api/v1/cars/update/{id}": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Update a car with the provided ID.",
                 "consumes": [
                     "application/json"
@@ -943,7 +958,7 @@ const docTemplate = `{
         },
         "/login": {
             "post": {
-                "description": "If the provided e-mail and password are correct an jwt token will be generated with the user id",
+                "description": "Create a new maintenance with the provided information",
                 "consumes": [
                     "application/json"
                 ],
@@ -953,11 +968,11 @@ const docTemplate = `{
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Log in the application",
+                "summary": "Create a new user",
                 "operationId": "login",
                 "parameters": [
                     {
-                        "description": "user information to login",
+                        "description": "information to log in",
                         "name": "request",
                         "in": "body",
                         "required": true,
@@ -1104,7 +1119,7 @@ const docTemplate = `{
         },
         "/signup": {
             "post": {
-                "description": "Create a new maintenance with the provided information",
+                "description": "Create a new user with the provided information",
                 "consumes": [
                     "application/json"
                 ],
@@ -1124,6 +1139,45 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/userdtos.UserInputDTO"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/user/change-password": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Change user password by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Change user password",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Change Password Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/authdto.ChangePasswordDTO"
                         }
                     }
                 ],
@@ -1217,45 +1271,6 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/user/{id}/change-password": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Change user password by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Change user password",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Change Password Request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/authdto.ChangePasswordDTO"
-                        }
-                    }
-                ],
-                "responses": {}
-            }
         }
     },
     "definitions": {
@@ -1267,10 +1282,12 @@ const docTemplate = `{
             ],
             "properties": {
                 "current_password": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 8
                 },
                 "new_password": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 8
                 }
             }
         },
@@ -1285,7 +1302,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 8
                 }
             }
         },
@@ -1803,10 +1821,7 @@ const docTemplate = `{
         "userdtos.UserUpdateDTO": {
             "type": "object",
             "required": [
-                "avatar",
-                "email",
-                "name",
-                "status"
+                "email"
             ],
             "properties": {
                 "avatar": {

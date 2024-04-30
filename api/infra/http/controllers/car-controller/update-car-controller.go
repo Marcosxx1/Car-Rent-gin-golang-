@@ -16,6 +16,7 @@ import (
 // @Tags        Car
 // @Accept      json
 // @Produce     json
+// @Security ApiKeyAuth
 // @Param       id         		    path   		string  true  "id"
 // @Param		request				body 		cardtos.CarInputDTO	true "Car information to be updated"
 // @Success	    201   				{object} 	cardtos.CarOutputDTO "Successfully updated car"

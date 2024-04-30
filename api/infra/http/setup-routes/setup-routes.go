@@ -9,17 +9,20 @@ import (
 func Setup(router *gin.Engine) {
 	// Create the auth group
 	authGroup := router.Group("/api/v1").Use(middlewares.JWTMiddleware(), middlewares.SanitizeMiddleware())
+	authGroupNotSanitized := router.Group("/api/v1").Use(middlewares.JWTMiddleware())
 	/* 	onlyAdminRoutes := router.Group("/admin/v1").Use()
 	 */ // Cast authGroup to *gin.RouterGroup, if we try to use authGroup directly, it will
 	// show us an error because authGroup is type of gin.IRoutes and our routes are expecting
 	// *gin.RouterGroup
 	authGroupRoutes := authGroup.(*gin.RouterGroup)
-	routes.AuthRoutes(router)                                     // don't need authentication
-	routes.SetupCategoryRoutes(router /* authGroupRoutes */)      // need to be admin
-	routes.SetupCarRoutes(router, authGroupRoutes)                //don't need authentication
-	routes.SetupSpecificationRoutes(router /* authGroupRoutes */) //don't need authentication
-	routes.SetupUserRoutes(authGroupRoutes)                       // can be admin or normal user
-	routes.SetupMaintenanceRoutes(authGroupRoutes)                // needs to be admin
-	routes.SetupReviewRoutes(router, authGroupRoutes)             // need to be logged user
-	routes.SetupOrderRoutes(authGroupRoutes, router)              // needs to be admin
+	authGroupWithOutSanitization := authGroupNotSanitized.(*gin.RouterGroup)
+
+	routes.AuthRoutes(router)                                                    // don't need authentication
+	routes.SetupCategoryRoutes(router /* authGroupRoutes */)                     // need to be admin
+	routes.SetupCarRoutes(router, authGroupRoutes, authGroupWithOutSanitization) //don't need authentication
+	routes.SetupSpecificationRoutes(router /* authGroupRoutes */)                //don't need authentication
+	routes.SetupUserRoutes(authGroupRoutes)                                      // can be admin or normal user
+	routes.SetupMaintenanceRoutes(authGroupRoutes)                               // needs to be admin
+	routes.SetupReviewRoutes(router, authGroupRoutes)                            // need to be logged user
+	routes.SetupOrderRoutes(authGroupRoutes, router)                             // needs to be admin
 }

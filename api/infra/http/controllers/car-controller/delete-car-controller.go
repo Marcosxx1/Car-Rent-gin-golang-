@@ -13,6 +13,7 @@ import (
 // @Tags Car
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param id path string true "Car ID to be deleted"
 // @Success 200 "Car deleted successfully"
 // @Failure 400 {object} validation_errors.HTTPErrorCar "Error details"
@@ -20,7 +21,11 @@ import (
 func DeleteCarController(context *gin.Context, deleteUseCase *usecases.DeleteCarUseCase) {
 	id := context.Param("id")
 
-	deleteUseCase.Execute(id)
+	err := deleteUseCase.Execute(id)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
 
-	context.JSON(http.StatusOK, "Car deleted")
+	context.JSON(http.StatusOK, nil)
 }

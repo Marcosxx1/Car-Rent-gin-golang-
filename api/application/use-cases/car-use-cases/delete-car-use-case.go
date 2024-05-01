@@ -22,9 +22,10 @@ func NewDeleteCarUseCase(
 }
 
 func (useCase *DeleteCarUseCase) Execute(id string) error {
+
 	existCar, err := useCase.carRepository.FindCarById(id)
 	if err != nil {
-		return err
+		return errors.New("no car with provided id")
 	}
 
 	if existCar == nil {

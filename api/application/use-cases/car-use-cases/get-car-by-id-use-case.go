@@ -29,17 +29,13 @@ func (useCase *GetCarByIdUseCase) Execute(id string) (*cardtos.CarOutputDTO, err
 		return nil, err
 	}
 
-	if existCar == nil {
+	if existCar.ID == "" {
 		return nil, errors.New("car not found")
 	}
 
 	existSpecification, err := useCase.specificationRepository.FindAllSpecificationsByCarId(id)
 	if err != nil {
 		return nil, err
-	}
-
-	if existSpecification == nil {
-		return nil, errors.New("specifications not found")
 	}
 
 	carToBeReturned := &cardtos.CarOutputDTO{
@@ -56,3 +52,7 @@ func (useCase *GetCarByIdUseCase) Execute(id string) (*cardtos.CarOutputDTO, err
 
 	return carToBeReturned, nil
 }
+
+/* 	if len(existSpecification) == 0 { // one car may have no specifications
+	return nil, errors.New("specifications not found")
+} */

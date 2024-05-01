@@ -6,11 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupCarRoutes(router *gin.Engine, authGroup *gin.RouterGroup) {
+func SetupCarRoutes(router *gin.Engine, authGroup *gin.RouterGroup, authGroupNotSanitized *gin.RouterGroup) {
 
 	authGroup.POST("/cars/create", carfactory.RegisterCarControllerFacotry)
 	authGroup.PUT("/cars/update/:id", carfactory.UpdateCarControllerFacotry)
-	authGroup.DELETE("/cars/delete/:id", carfactory.DeleteCarControllerFacotry)
+	authGroupNotSanitized.DELETE("/cars/delete/:id", carfactory.DeleteCarControllerFacotry)
 	router.GET("/cars", carfactory.GetAllCarsControllerFactory)
 	authGroup.GET("/cars/:id", carfactory.FindCarByIdControllerFacotry)
 

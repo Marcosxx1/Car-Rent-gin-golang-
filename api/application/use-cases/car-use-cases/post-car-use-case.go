@@ -65,6 +65,7 @@ func (useCase *PostCarUseCase) performCarCreation(wg *sync.WaitGroup, resultChan
 
 	var specifications []*domain.Specification
 	go func() {
+		/* func utils.ConvertSpecificationToDomainCreate(specification []*specificationdtos.SpecificationInputDto, id string) []*domain.Specification */
 		specifications = utils.ConvertSpecificationToDomainCreate(inputDTO.Specification, carID)
 	}()
 
@@ -79,16 +80,18 @@ func (useCase *PostCarUseCase) performCarCreation(wg *sync.WaitGroup, resultChan
 		Brand:        inputDTO.Brand,
 		CategoryID:   inputDTO.CategoryID,
 	}
-
+	/* func (repositories.CarRepository) RegisterCar(car *domain.Car) error */
 	if err := useCase.carRepository.RegisterCar(newCar); err != nil {
 		errorChan <- fmt.Errorf("failed to create car record: %w", err)
 		return
 	}
 
+	/* func (repositories.SpecificationRepository) PostMultipleSpecifications(specifications []*domain.Specification) error */
 	if err := useCase.specificationRepository.PostMultipleSpecifications(specifications); err != nil {
 		errorChan <- fmt.Errorf("failed to create specification record: %w", err)
 		return
 	}
 
+	/* func cardtos.ConvertToOutputDTO(carID string, inputDTO *cardtos.CarInputDTO) *cardtos.CarOutputDTO */
 	resultChan <- cardtos.ConvertToOutputDTO(carID, inputDTO)
 }

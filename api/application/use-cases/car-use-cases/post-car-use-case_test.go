@@ -70,11 +70,13 @@ func TestErrorRegisteringCar(t *testing.T) {
 	}
 }
 
-/*func TestCarCreationError(t *testing.T) {
+func TestErrorPostingSpecifications(t *testing.T) {
 	mockCarRepo := new(databasemocks.MockCarRepository)
-	mockCarRepo.On("RegisterCar", mock.AnythingOfType("*domain.Car")).Return(errors.New("failed to create car"))
-
 	mockSpecRepo := new(databasemocks.MockSpecificationRepository)
+
+	expectedErr := fmt.Errorf("failed to create specification record")
+	mockCarRepo.On("RegisterCar", mock.AnythingOfType("*domain.Car")).Return(nil)
+	mockSpecRepo.On("PostMultipleSpecifications", mock.AnythingOfType("[]*domain.Specification")).Return(expectedErr)
 
 	usecase := NewPostCarUseCase(mockCarRepo, mockSpecRepo)
 
@@ -86,31 +88,46 @@ func TestErrorRegisteringCar(t *testing.T) {
 		LicensePlate: "ABC123",
 		FineAmount:   20.0,
 		Brand:        "Test Brand",
-		CategoryID:   "categoryID",
+	}
+	carID := "test_car_id"
+
+	resultChan := make(chan *cardtos.CarOutputDTO)
+	errorChan := make(chan error)
+	validationErrorSignal := make(chan bool, 1)
+	validationErrorSignal <- false
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	go usecase.performCarCreation(&wg, resultChan, errorChan, validationErrorSignal, carID, inputDTO)
+
+	go func() {
+		wg.Wait()
+		close(resultChan)
+		close(errorChan)
+	}()
+
+	select {
+	case <-resultChan:
+		t.Error("Expected an error but got a result")
+	case err := <-errorChan:
+		assert.Error(t, err)
+		assert.Equal(t, expectedErr, err)
 	}
 
-	car, err := usecase.ExecuteConcurrently(inputDTO)
-
-	assert.Error(t, err)
-	assert.Nil(t, car)
-
-	mockCarRepo.AssertExpectations(t)
-	mockSpecRepo.AssertNotCalled(t, "PostMultipleSpecifications")
+	mockSpecRepo.AssertCalled(t, "PostMultipleSpecifications", mock.AnythingOfType("[]*domain.Specification"))
 }
 
- func TestSpecificationCreationError(t *testing.T) {
-	// Mock Car Repository
+func TestSuccessfulCarCreation(t *testing.T) {
 	mockCarRepo := new(databasemocks.MockCarRepository)
-	mockCarRepo.On("RegisterCar", mock.AnythingOfType("*domain.Car")).Return(nil) // Mock successful car creation
-
-	// Mock Specification Repository to simulate specification creation error
 	mockSpecRepo := new(databasemocks.MockSpecificationRepository)
-	mockSpecRepo.On("PostMultipleSpecifications", mock.AnythingOfType("[]*domain.Specification")).Return(errors.New("failed to create specifications"))
 
-	// Create the use case instance
+	mockCarRepo.On("RegisterCar", mock.AnythingOfType("*domain.Car")).Return(nil)
+
+	mockSpecRepo.On("PostMultipleSpecifications", mock.AnythingOfType("[]*domain.Specification")).Return(nil)
+
 	usecase := NewPostCarUseCase(mockCarRepo, mockSpecRepo)
 
-	// Create the input DTO
 	inputDTO := &cardtos.CarInputDTO{
 		Name:         "Test Car",
 		Description:  "Test Description",
@@ -119,20 +136,36 @@ func TestErrorRegisteringCar(t *testing.T) {
 		LicensePlate: "ABC123",
 		FineAmount:   20.0,
 		Brand:        "Test Brand",
-		CategoryID:   "categoryID",
-		// Add specifications if needed
+	}
+	carID := "test_car_id"
+
+	resultChan := make(chan *cardtos.CarOutputDTO)
+	errorChan := make(chan error)
+	validationErrorSignal := make(chan bool, 1)
+	validationErrorSignal <- false
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	go usecase.performCarCreation(&wg, resultChan, errorChan, validationErrorSignal, carID, inputDTO)
+
+	go func() {
+		wg.Wait()
+		close(resultChan)
+		close(errorChan)
+	}()
+
+	select {
+	case createdCar := <-resultChan:
+		assert.NoError(t, nil)
+
+		assert.NotNil(t, createdCar)
+		assert.Equal(t, inputDTO.Name, createdCar.Name)
+
+	case err := <-errorChan:
+		t.Errorf("Unexpected error: %v", err)
 	}
 
-	// Execute the use case
-	car, err := usecase.ExecuteConcurrently(inputDTO)
-
-	// Assertions
-	assert.Error(t, err)   // An error should occur due to specification creation failure
-	assert.Nil(t, car)     // No car should be returned
-	// Add more assertions as needed
-
-	// Verify expectations for the mock interactions
-	mockCarRepo.AssertExpectations(t)   // Car creation should be attempted
-	mockSpecRepo.AssertExpectations(t)  // Specification creation should be attempted
+	mockCarRepo.AssertCalled(t, "RegisterCar", mock.AnythingOfType("*domain.Car"))
+	mockSpecRepo.AssertCalled(t, "PostMultipleSpecifications", mock.AnythingOfType("[]*domain.Specification"))
 }
-*/

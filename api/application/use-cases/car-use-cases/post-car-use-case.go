@@ -88,7 +88,7 @@ func (useCase *PostCarUseCase) performCarCreation(wg *sync.WaitGroup, resultChan
 
 	/* func (repositories.SpecificationRepository) PostMultipleSpecifications(specifications []*domain.Specification) error */
 	if err := useCase.specificationRepository.PostMultipleSpecifications(specifications); err != nil {
-		errorChan <- fmt.Errorf("failed to create specification record: %w", err)
+		errorChan <- fmt.Errorf("failed to create specification record")
 		return
 	}
 

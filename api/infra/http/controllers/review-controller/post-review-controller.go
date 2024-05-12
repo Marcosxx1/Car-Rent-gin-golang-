@@ -15,6 +15,7 @@ import (
 // @ID                  post-review
 // @Tags                Reviews
 // @Accept              json
+// @Security 			BearerAuth
 // @Produce             json
 // @Param               request         body        reviewdto.ReviewInputDTO  true "Review information to be created"
 // @Success             201             {object}    reviewdto.ReviewOutputDTO "Successfully created review"

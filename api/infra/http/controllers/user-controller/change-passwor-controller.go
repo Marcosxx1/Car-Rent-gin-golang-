@@ -15,7 +15,7 @@ import (
 // @Produce json
 // @Param id path string true "User ID"
 // @Param request body authdto.ChangePasswordDTO true "Change Password Request"
-// @Security ApiKeyAuth
+// @Security 		BearerAuth
 // @Router /user/change-password [post]
 func ChangePasswordController(context *gin.Context, userUseCase *authusecase.ChangePasswordUseCase) {
 	userID := context.GetString("user_id")

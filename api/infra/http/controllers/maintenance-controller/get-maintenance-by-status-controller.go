@@ -18,6 +18,7 @@ import (
 // @Tags                Maintenance
 // @Accept              json
 // @Produce             json
+// @Security 			BearerAuth
 // @Param               maintenance_status       path    string  true  "maintenance_status" Enums(Scheduled,InProgress,Completed,PendingApproval,Canceled,AwaitingParts,AwaitingPayment,Rescheduled,MaintenanceFailed,AwaitingInspection) "maintenance status"
 // @Success             200         {array} maintenancedtos.MaintenanceOutputDTO "Successfully retrieved maintenances"
 // @Failure             422         {array} validation_errors.HTTPError "Validation errors"

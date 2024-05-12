@@ -16,6 +16,7 @@ import (
 // @Tags Orders
 // @Accept json
 // @Produce json
+// @Security 		BearerAuth
 // @Param options query string false "Query parameters for filtering orders"
 // @Success 200 {array} orderdto.OrderOutputDTO "OK"
 // @Router /orders [get]

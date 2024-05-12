@@ -13,6 +13,7 @@ import (
 // @ID get-scheduled-maintenances
 // @Tags Maintenance
 // @Produce json
+// @Security 			BearerAuth
 // @Success 200 {array} maintenancedtos.MaintenanceOutputDTO "Successfully retrieved scheduled maintenances"
 // @Failure 400 {string} string "Bad Request"
 // @Failure 404 {string} string "Not Found"

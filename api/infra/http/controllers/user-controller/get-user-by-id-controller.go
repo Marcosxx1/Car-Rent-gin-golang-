@@ -13,6 +13,7 @@ import (
 // @Tags User
 // @Accept json
 // @Produce json
+// @Security 		BearerAuth
 // @Param id path string true "User ID"
 // @Security ApiKeyAuth
 // @Success 200 {object} userdtos.UserOutPutDTO

@@ -10,12 +10,13 @@ import (
 )
 
 // PostCategoryController handles the HTTP POST request to create a new category.
-// @Summary     Create a new category
+// @Summary     Create a new category (Authentication needed)
 // @Description Create a new category with the provided information.
 // @ID          post-category
 // @Tags        Category
 // @Accept      json
 // @Produce     json
+// @Security 	BearerAuth
 // @Param       request    body    categorydtos.CategoryInputDTO true "Category information to be created"
 // @Success	    201   		{object} categorydtos.CategoryOutputDTO "Successfully created category"
 // @Router			/api/v1/category/create [post]

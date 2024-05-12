@@ -17,6 +17,7 @@ import (
 // @Tags                Maintenance
 // @Accept              json
 // @Produce             json
+// @Security 			BearerAuth
 // @Param page query int false "Page number (default is 1)"
 // @Param pageSize query int false "Number of items per page (default is 10)"
 // @Success             200          {array}    maintenancedtos.MaintenanceOutputDTO "List of maintenance records"

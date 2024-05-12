@@ -16,6 +16,7 @@ import (
 // @Tags                Reviews
 // @Accept              json
 // @Produce             json
+// @Security 			BearerAuth
 // @Param               id              path        string    true  "Review ID to be updated"
 // @Param               request         body        reviewdto.ReviewInputDTO  true "Review information to be updated"
 // @Success             200             {object}    reviewdto.ReviewOutputDTO "Successfully updated review"

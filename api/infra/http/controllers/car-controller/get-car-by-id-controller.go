@@ -15,6 +15,7 @@ import (
 // @Tags			Car
 // @Accept			json
 // @Produce			json
+// @Security 		BearerAuth
 // @Param        	id   			path   		string  true  	  "Car ID"
 // @Success	    	201   			{object} 	cardtos.CarOutputDTO "car"
 // @Failure			422				{array}		validation_errors.HTTPError

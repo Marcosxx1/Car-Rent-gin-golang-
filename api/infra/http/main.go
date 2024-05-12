@@ -12,7 +12,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// @securityDefinitions.apikey Bearer
+// @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
 func main() {

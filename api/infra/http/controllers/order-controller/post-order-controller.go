@@ -16,6 +16,7 @@ import (
 // @Tags Orders
 // @Accept json
 // @Produce json
+// @Security 		BearerAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param carID path string true "Car ID"
 // @Param requestBody body orderdto.OrderInputPartialDTO true "Order input data"

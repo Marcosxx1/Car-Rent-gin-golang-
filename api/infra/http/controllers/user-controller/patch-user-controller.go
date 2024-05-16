@@ -15,7 +15,7 @@ import (
 // @Produce json
 // @Param id path string true "User ID"
 // @Param request body userdtos.UserUpdateDTO true "Update User Request"
-// @Security Bearer
+// @Security 		BearerAuth
 // @Param Authorization header string true "Authorization"
 // @Success 200 {object} userdtos.UserUpdateDTO
 // @Router /user/{id} [patch]

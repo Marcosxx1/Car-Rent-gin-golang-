@@ -6,7 +6,7 @@ import (
 )
 
 func SetupOrderRoutes(authGroup *gin.RouterGroup, router *gin.Engine) {
-	router.GET("order", factory.GetOrderByQueryFactoryController)
+	router.GET("/order", factory.GetOrderByQueryFactoryController)
 	authGroup.POST("/order", factory.PostOrderFactoryController)
 	authGroup.DELETE("order/id", factory.DeleteOrderFactoryController)
 }

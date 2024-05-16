@@ -19,7 +19,7 @@ const docTemplate = `{
             "post": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "Create a new car with the provided information",
@@ -109,7 +109,7 @@ const docTemplate = `{
             "put": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "Update a car with the provided ID.",
@@ -160,6 +160,11 @@ const docTemplate = `{
         },
         "/api/v1/cars/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Find a car with the provided id",
                 "consumes": [
                     "application/json"
@@ -202,6 +207,11 @@ const docTemplate = `{
         },
         "/api/v1/category/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a new category with the provided information.",
                 "consumes": [
                     "application/json"
@@ -212,7 +222,7 @@ const docTemplate = `{
                 "tags": [
                     "Category"
                 ],
-                "summary": "Create a new category",
+                "summary": "Create a new category (Authentication needed)",
                 "operationId": "post-category",
                 "parameters": [
                     {
@@ -237,6 +247,11 @@ const docTemplate = `{
         },
         "/api/v1/category/list": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve a list of all categories.",
                 "consumes": [
                     "application/json"
@@ -284,6 +299,11 @@ const docTemplate = `{
         },
         "/api/v1/maintenance/by/{maintenance_status}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get a list of maintenances by its status",
                 "consumes": [
                     "application/json"
@@ -341,6 +361,11 @@ const docTemplate = `{
         },
         "/api/v1/maintenance/latest/{carID}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get latest maintenance associated with a specific carID",
                 "consumes": [
                     "application/json"
@@ -386,6 +411,11 @@ const docTemplate = `{
         },
         "/api/v1/maintenance/maintenance/by-date-range": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get maintenance records within the specified date range",
                 "consumes": [
                     "application/json"
@@ -438,6 +468,11 @@ const docTemplate = `{
         },
         "/api/v1/maintenance/maintenances": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve a list of maintenance records for a specific car",
                 "consumes": [
                     "application/json"
@@ -485,6 +520,11 @@ const docTemplate = `{
         },
         "/api/v1/maintenance/scheduled": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get a list of scheduled maintenances based on the next maintenance due date",
                 "produces": [
                     "application/json"
@@ -527,6 +567,11 @@ const docTemplate = `{
         },
         "/api/v1/maintenance/{carID}/maintenance/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a new maintenance with the provided information",
                 "consumes": [
                     "application/json"
@@ -578,6 +623,11 @@ const docTemplate = `{
         },
         "/api/v1/maintenance/{carID}/maintenances": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get a list of maintenances associated with a specific carID",
                 "consumes": [
                     "application/json"
@@ -635,6 +685,11 @@ const docTemplate = `{
         },
         "/api/v1/maintenance/{maintenanceID}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete a maintenance with the provided ID.",
                 "consumes": [
                     "application/json"
@@ -669,6 +724,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update an existing maintenance with the provided information",
                 "consumes": [
                     "application/json"
@@ -711,6 +771,11 @@ const docTemplate = `{
         },
         "/api/v1/review/list": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get all reviewsn",
                 "consumes": [
                     "application/json"
@@ -738,6 +803,11 @@ const docTemplate = `{
         },
         "/api/v1/review/{review_id}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete a review with the provided ID",
                 "tags": [
                     "Reviews"
@@ -768,6 +838,11 @@ const docTemplate = `{
         },
         "/api/v1/reviews/:id": {
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update an existing review with the provided information",
                 "consumes": [
                     "application/json"
@@ -823,6 +898,11 @@ const docTemplate = `{
         },
         "/api/v1/reviews/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a new review with the provided information",
                 "consumes": [
                     "application/json"
@@ -867,6 +947,11 @@ const docTemplate = `{
         },
         "/api/v1/specification/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a new specification with the provided information.",
                 "consumes": [
                     "application/json"
@@ -986,6 +1071,11 @@ const docTemplate = `{
         },
         "/orders": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Fetches orders based on query parameters such as options and userID.",
                 "consumes": [
                     "application/json"
@@ -1020,6 +1110,11 @@ const docTemplate = `{
         },
         "/orders/{carID}": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a new order with the given parameters",
                 "consumes": [
                     "application/json"
@@ -1068,6 +1163,11 @@ const docTemplate = `{
         },
         "/orders/{order_id}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Deletes an order by its ID",
                 "consumes": [
                     "application/json"
@@ -1149,7 +1249,7 @@ const docTemplate = `{
             "post": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "Change user password by ID",
@@ -1188,6 +1288,9 @@ const docTemplate = `{
             "get": {
                 "security": [
                     {
+                        "BearerAuth": []
+                    },
+                    {
                         "ApiKeyAuth": []
                     }
                 ],
@@ -1223,7 +1326,7 @@ const docTemplate = `{
             "patch": {
                 "security": [
                     {
-                        "Bearer": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "Update user details by ID",
@@ -1882,7 +1985,7 @@ const docTemplate = `{
         }
     },
     "securityDefinitions": {
-        "Bearer": {
+        "BearerAuth": {
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"

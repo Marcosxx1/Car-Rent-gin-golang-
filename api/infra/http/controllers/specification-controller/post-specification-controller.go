@@ -16,8 +16,9 @@ import (
 // @Tags        Specification
 // @Accept      json
 // @Produce     json
-// @Param       request    body    specificationdtos.SpecificationInputDto true "Specification information to be created"
-// @Success	    201   		{object} specificationdtos.SpecificationOutputDto "Successfully created specification"
+// @Security 	BearerAuth
+// @Param       request   	  body     specificationdtos.SpecificationInputDto  true "Specification information to be created"
+// @Success	    201   		  {object} specificationdtos.SpecificationOutputDto "Successfully created specification"
 // @Failure			400       {object} validation_errors.HTTPError
 // @Router			/api/v1/specification/create [post]
 func PostSpecificationController(context *gin.Context, specificationusecases *specificationusecases.PostSpecificationUseCase) {

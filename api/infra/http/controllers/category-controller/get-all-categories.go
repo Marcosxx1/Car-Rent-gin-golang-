@@ -17,6 +17,7 @@ import (
 //	@Tags			Category
 //	@Accept			json
 //	@Produce		json
+//	@Security 		ApiKeyAuth
 //	@Param			limit	query		int								false	"Limit the number of categories to be retrieved"
 //	@Param			offset	query		int								false	"Offset for pagination of categories"
 //	@Success		200		{array}		categorydtos.CategoryOutputDTO	"List of categories"

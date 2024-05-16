@@ -15,6 +15,7 @@ import (
 // @Tags                Maintenance
 // @Accept              json
 // @Produce             json
+// @Security 			BearerAuth
 // @Param               carID       path    string  true  "CarID"
 // @Success             200         {array} maintenancedtos.MaintenanceOutputDTO "Successfully retrieved maintenances"
 // @Failure             422         {array} validation_errors.HTTPError "Validation errors"

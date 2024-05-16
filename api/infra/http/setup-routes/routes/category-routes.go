@@ -5,9 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupCategoryRoutes(router *gin.Engine) {
+func SetupCategoryRoutes( /* router *gin.Engine */ authGroup *gin.RouterGroup) {
 
-	router.POST("/category/create", categoryfactory.PostCategoryControllerFactory)
-	router.GET("/category/list", categoryfactory.ListCategoriesControllerFactory)
+	authGroup.POST("/category/create", categoryfactory.PostCategoryControllerFactory)
+	authGroup.GET("/category/list", categoryfactory.ListCategoriesControllerFactory)
 
 }

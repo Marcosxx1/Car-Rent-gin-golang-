@@ -15,6 +15,7 @@ import (
 // @Tags                Reviews
 // @Accept              json
 // @Produce             json
+// @Security 			BearerAuth
 // @Success             201             {object}    []reviewdto.ReviewOutputDTO "Successfully created review"
 // @Router              /api/v1/review/list [get]
 func GetAllReviewsController(context *gin.Context, getAllReviewsUseCase *usecases.GetAllReviewsUseCase) {

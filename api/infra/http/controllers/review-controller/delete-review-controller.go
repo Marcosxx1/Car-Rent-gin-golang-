@@ -14,6 +14,7 @@ import (
 // @ID delete-review
 // @Tags Reviews
 // @Produces json
+// @Security 			BearerAuth
 // @Param id path string true "Review ID to be delete"
 // @Success 200
 // @Failure 400 {object} validation_errors.HTTPErrorCar "Error details"

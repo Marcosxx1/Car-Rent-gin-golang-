@@ -14,6 +14,7 @@ import (
 // @Tags Maintenance
 // @Accept json
 // @Produce json
+// @Security 			BearerAuth
 // @Param id path string true "Maintenance ID to be deleted"
 // @Success 200 "Maintenance deleted successfully"
 // @Failure 400 {object} validation_errors.HTTPErrorCar "Error details"

@@ -446,6 +446,8 @@ paths:
             items:
               $ref: '#/definitions/validation_errors.HTTPError'
             type: array
+      security:
+      - BearerAuth: []
       summary: Find car
       tags:
       - Car
@@ -476,7 +478,7 @@ paths:
               $ref: '#/definitions/validation_errors.HTTPErrorCar'
             type: array
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Create a new car
       tags:
       - Car
@@ -536,7 +538,7 @@ paths:
           schema:
             $ref: '#/definitions/validation_errors.HTTPErrorCar'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Update a car
       tags:
       - Car
@@ -560,7 +562,9 @@ paths:
           description: Successfully created category
           schema:
             $ref: '#/definitions/categorydtos.CategoryOutputDTO'
-      summary: Create a new category
+      security:
+      - BearerAuth: []
+      summary: Create a new category (Authentication needed)
       tags:
       - Category
   /api/v1/category/list:
@@ -591,6 +595,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/validation_errors.HTTPError'
+      security:
+      - ApiKeyAuth: []
       summary: Retrieve a list of categories
       tags:
       - Category
@@ -625,6 +631,8 @@ paths:
             items:
               $ref: '#/definitions/validation_errors.HTTPErrorCar'
             type: array
+      security:
+      - BearerAuth: []
       summary: Create a new maintenance
       tags:
       - Maintenance
@@ -663,6 +671,8 @@ paths:
             items:
               $ref: '#/definitions/validation_errors.HTTPError'
             type: array
+      security:
+      - BearerAuth: []
       summary: Get maintenances by carID
       tags:
       - Maintenance
@@ -687,6 +697,8 @@ paths:
           description: Error details
           schema:
             $ref: '#/definitions/validation_errors.HTTPErrorCar'
+      security:
+      - BearerAuth: []
       summary: Delete a maintenance
       tags:
       - Maintenance
@@ -714,6 +726,8 @@ paths:
           description: Successfully updated maintenance
           schema:
             $ref: '#/definitions/maintenancedtos.MaintenanceOutputDTO'
+      security:
+      - BearerAuth: []
       summary: Update an existing maintenance
       tags:
       - Maintenance
@@ -755,6 +769,8 @@ paths:
             items:
               $ref: '#/definitions/validation_errors.HTTPError'
             type: array
+      security:
+      - BearerAuth: []
       summary: Get maintenances by its status
       tags:
       - Maintenance
@@ -785,6 +801,8 @@ paths:
             items:
               $ref: '#/definitions/validation_errors.HTTPError'
             type: array
+      security:
+      - BearerAuth: []
       summary: Get latest maintenance by carID
       tags:
       - Maintenance
@@ -820,6 +838,8 @@ paths:
             items:
               $ref: '#/definitions/validation_errors.HTTPErrorCar'
             type: array
+      security:
+      - BearerAuth: []
       summary: Get maintenance records by date range
       tags:
       - Maintenance
@@ -851,6 +871,8 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/validation_errors.HTTPErrorCar'
+      security:
+      - BearerAuth: []
       summary: Retrieve a list of maintenance records
       tags:
       - Maintenance
@@ -880,6 +902,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get scheduled maintenances
       tags:
       - Maintenance
@@ -900,6 +924,8 @@ paths:
           description: Error details
           schema:
             $ref: '#/definitions/validation_errors.HTTPErrorCar'
+      security:
+      - BearerAuth: []
       summary: Delete a review
       tags:
       - Reviews
@@ -918,6 +944,8 @@ paths:
             items:
               $ref: '#/definitions/reviewdto.ReviewOutputDTO'
             type: array
+      security:
+      - BearerAuth: []
       summary: Get all reviews
       tags:
       - Reviews
@@ -955,6 +983,8 @@ paths:
             items:
               $ref: '#/definitions/validation_errors.HTTPError'
             type: array
+      security:
+      - BearerAuth: []
       summary: Update an existing review
       tags:
       - Reviews
@@ -984,6 +1014,8 @@ paths:
             items:
               $ref: '#/definitions/validation_errors.HTTPError'
             type: array
+      security:
+      - BearerAuth: []
       summary: Create a new review
       tags:
       - Reviews
@@ -1011,6 +1043,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/validation_errors.HTTPError'
+      security:
+      - BearerAuth: []
       summary: Create a new specification
       tags:
       - Specification
@@ -1085,6 +1119,8 @@ paths:
             items:
               $ref: '#/definitions/orderdto.OrderOutputDTO'
             type: array
+      security:
+      - BearerAuth: []
       summary: Get orders by query parameters
       tags:
       - Orders
@@ -1117,6 +1153,8 @@ paths:
           description: Created order
           schema:
             $ref: '#/definitions/orderdto.OrderOutputDTO'
+      security:
+      - BearerAuth: []
       summary: Create a new order
       tags:
       - Orders
@@ -1151,6 +1189,8 @@ paths:
           description: other error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Delete order by ID
       tags:
       - Orders
@@ -1192,6 +1232,7 @@ paths:
           schema:
             $ref: '#/definitions/userdtos.UserOutPutDTO'
       security:
+      - BearerAuth: []
       - ApiKeyAuth: []
       summary: Get user by ID
       tags:
@@ -1225,7 +1266,7 @@ paths:
           schema:
             $ref: '#/definitions/userdtos.UserUpdateDTO'
       security:
-      - Bearer: []
+      - BearerAuth: []
       summary: Update user by ID
       tags:
       - User
@@ -1250,12 +1291,12 @@ paths:
       - application/json
       responses: {}
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Change user password
       tags:
       - User
 securityDefinitions:
-  Bearer:
+  BearerAuth:
     in: header
     name: Authorization
     type: apiKey

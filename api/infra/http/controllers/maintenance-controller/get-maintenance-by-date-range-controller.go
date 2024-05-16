@@ -16,6 +16,7 @@ import (
 // @Tags				Maintenance
 // @Accept				json
 // @Produce				json
+// @Security 			BearerAuth
 // @Param				startDate			query		string	true	"Start date of the range (format: '2006-01-02')"
 // @Param				endDate				query		string	true	"End date of the range (format: '2006-01-02')"
 // @Success	    		200   				{array} 	maintenancedtos.MaintenanceOutputDTO "Successfully retrieved maintenance records"

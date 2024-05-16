@@ -14,13 +14,14 @@ import (
 // @Tags Orders
 // @Accept json
 // @Produce json
+// @Security 		BearerAuth
 // @Param order_id path string true "Order ID"
 // @failure      400              {string}  string    "error"
 // @response     default          {string}  string    "other error"
 // @Failure 404 {string} asd "Order not found"
 // @Failure 500 {string} string "Internal server error"
 // @Router /orders/{order_id} [delete]
-func DeleteOrderController(context *gin.Context, deleteOrderUseCase *orderusecases.DeleteOrderUseCase){
+func DeleteOrderController(context *gin.Context, deleteOrderUseCase *orderusecases.DeleteOrderUseCase) {
 	orderId := context.Param("order_id")
 
 	err := deleteOrderUseCase.Execute(orderId)

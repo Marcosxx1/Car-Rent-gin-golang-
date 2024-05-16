@@ -15,6 +15,7 @@ import (
 // @Tags				Maintenance
 // @Accept				json
 // @Produce				json
+// @Security 			BearerAuth
 // @Param				maintenanceID		path		string	true	"maintenanceID"
 // @Param				request				body 		maintenancedtos.MaintenanceInputDTO	true "Maintenance information to be updated"
 // @Success	    		200   				{object} 	maintenancedtos.MaintenanceOutputDTO "Successfully updated maintenance"

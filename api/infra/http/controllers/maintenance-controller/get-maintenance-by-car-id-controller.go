@@ -15,6 +15,7 @@ import (
 // @Tags                Maintenance
 // @Accept              json
 // @Produce             json
+// @Security 			BearerAuth
 // @Param               carID       path    string  true  "CarID"
 // @Param               page        query   int     false "Page number (default 1)"
 // @Param               pageSize    query   int     false "Number of items per page (default 10)"

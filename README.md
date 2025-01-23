@@ -1,4 +1,4 @@
-# Car Rental API (WORK IN PROGRESS - WIP)
+# Car Rental API
 
 Welcome to the Car Rental API repository! 🚗 This project represents my ongoing exploration of REST API development using Golang, with the powerful Gin framework for efficient routing.
 
